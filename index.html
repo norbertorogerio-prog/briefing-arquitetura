@@ -1,13 +1,3 @@
-Com certeza! Pegando o desenho da imagem como referência (aquele estilo "clean" com título "Relatório de Vistoria", as informações em cards lado a lado e as fotos em grid), vou refatorar completamente o código para algo muito mais próximo desse visual.
-
-Agora o relatório terá:
-
-· Layout em dois painéis lado a lado (esquerda: formulário / direita: relatório visual)
-· Relatório sem moldura de celular, apenas cards brancos com sombra suave
-· Área de fotos em grid organizado dentro do relatório
-· Design minimalista e profissional, igual à referência
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,7 +5,7 @@ Agora o relatório terá:
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
 <title>Relatório de Vistoria | Vivo</title>
 
-<!-- Google Fonts + html2canvas -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -27,75 +17,81 @@ Agora o relatório terá:
 }
 
 body {
-  background: #F5F7FB;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  padding: 32px 24px;
-  color: #1E293B;
+  background: linear-gradient(135deg, #F8FAFF 0%, #F0F4FA 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 40px 32px;
+  min-height: 100vh;
 }
 
-/* Container principal - 2 colunas estilo dashboard */
-.dashboard {
-  max-width: 1400px;
+/* Container principal */
+.container {
+  max-width: 1600px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
 }
 
-@media (min-width: 1024px) {
-  .dashboard {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-  .form-panel {
-    width: 380px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 32px;
-  }
-  .report-panel {
-    flex: 1;
-    min-width: 0;
-  }
+/* Título principal */
+.main-title {
+  margin-bottom: 32px;
 }
 
-/* ========== CARDS ESTILO CLEAN ========== */
-.card {
-  background: #FFFFFF;
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
-  padding: 28px;
-  transition: all 0.2s ease;
-  border: 1px solid #E9EEF3;
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #F1F4F9;
-}
-
-.card-header h2 {
-  font-size: 18px;
+.main-title h1 {
+  font-size: 28px;
   font-weight: 700;
-  color: #0F172A;
-  letter-spacing: -0.3px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.card-header h2 span {
-  background: linear-gradient(135deg, #6600CC, #8833FF);
+  background: linear-gradient(135deg, #6600CC, #8B5CF6);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  letter-spacing: -0.5px;
 }
 
-/* Formulário */
+.main-title p {
+  color: #64748B;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* Layout dois painéis */
+.dashboard {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* PAINEL ESQUERDO - FORMULÁRIO */
+.form-panel {
+  flex: 0 0 380px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: sticky;
+  top: 32px;
+}
+
+.form-header {
+  background: linear-gradient(135deg, #6600CC, #7C3AED);
+  padding: 24px;
+  color: white;
+}
+
+.form-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-header p {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 8px;
+}
+
+.form-body {
+  padding: 24px;
+}
+
 .form-group {
   margin-bottom: 20px;
 }
@@ -107,20 +103,17 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #5B6E8C;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .form-control {
   width: 100%;
   padding: 12px 16px;
   font-size: 14px;
-  font-weight: 500;
   border: 1.5px solid #E2E8F0;
   border-radius: 14px;
-  background: #FFFFFF;
-  transition: all 0.2s;
   font-family: 'Inter', sans-serif;
-  color: #1E293B;
+  transition: all 0.2s;
 }
 
 .form-control:focus {
@@ -131,40 +124,36 @@ body {
 
 .form-row {
   display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
 }
 
 .form-row .form-group {
   flex: 1;
-  margin-bottom: 0;
 }
 
-/* Status buttons */
+/* Status buttons - estilo clean */
 .status-group {
   margin: 20px 0 16px;
 }
 
 .status-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .status-btn {
-  flex: 1;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 10px 12px;
   border-radius: 40px;
   border: 1.5px solid #E2E8F0;
-  background: #FFFFFF;
+  background: white;
   font-size: 13px;
   font-weight: 600;
-  color: #475569;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -180,15 +169,14 @@ body {
   height: 10px;
   border-radius: 50%;
 }
-
-.dot-valid { background: #10B981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+.dot-valid { background: #10B981; }
 .dot-lock { background: #F59E0B; }
 .dot-prob { background: #EF4444; }
 .dot-other { background: #8B5CF6; }
 
-/* Photo upload */
-.photo-zone {
-  margin-top: 24px;
+/* Upload de fotos */
+.photo-section {
+  margin-top: 20px;
   padding-top: 20px;
   border-top: 1px solid #E9EEF3;
 }
@@ -196,27 +184,24 @@ body {
 .photo-label {
   font-size: 13px;
   font-weight: 700;
-  color: #1E293B;
   margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  color: #1E293B;
 }
 
-.upload-area {
-  background: #FAFCFE;
+.upload-btn {
+  background: #F8FAFE;
   border: 1.5px dashed #CBD5E1;
-  border-radius: 20px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 14px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
   font-size: 13px;
   font-weight: 500;
   color: #5B6E8C;
+  transition: all 0.2s;
 }
 
-.upload-area:hover {
+.upload-btn:hover {
   background: #F1F5F9;
   border-color: #6600CC;
   color: #6600CC;
@@ -225,7 +210,7 @@ body {
 .photo-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   margin-top: 16px;
 }
 
@@ -233,41 +218,31 @@ body {
   position: relative;
   width: 80px;
   height: 80px;
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
   border: 2px solid #E9EEF3;
-  background: #F8FAFE;
 }
 
 .photo-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  cursor: pointer;
 }
 
 .photo-delete {
   position: absolute;
   top: 4px;
   right: 4px;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(2px);
-  border-radius: 20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 50%;
   width: 22px;
   height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 12px;
   color: white;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-.photo-delete:hover {
-  background: #EF4444;
-  transform: scale(1.05);
 }
 
 .btn-clear {
@@ -276,12 +251,10 @@ body {
   padding: 12px;
   border-radius: 40px;
   border: 1px solid #E2E8F0;
-  background: #FFFFFF;
+  background: white;
   font-weight: 600;
-  font-size: 13px;
-  color: #64748B;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s;
 }
 
 .btn-clear:hover {
@@ -290,32 +263,55 @@ body {
   color: #EF4444;
 }
 
-.helper-text {
-  font-size: 11px;
-  color: #94A3B8;
-  text-align: center;
-  margin-top: 16px;
+/* PAINEL DIREITO - RELATÓRIO (ESTILO IMAGEM) */
+.report-panel {
+  flex: 1;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
-/* ========== PAINEL DO RELATÓRIO ========== */
+/* Header do relatório com ações */
 .report-header {
+  padding: 24px 28px;
+  background: white;
+  border-bottom: 1px solid #E9EEF3;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #F1F4F9;
 }
 
-.report-header h3 {
+.report-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.report-header-left h2 {
   font-size: 20px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #0F172A, #334155);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.ai-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F1F5F9;
+  padding: 6px 14px;
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-badge input {
+  accent-color: #6600CC;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
 .action-buttons {
@@ -325,16 +321,12 @@ body {
 }
 
 .action-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 40px;
   border: 1px solid #E2E8F0;
-  background: #FFFFFF;
+  background: white;
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -345,40 +337,19 @@ body {
   color: #6600CC;
 }
 
-.ai-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #F8FAFE;
-  padding: 6px 14px;
-  border-radius: 40px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid #E2E8F0;
+/* LISTA DE SALAS - cards horizontais */
+.rooms-section {
+  padding: 20px 28px;
+  background: #FAFCFE;
+  border-bottom: 1px solid #E9EEF3;
 }
 
-.ai-toggle input {
-  accent-color: #6600CC;
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-/* Grid de salas vistoriadas */
-.rooms-grid {
-  background: #FFFFFF;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 24px;
-  border: 1px solid #E9EEF3;
-}
-
-.rooms-grid h4 {
+.rooms-section h3 {
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
   color: #5B6E8C;
+  letter-spacing: 0.5px;
   margin-bottom: 16px;
 }
 
@@ -386,40 +357,36 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  max-height: 280px;
-  overflow-y: auto;
 }
 
-.room-badge {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 16px;
-  background: #FAFCFE;
-  border-radius: 16px;
+.room-card {
+  background: white;
   border: 1px solid #E9EEF3;
+  border-radius: 16px;
+  padding: 12px 16px;
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 110px;
+  min-width: 120px;
 }
 
-.room-badge:hover {
+.room-card:hover {
   border-color: #6600CC;
-  background: #F9F5FF;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.room-badge.has-photo {
+.room-card.has-photo {
   border-left: 3px solid #10B981;
 }
 
 .room-number {
   font-weight: 800;
-  font-size: 13px;
+  font-size: 14px;
   color: #0F172A;
+  margin-bottom: 6px;
 }
 
-.room-status {
+.room-status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -427,210 +394,250 @@ body {
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 30px;
-  width: fit-content;
 }
-
 .status-valid { background: #E8F9F0; color: #0B6E41; }
 .status-lock { background: #FEF3E2; color: #B45309; }
 .status-prob { background: #FEE9E9; color: #C53030; }
 .status-other { background: #F0E9FF; color: #6D28D9; }
 
-/* Área principal do relatório (sem moldura de celular) */
-.report-content-area {
-  background: #FFFFFF;
-  border-radius: 24px;
-  border: 1px solid #E9EEF3;
-  overflow: hidden;
-}
-
-#reportContent {
+/* ÁREA PRINCIPAL DO RELATÓRIO - ESTILO EXATAMENTE COMO NA IMAGEM */
+.report-content {
   padding: 28px;
-  max-height: 650px;
+  max-height: 550px;
   overflow-y: auto;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #1E293B;
 }
 
-/* Estilos internos do relatório */
-.report-title-section {
+/* Estilos do relatório - igual ao design da imagem */
+.report-title {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #6600CC, #8B5CF6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 24px;
+}
+
+/* Cards de informações no estilo "Resumo Inteligente" */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.info-card {
+  background: #F8FAFE;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #E9EEF3;
+}
+
+.info-card .label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #8B9AB0;
+  margin-bottom: 8px;
+}
+
+.info-card .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.divider-light {
+  height: 1px;
+  background: linear-gradient(90deg, #E2E8F0, transparent);
+  margin: 20px 0;
+}
+
+.stat-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #F0F2F5;
+}
+
+.stat-marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.marker-valid { background: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+.marker-lock { background: #F59E0B; }
+.marker-prob { background: #EF4444; }
+.marker-other { background: #8B5CF6; }
+
+.stat-text {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+.stat-number {
   font-weight: 800;
   font-size: 18px;
   color: #0F172A;
+}
+
+/* Detalhamento por andar */
+.floor-detail {
+  margin-top: 24px;
+  background: #F8FAFE;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.floor-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #6600CC;
   margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, #E2E8F0, #CBD5E1, #E2E8F0);
-  margin: 20px 0;
-}
-
-.info-row {
-  display: flex;
-  gap: 16px;
-  margin: 10px 0;
-  padding: 8px 0;
-  border-bottom: 1px dashed #F0F2F5;
-}
-
-.info-label {
-  min-width: 100px;
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: #5B6E8C;
-  letter-spacing: 0.3px;
-}
-
-.info-value {
-  font-weight: 500;
-  color: #1E293B;
-}
-
-.bullet-point {
-  margin: 8px 0 8px 20px;
-  font-size: 13px;
-}
-
-.stats-badge {
-  display: inline-flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 12px 0;
-}
-
-.stat-item {
-  background: #F8FAFE;
-  padding: 6px 14px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Fotos no relatório */
-.evidence-block {
-  margin: 24px 0;
-  padding: 20px;
-  background: #FAFCFE;
-  border-radius: 20px;
-  border: 1px solid #E9EEF3;
-}
-
-.evidence-title {
-  font-weight: 700;
-  font-size: 14px;
-  color: #6600CC;
-  margin-bottom: 14px;
-}
-
-.evidence-photos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.evidence-photo {
-  width: 88px;
-  height: 88px;
-  border-radius: 16px;
-  object-fit: cover;
-  border: 2px solid #E9EEF3;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.evidence-photo:hover {
-  transform: scale(1.03);
-  border-color: #6600CC;
-}
-
-/* Modal */
-.modal-fullscreen {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.92);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.modal-fullscreen.show {
-  display: flex;
-}
-
-.modal-fullscreen img {
-  max-width: 92%;
-  max-height: 92%;
-  border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.share-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  z-index: 10001;
-  align-items: center;
-  justify-content: center;
-}
-
-.share-modal.show {
-  display: flex;
-}
-
-.share-card {
-  background: white;
-  border-radius: 32px;
-  padding: 28px;
-  max-width: 340px;
-  width: 90%;
-  text-align: center;
-}
-
-.share-card h4 {
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 20px;
-}
-
-.share-buttons {
+.floor-items {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+.floor-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid #E9EEF3;
+}
+
+.floor-badge {
+  background: white;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #6600CC;
+  border: 1px solid #E2E8F0;
+}
+
+.floor-status-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+}
+
+/* Evidências fotográficas */
+.evidence-section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 2px solid #F0F2F5;
+}
+
+.evidence-title {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: #0F172A;
+}
+
+.evidence-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.evidence-card {
+  background: #F8FAFE;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #E9EEF3;
+  min-width: 200px;
+}
+
+.evidence-room {
+  font-weight: 700;
+  font-size: 13px;
+  color: #6600CC;
+  margin-bottom: 12px;
+}
+
+.evidence-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.evidence-photo {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #E9EEF3;
+  transition: 0.2s;
+}
+
+.evidence-photo:hover {
+  border-color: #6600CC;
+  transform: scale(1.05);
+}
+
+/* Modais */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+.modal.show { display: flex; }
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+}
+.modal-content img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+.share-modal {
+  background: white;
+  border-radius: 28px;
+  padding: 28px;
+  max-width: 340px;
+  width: 90%;
+  text-align: center;
+}
+.share-modal h4 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.share-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 .share-btn {
   padding: 12px;
   border-radius: 40px;
   border: none;
   font-weight: 700;
   cursor: pointer;
-  font-size: 14px;
 }
-
-.btn-wa { background: #25D366; color: white; }
-.btn-teams { background: #6264A7; color: white; }
-.btn-email { background: #EA4335; color: white; }
-.btn-img { background: linear-gradient(135deg, #6600CC, #8833FF); color: white; }
-
-.close-share {
-  margin-top: 16px;
-  background: #F1F5F9;
-  border: 1px solid #E2E8F0;
-  padding: 10px;
-  border-radius: 40px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
 .toast {
   position: fixed;
   bottom: 30px;
@@ -640,140 +647,130 @@ body {
   padding: 12px 24px;
   border-radius: 60px;
   font-size: 13px;
-  font-weight: 500;
   opacity: 0;
-  transform: translateY(10px);
   transition: 0.2s;
   z-index: 9999;
-  pointer-events: none;
 }
-
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+.toast.show { opacity: 1; }
 </style>
 </head>
 <body>
-
-<div class="dashboard">
-  <!-- COLUNA ESQUERDA - FORMULÁRIO -->
-  <div class="form-panel">
-    <div class="card">
-      <div class="card-header">
-        <h2>📋 <span>Vistoria Técnica</span></h2>
-      </div>
-
-      <div class="form-group">
-        <label>👤 Auditor responsável</label>
-        <input type="text" id="auditor" class="form-control" placeholder="Nome completo">
-      </div>
-
-      <div class="form-group">
-        <label>🏢 Prédio</label>
-        <select id="predio" class="form-control">
-          <option value="">Selecione o prédio</option>
-          <option value="Eco Berrini">Eco Berrini</option>
-          <option value="Chucri Zaidan">Chucri Zaidan</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>📍 Endereço</label>
-        <input type="text" id="endereco" class="form-control" placeholder="Endereço completo">
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>🏬 Andar</label>
-          <input type="number" id="floorInput" class="form-control" min="1" max="32" value="1">
-        </div>
-        <div class="form-group">
-          <label>🚪 Sala</label>
-          <input type="number" id="roomInput" class="form-control" min="1" max="50" value="1">
-        </div>
-      </div>
-
-      <div class="status-group">
-        <label>📌 Status da sala</label>
-        <div class="status-buttons">
-          <button class="status-btn" data-status="valid"><span class="status-dot dot-valid"></span>Validada</button>
-          <button class="status-btn" data-status="lock"><span class="status-dot dot-lock"></span>Trancada</button>
-          <button class="status-btn" data-status="prob"><span class="status-dot dot-prob"></span>Problemas</button>
-          <button class="status-btn" data-status="other"><span class="status-dot dot-other"></span>Outros</button>
-        </div>
-      </div>
-
-      <div class="photo-zone">
-        <div class="photo-label">📸 Fotos da sala <strong id="currentDisplay">01-01</strong></div>
-        <div id="uploadBtn" class="upload-area">📷 + Adicionar foto (câmera ou galeria)</div>
-        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" multiple>
-        <div id="photoGallery" class="photo-grid"></div>
-      </div>
-
-      <button id="clearAllBtn" class="btn-clear">🗑️ Limpar todos os registros</button>
-      <div class="helper-text">💡 Selecione andar/sala → adicione fotos → clique no status para registrar</div>
-    </div>
+<div class="container">
+  <div class="main-title">
+    <h1>📋 Vistoria Técnica Vivo</h1>
+    <p>Registro e acompanhamento de vistorias em salas comerciais</p>
   </div>
 
-  <!-- COLUNA DIREITA - RELATÓRIO -->
-  <div class="report-panel">
-    <!-- Grid de salas registradas -->
-    <div class="rooms-grid">
-      <h4>📦 Salas vistoriadas</h4>
-      <div id="roomsList" class="rooms-list">
-        <div class="helper-text" style="width:100%; text-align:center;">Nenhuma sala registrada</div>
+  <div class="dashboard">
+    <!-- PAINEL ESQUERDO - FORMULÁRIO -->
+    <div class="form-panel">
+      <div class="form-header">
+        <h2>📸 Nova Vistoria</h2>
+        <p>Preencha os dados e registre o status da sala</p>
       </div>
-    </div>
-
-    <!-- Relatório principal (sem moldura de celular) -->
-    <div class="report-content-area">
-      <div style="padding: 20px 28px 0 28px;">
-        <div class="report-header">
-          <h3>📄 Relatório de Vistoria</h3>
-          <div class="action-buttons">
-            <label class="ai-toggle">
-              <input type="checkbox" id="useAI" checked> IA inteligente
-            </label>
-            <button id="shareBtn" class="action-btn">📱 Compartilhar</button>
-            <button id="pngBtn" class="action-btn">📸 Salvar PNG</button>
-            <button id="copyBtn" class="action-btn">📋 Copiar</button>
-            <button id="txtBtn" class="action-btn">⬇️ TXT</button>
-            <button id="csvBtn" class="action-btn">🧾 CSV</button>
+      <div class="form-body">
+        <div class="form-group">
+          <label>👤 Auditor</label>
+          <input type="text" id="auditor" class="form-control" placeholder="Nome do responsável">
+        </div>
+        <div class="form-group">
+          <label>🏢 Prédio</label>
+          <select id="predio" class="form-control">
+            <option value="">Selecione</option>
+            <option value="Eco Berrini">Eco Berrini</option>
+            <option value="Chucri Zaidan">Chucri Zaidan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>📍 Endereço</label>
+          <input type="text" id="endereco" class="form-control" placeholder="Endereço automático">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>🏬 Andar</label>
+            <input type="number" id="floorInput" class="form-control" min="1" max="32" value="1">
+          </div>
+          <div class="form-group">
+            <label>🚪 Sala</label>
+            <input type="number" id="roomInput" class="form-control" min="1" max="50" value="1">
           </div>
         </div>
+
+        <div class="status-group">
+          <label>📌 Status da Sala</label>
+          <div class="status-buttons">
+            <button class="status-btn" data-status="valid"><span class="status-dot dot-valid"></span>Validada</button>
+            <button class="status-btn" data-status="lock"><span class="status-dot dot-lock"></span>Trancada</button>
+            <button class="status-btn" data-status="prob"><span class="status-dot dot-prob"></span>Problemas</button>
+            <button class="status-btn" data-status="other"><span class="status-dot dot-other"></span>Outros</button>
+          </div>
+        </div>
+
+        <div class="photo-section">
+          <div class="photo-label">📸 Fotos <span id="currentRoomLabel">A01-S01</span></div>
+          <div id="uploadBtn" class="upload-btn">📷 + Adicionar foto</div>
+          <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" multiple>
+          <div id="photoGallery" class="photo-grid"></div>
+        </div>
+
+        <button id="clearAllBtn" class="btn-clear">🗑️ Limpar todos os registros</button>
       </div>
-      <div id="reportContent">
-        <div class="report-title-section">📋 Relatório</div>
-        <div class="divider"></div>
-        <div class="bullet-point">Aguardando registros de vistoria...</div>
+    </div>
+
+    <!-- PAINEL DIREITO - RELATÓRIO (ESTILO IMAGEM) -->
+    <div class="report-panel">
+      <div class="report-header">
+        <div class="report-header-left">
+          <h2>📄 Relatório de Vistoria</h2>
+          <label class="ai-badge">
+            <input type="checkbox" id="useAI" checked> 🤖 IA Inteligente
+          </label>
+        </div>
+        <div class="action-buttons">
+          <button id="shareBtn" class="action-btn">📱 Compartilhar</button>
+          <button id="pngBtn" class="action-btn">📸 PNG</button>
+          <button id="copyBtn" class="action-btn">📋 Copiar</button>
+          <button id="csvBtn" class="action-btn">🧾 CSV</button>
+        </div>
+      </div>
+
+      <!-- Lista de salas registradas -->
+      <div class="rooms-section">
+        <h3>📦 Salas vistoriadas</h3>
+        <div id="roomsList" class="rooms-list">
+          <div style="color:#94A3B8; font-size:13px;">Nenhuma sala registrada</div>
+        </div>
+      </div>
+
+      <!-- CONTEÚDO DO RELATÓRIO - ESTILO EXATO DA IMAGEM -->
+      <div id="reportContent" class="report-content">
+        <!-- O conteúdo será gerado dinamicamente -->
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modais -->
-<div id="shareModal" class="share-modal">
-  <div class="share-card">
+<!-- MODAIS -->
+<div id="imageModal" class="modal" onclick="closeModal()">
+  <div class="modal-content">
+    <img id="modalImage" src="">
+  </div>
+</div>
+<div id="shareModal" class="modal">
+  <div class="share-modal">
     <h4>✨ Compartilhar</h4>
     <div class="share-buttons">
-      <button id="shareWA" class="share-btn btn-wa">💬 WhatsApp</button>
-      <button id="shareTeams" class="share-btn btn-teams">💼 Teams</button>
-      <button id="shareEmail" class="share-btn btn-email">📧 E-mail</button>
-      <button id="shareImage" class="share-btn btn-img">📸 Salvar imagem</button>
+      <button id="shareWA" class="share-btn" style="background:#25D366; color:white;">💬 WhatsApp</button>
+      <button id="shareEmail" class="share-btn" style="background:#EA4335; color:white;">📧 E-mail</button>
+      <button id="shareImage" class="share-btn" style="background:linear-gradient(135deg,#6600CC,#8B5CF6); color:white;">📸 Salvar Imagem</button>
     </div>
-    <button id="closeShareModal" class="close-share">Fechar</button>
+    <button id="closeShareModal" style="margin-top:16px; padding:10px; border-radius:40px; border:1px solid #E2E8F0; background:white; cursor:pointer; width:100%;">Fechar</button>
   </div>
 </div>
-
-<div id="fullscreenModal" class="modal-fullscreen" onclick="closeFullscreen()">
-  <img id="fullscreenImg" src="">
-</div>
-
 <div id="toast" class="toast"></div>
 
 <script>
-// ========== ESTADO ==========
+// Estado
 let entries = JSON.parse(localStorage.getItem('vistoria_entries') || '[]');
 let currentFloor = 1, currentRoom = 1;
 let currentImageData = null;
@@ -782,85 +779,54 @@ const pad2 = n => String(n).padStart(2, '0');
 const roomKey = (f, r) => `A${pad2(f)}-S${pad2(r)}`;
 const statusName = s => s === 'valid' ? 'Validada' : s === 'lock' ? 'Trancada' : s === 'prob' ? 'Problemas' : 'Outros';
 const statusEmoji = s => s === 'valid' ? '✅' : s === 'lock' ? '🔒' : s === 'prob' ? '❌' : '◻️';
-const statusClassStyle = s => s === 'valid' ? 'status-valid' : s === 'lock' ? 'status-lock' : s === 'prob' ? 'status-prob' : 'status-other';
+const statusClass = s => s === 'valid' ? 'status-valid' : s === 'lock' ? 'status-lock' : s === 'prob' ? 'status-prob' : 'status-other';
 
 // Fotos
-function getRoomPhotos(f, r) {
-  return JSON.parse(localStorage.getItem(`photos_${roomKey(f, r)}`) || '[]');
-}
-function saveRoomPhotos(f, r, arr) {
-  localStorage.setItem(`photos_${roomKey(f, r)}`, JSON.stringify(arr));
-}
-function addPhoto(f, r, photoData) {
-  const photos = getRoomPhotos(f, r);
-  photos.push(photoData);
-  saveRoomPhotos(f, r, photos);
-  if (currentFloor === f && currentRoom === r) renderCurrentPhotos();
-  renderRoomsGrid();
-  renderReport();
-}
-function deletePhoto(f, r, idx) {
-  const photos = getRoomPhotos(f, r);
-  photos.splice(idx, 1);
-  saveRoomPhotos(f, r, photos);
-  if (currentFloor === f && currentRoom === r) renderCurrentPhotos();
-  renderRoomsGrid();
-  renderReport();
-  showToast('📸 Foto removida');
-}
+function getRoomPhotos(f, r) { return JSON.parse(localStorage.getItem(`photos_${roomKey(f, r)}`) || '[]'); }
+function saveRoomPhotos(f, r, arr) { localStorage.setItem(`photos_${roomKey(f, r)}`, JSON.stringify(arr)); }
+function addPhoto(f, r, data) { const arr = getRoomPhotos(f, r); arr.push(data); saveRoomPhotos(f, r, arr); if (currentFloor === f && currentRoom === r) renderCurrentPhotos(); renderRoomsList(); renderReport(); }
+function deletePhoto(f, r, idx) { const arr = getRoomPhotos(f, r); arr.splice(idx, 1); saveRoomPhotos(f, r, arr); if (currentFloor === f && currentRoom === r) renderCurrentPhotos(); renderRoomsList(); renderReport(); showToast('Foto removida'); }
 
-// Render fotos atuais
 function renderCurrentPhotos() {
   const gallery = document.getElementById('photoGallery');
   const photos = getRoomPhotos(currentFloor, currentRoom);
-  document.getElementById('currentDisplay').innerText = `${pad2(currentFloor)}-${pad2(currentRoom)}`;
-  if (!photos.length) {
-    gallery.innerHTML = '<div class="helper-text" style="width:100%;">Nenhuma foto adicionada</div>';
-    return;
-  }
+  document.getElementById('currentRoomLabel').innerText = `${roomKey(currentFloor, currentRoom)}`;
+  if (!photos.length) { gallery.innerHTML = '<div style="color:#94A3B8; font-size:12px; text-align:center;">Nenhuma foto</div>'; return; }
   gallery.innerHTML = '';
   photos.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'photo-item';
-    div.innerHTML = `
-      <img src="${p}" onclick="showFullscreen('${p}')">
-      <div class="photo-delete" onclick="event.stopPropagation(); deletePhoto(${currentFloor}, ${currentRoom}, ${i})">✕</div>
-    `;
+    div.innerHTML = `<img src="${p}" onclick="openImage('${p}')"><div class="photo-delete" onclick="event.stopPropagation(); deletePhoto(${currentFloor}, ${currentRoom}, ${i})">✕</div>`;
     gallery.appendChild(div);
   });
 }
 
-// Grid de salas registradas
-function renderRoomsGrid() {
+function renderRoomsList() {
   const container = document.getElementById('roomsList');
-  if (!entries.length) {
-    container.innerHTML = '<div class="helper-text" style="width:100%; text-align:center;">Nenhuma sala registrada</div>';
-    return;
-  }
-  const sorted = [...entries].sort((a, b) => a.f - b.f || a.r - b.r);
+  if (!entries.length) { container.innerHTML = '<div style="color:#94A3B8; font-size:13px;">Nenhuma sala registrada</div>'; return; }
+  const sorted = [...entries].sort((a,b) => a.f - b.f || a.r - b.r);
   container.innerHTML = '';
   sorted.forEach(item => {
     const photos = getRoomPhotos(item.f, item.r);
-    const hasPhoto = photos.length > 0;
-    const badge = document.createElement('div');
-    badge.className = `room-badge ${hasPhoto ? 'has-photo' : ''}`;
-    badge.onclick = () => {
-      floorInput.value = item.f;
-      roomInput.value = item.r;
-      updateCurrentDisplay();
-      renderCurrentPhotos();
-    };
-    badge.innerHTML = `
-      <div class="room-number">A${pad2(item.f)} • S${pad2(item.r)} ${hasPhoto ? '📸' : ''}</div>
-      <div class="room-status ${statusClassStyle(item.status)}">${statusEmoji(item.status)} ${statusName(item.status)}</div>
-      ${hasPhoto ? `<div style="font-size:10px; color:#10B981;">📷 ${photos.length} foto(s)</div>` : ''}
+    const card = document.createElement('div');
+    card.className = `room-card ${photos.length ? 'has-photo' : ''}`;
+    card.onclick = () => { floorInput.value = item.f; roomInput.value = item.r; updateCurrent(); renderCurrentPhotos(); };
+    card.innerHTML = `
+      <div class="room-number">${roomKey(item.f, item.r)} ${photos.length ? '📸' : ''}</div>
+      <div class="room-status-badge ${statusClass(item.status)}">${statusEmoji(item.status)} ${statusName(item.status)}</div>
     `;
-    container.appendChild(badge);
+    container.appendChild(card);
   });
 }
 
-// IA Narrativa
-function generateAIReport(predio, endereco, auditor, entries, totalFotos) {
+// Geração do relatório no estilo da imagem
+function renderReport() {
+  const predio = document.getElementById('predio').value || 'Não informado';
+  const endereco = document.getElementById('endereco').value || 'Não informado';
+  const auditor = document.getElementById('auditor').value || 'Não informado';
+  const useAI = document.getElementById('useAI').checked;
+  const dateStr = new Date().toLocaleString('pt-BR');
+  
   const stats = { valid: 0, lock: 0, prob: 0, other: 0 };
   const floorsMap = {};
   entries.forEach(e => {
@@ -869,167 +835,125 @@ function generateAIReport(predio, endereco, auditor, entries, totalFotos) {
     floorsMap[e.f][e.status].push(e.r);
   });
   const total = entries.length;
-  const dateStr = new Date().toLocaleString('pt-BR');
-  const headline = total === 0 ? 'Nenhuma sala registrada nesta vistoria.' : `Vistoria concluída com ${total} sala(s). ${stats.valid} validações, ${stats.prob} ocorrências com problema, ${stats.lock} bloqueios.`;
-  
-  let html = `<div class="report-title-section">🤖 Resumo Inteligente</div><div class="divider"></div>`;
-  html += `<div class="info-row"><div class="info-label">Prédio</div><div class="info-value">${predio || '—'}</div></div>`;
-  html += `<div class="info-row"><div class="info-label">Endereço</div><div class="info-value">${endereco || '—'}</div></div>`;
-  html += `<div class="info-row"><div class="info-label">Data/Hora</div><div class="info-value">${dateStr}</div></div>`;
-  html += `<div class="info-row"><div class="info-label">Auditor</div><div class="info-value">${auditor || '—'}</div></div>`;
-  html += `<div class="divider"></div>`;
-  html += `<div class="bullet-point">📌 ${headline}</div>`;
-  html += `<div class="divider"></div>`;
-  html += `<div class="stats-badge">✅ Validadas: ${stats.valid} &nbsp; 🔒 Trancadas: ${stats.lock} &nbsp; ❌ Problemas: ${stats.prob} &nbsp; ◻️ Outros: ${stats.other}</div>`;
-  
-  if (total > 0) {
-    html += `<div class="bullet-point"><strong>📊 Detalhamento por andar</strong></div>`;
-    Object.keys(floorsMap).map(Number).sort((a, b) => a - b).forEach(f => {
-      const a = floorsMap[f];
-      const parts = [];
-      if (a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x, y) => x - y).map(pad2).join(', ')})`);
-      if (a.lock.length) parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x, y) => x - y).map(pad2).join(', ')})`);
-      if (a.prob.length) parts.push(`❌ ${a.prob.length} (${a.prob.sort((x, y) => x - y).map(pad2).join(', ')})`);
-      if (a.other.length) parts.push(`◻️ ${a.other.length} (${a.other.sort((x, y) => x - y).map(pad2).join(', ')})`);
-      html += `<div class="bullet-point">• Andar ${pad2(f)}: ${parts.join(' | ') || '—'}</div>`;
-    });
-  }
-  if (totalFotos > 0) html += `<div class="divider"></div><div class="bullet-point">📸 Total de evidências fotográficas: ${totalFotos} foto(s).</div>`;
-  return html;
-}
-
-// Render relatório completo
-function renderReport() {
-  const predio = document.getElementById('predio').value || 'Não informado';
-  const endereco = document.getElementById('endereco').value || 'Não informado';
-  const auditor = document.getElementById('auditor').value || 'Não informado';
-  const useAI = document.getElementById('useAI').checked;
   let totalFotos = 0;
   const roomsWithPhotos = [];
-  
   entries.forEach(item => {
     const photos = getRoomPhotos(item.f, item.r);
-    if (photos.length) {
-      totalFotos += photos.length;
-      roomsWithPhotos.push({ room: `A${pad2(item.f)}-S${pad2(item.r)}`, status: statusName(item.status), emoji: statusEmoji(item.status), photos });
-    }
+    if (photos.length) { totalFotos += photos.length; roomsWithPhotos.push({ room: roomKey(item.f, item.r), status: statusName(item.status), emoji: statusEmoji(item.status), photos }); }
   });
   
-  let mainHtml = '';
+  let html = '';
+  
   if (useAI) {
-    mainHtml = generateAIReport(predio, endereco, auditor, entries, totalFotos);
-  } else {
-    const dateStr = new Date().toLocaleString('pt-BR');
-    mainHtml = `<div class="report-title-section">📋 Relatório de Vistoria</div><div class="divider"></div>`;
-    mainHtml += `<div class="info-row"><div class="info-label">Prédio</div><div class="info-value">${predio}</div></div>`;
-    mainHtml += `<div class="info-row"><div class="info-label">Endereço</div><div class="info-value">${endereco}</div></div>`;
-    mainHtml += `<div class="info-row"><div class="info-label">Data</div><div class="info-value">${dateStr}</div></div>`;
-    mainHtml += `<div class="info-row"><div class="info-label">Auditor</div><div class="info-value">${auditor}</div></div>`;
-    mainHtml += `<div class="divider"></div><div class="bullet-point">Total de salas registradas: ${entries.length}</div>`;
-  }
-  
-  if (roomsWithPhotos.length) {
-    mainHtml += `<div class="divider"></div><div class="report-title-section">📸 Evidências Fotográficas</div>`;
-    roomsWithPhotos.forEach(r => {
-      mainHtml += `<div class="evidence-block"><div class="evidence-title">${r.emoji} ${r.room} — ${r.status} (${r.photos.length} foto${r.photos.length > 1 ? 's' : ''})</div><div class="evidence-photos">`;
-      r.photos.forEach(p => {
-        mainHtml += `<img src="${p}" class="evidence-photo" onclick="showFullscreen('${p}')">`;
+    // Título "Resumo Inteligente" - estilo da imagem
+    html += `<div class="report-title">🤖 Resumo Inteligente</div>`;
+    
+    // Grid de informações em cards
+    html += `<div class="info-grid">
+      <div class="info-card"><div class="label">PRÉDIO</div><div class="value">${predio}</div></div>
+      <div class="info-card"><div class="label">ENDEREÇO</div><div class="value">${endereco}</div></div>
+      <div class="info-card"><div class="label">DATA/HORA</div><div class="value">${dateStr}</div></div>
+      <div class="info-card"><div class="label">AUDITOR</div><div class="value">${auditor}</div></div>
+    </div>`;
+    
+    html += `<div class="divider-light"></div>`;
+    
+    // Linha de resumo principal
+    const headline = total === 0 ? 'Nenhuma sala registrada nesta vistoria.' : `📌 Vistoria concluída com ${total} sala(s). ${stats.valid} validações, ${stats.prob} ocorrência(s) com problema, ${stats.lock} bloqueio(s).`;
+    html += `<div style="padding: 8px 0 16px 0; font-size: 14px; color: #334155;">${headline}</div>`;
+    html += `<div class="divider-light"></div>`;
+    
+    // Estatísticas em linhas
+    html += `<div class="stat-line"><div class="stat-marker marker-valid"></div><div class="stat-text">Validada</div><div class="stat-number">${stats.valid}</div></div>`;
+    html += `<div class="stat-line"><div class="stat-marker marker-lock"></div><div class="stat-text">Trancada</div><div class="stat-number">${stats.lock}</div></div>`;
+    html += `<div class="stat-line"><div class="stat-marker marker-prob"></div><div class="stat-text">Problemas</div><div class="stat-number">${stats.prob}</div></div>`;
+    html += `<div class="stat-line"><div class="stat-marker marker-other"></div><div class="stat-text">Outros</div><div class="stat-number">${stats.other}</div></div>`;
+    
+    // Detalhamento por andar
+    if (total > 0) {
+      html += `<div class="floor-detail"><div class="floor-title">📊 Detalhamento por andar</div><div class="floor-items">`;
+      Object.keys(floorsMap).map(Number).sort((a,b) => a-b).forEach(f => {
+        const a = floorsMap[f];
+        const parts = [];
+        if (a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(pad2).join(', ')})`);
+        if (a.lock.length) parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(pad2).join(', ')})`);
+        if (a.prob.length) parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(pad2).join(', ')})`);
+        if (a.other.length) parts.push(`◻️ ${a.other.length} (${a.other.sort((x,y)=>x-y).map(pad2).join(', ')})`);
+        html += `<div class="floor-item"><span class="floor-badge">Andar ${pad2(f)}</span><div class="floor-status-list">${parts.join(' | ')}</div></div>`;
       });
-      mainHtml += `</div></div>`;
-    });
+      html += `</div></div>`;
+    }
+  } else {
+    // Modo simples
+    html += `<div class="report-title">📋 Relatório de Vistoria</div>`;
+    html += `<div class="info-grid"><div class="info-card"><div class="label">PRÉDIO</div><div class="value">${predio}</div></div><div class="info-card"><div class="label">DATA</div><div class="value">${dateStr}</div></div></div>`;
+    html += `<div class="info-card" style="margin-bottom:16px;"><div class="label">AUDITOR</div><div class="value">${auditor}</div></div>`;
+    html += `<div class="stat-line"><div class="stat-text">Total de salas</div><div class="stat-number">${total}</div></div>`;
   }
   
-  document.getElementById('reportContent').innerHTML = mainHtml;
+  // Evidências fotográficas
+  if (roomsWithPhotos.length > 0) {
+    html += `<div class="evidence-section"><div class="evidence-title">📸 Evidências Fotográficas</div><div class="evidence-grid">`;
+    roomsWithPhotos.forEach(r => {
+      html += `<div class="evidence-card"><div class="evidence-room">${r.emoji} ${r.room} — ${r.status}</div><div class="evidence-photos">`;
+      r.photos.forEach(p => { html += `<img src="${p}" class="evidence-photo" onclick="openImage('${p}')">`; });
+      html += `</div></div>`;
+    });
+    html += `</div></div>`;
+  }
+  
+  if (total === 0 && !useAI) html += `<div style="color:#94A3B8; text-align:center; padding:40px;">Nenhuma sala registrada. Selecione andar/sala e clique no status para adicionar.</div>`;
+  
+  document.getElementById('reportContent').innerHTML = html;
 }
 
-// Ações de registro
 function registerRoom(status) {
   const idx = entries.findIndex(e => e.f === currentFloor && e.r === currentRoom);
   if (idx >= 0) entries[idx].status = status;
   else entries.push({ f: currentFloor, r: currentRoom, status });
   localStorage.setItem('vistoria_entries', JSON.stringify(entries));
-  renderRoomsGrid();
+  renderRoomsList();
   renderReport();
-  showToast(`✅ A${pad2(currentFloor)}-S${pad2(currentRoom)}: ${statusName(status)}`);
+  showToast(`✅ ${roomKey(currentFloor, currentRoom)}: ${statusName(status)}`);
 }
 
-// Gerar imagem (captura área do relatório)
-async function generateReportImage() {
-  const el = document.getElementById('reportContent');
-  if (!el) return null;
-  showToast('📸 Gerando imagem...');
-  try {
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: '#FFFFFF', logging: false, useCORS: true });
-    return canvas.toDataURL('image/png');
-  } catch (e) {
-    showToast('❌ Erro ao gerar imagem');
-    return null;
-  }
-}
-
-// Helpers
-function updateCurrentDisplay() {
+function updateCurrent() {
   currentFloor = Math.min(32, Math.max(1, parseInt(floorInput.value) || 1));
   currentRoom = Math.min(50, Math.max(1, parseInt(roomInput.value) || 1));
   floorInput.value = currentFloor;
   roomInput.value = currentRoom;
   renderCurrentPhotos();
 }
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+
+async function generateImage() {
+  const el = document.getElementById('reportContent');
+  if (!el) return null;
+  showToast('Gerando imagem...');
+  try {
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: '#FFFFFF', logging: false, useCORS: true });
+    return canvas.toDataURL('image/png');
+  } catch(e) { showToast('Erro'); return null; }
 }
-window.showFullscreen = (src) => {
-  const modal = document.getElementById('fullscreenModal');
-  const img = document.getElementById('fullscreenImg');
-  img.src = src;
-  modal.classList.add('show');
-};
-window.closeFullscreen = () => document.getElementById('fullscreenModal').classList.remove('show');
+
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
+window.openImage = (src) => { document.getElementById('modalImage').src = src; document.getElementById('imageModal').classList.add('show'); };
+window.closeModal = () => document.getElementById('imageModal').classList.remove('show');
 window.deletePhoto = deletePhoto;
 
-// Event listeners
-const floorInput = document.getElementById('floorInput');
-const roomInput = document.getElementById('roomInput');
-floorInput.addEventListener('input', updateCurrentDisplay);
-roomInput.addEventListener('input', updateCurrentDisplay);
-
-document.querySelectorAll('.status-btn').forEach(btn => {
-  btn.addEventListener('click', () => registerRoom(btn.dataset.status));
-});
-
+// Eventos
+document.querySelectorAll('.status-btn').forEach(btn => btn.addEventListener('click', () => registerRoom(btn.dataset.status)));
 document.getElementById('uploadBtn').addEventListener('click', () => document.getElementById('photoInput').click());
 document.getElementById('photoInput').addEventListener('change', (e) => {
-  const files = [...e.target.files];
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => addPhoto(currentFloor, currentRoom, ev.target.result);
-    reader.readAsDataURL(file);
-  });
+  [...e.target.files].forEach(file => { const r = new FileReader(); r.onload = ev => addPhoto(currentFloor, currentRoom, ev.target.result); r.readAsDataURL(file); });
   e.target.value = '';
 });
-
 document.getElementById('clearAllBtn').addEventListener('click', () => {
-  if (!confirm('⚠️ Limpar TODOS os registros e fotos?')) return;
-  entries = [];
-  localStorage.setItem('vistoria_entries', '[]');
-  const keys = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith('photos_')) keys.push(k);
-  }
-  keys.forEach(k => localStorage.removeItem(k));
-  document.getElementById('auditor').value = '';
-  document.getElementById('predio').value = '';
-  document.getElementById('endereco').value = '';
-  renderRoomsGrid();
-  renderReport();
-  renderCurrentPhotos();
-  showToast('✓ Todos os dados removidos');
+  if (!confirm('⚠️ Limpar tudo?')) return;
+  entries = []; localStorage.setItem('vistoria_entries', '[]');
+  for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('photos_')) localStorage.removeItem(k); }
+  document.getElementById('auditor').value = ''; document.getElementById('predio').value = ''; document.getElementById('endereco').value = '';
+  renderRoomsList(); renderReport(); renderCurrentPhotos(); showToast('✓ Todos os dados removidos');
 });
-
 document.getElementById('predio').addEventListener('change', () => {
   const v = document.getElementById('predio').value;
   const end = document.getElementById('endereco');
@@ -1039,82 +963,26 @@ document.getElementById('predio').addEventListener('change', () => {
   renderReport();
 });
 document.getElementById('useAI').addEventListener('change', renderReport);
-document.getElementById('copyBtn').addEventListener('click', () => {
-  const text = document.getElementById('reportContent').innerText;
-  navigator.clipboard.writeText(text).then(() => showToast('Relatório copiado ✅'));
-});
-document.getElementById('txtBtn').addEventListener('click', () => {
-  const text = document.getElementById('reportContent').innerText;
-  const blob = new Blob([text], { type: 'text/plain' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `vistoria_${new Date().toISOString().slice(0, 19)}.txt`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-});
+document.getElementById('copyBtn').addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('reportContent').innerText); showToast('Copiado!'); });
 document.getElementById('csvBtn').addEventListener('click', () => {
-  const pred = document.getElementById('predio').value;
-  const auditor = document.getElementById('auditor').value;
-  const rows = [['Andar', 'Sala', 'Status', 'QtdFotos']];
-  entries.forEach(e => rows.push([pad2(e.f), pad2(e.r), statusName(e.status), getRoomPhotos(e.f, e.r).length]));
+  const rows = [['Andar','Sala','Status','Fotos']];
+  entries.forEach(e => rows.push([pad2(e.f), pad2(e.r), statusName(e.status), getRoomPhotos(e.f,e.r).length]));
   const csv = rows.map(r => r.join(';')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `vistoria_${pred.replace(/\s/g, '_')}.csv`;
-  a.click();
-  URL.revokeObjectURL(a.href);
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `vistoria.csv`; a.click();
 });
-document.getElementById('pngBtn').addEventListener('click', async () => {
-  const img = await generateReportImage();
-  if (img) {
-    const a = document.createElement('a');
-    a.download = `vistoria_${new Date().toISOString().slice(0, 19)}.png`;
-    a.href = img;
-    a.click();
-    showToast('✅ Imagem salva');
-  }
-});
-document.getElementById('shareBtn').addEventListener('click', async () => {
-  currentImageData = await generateReportImage();
-  if (currentImageData) document.getElementById('shareModal').classList.add('show');
-});
-document.getElementById('shareWA').addEventListener('click', () => {
-  if (currentImageData) {
-    const text = `✨ Vistoria - ${document.getElementById('predio').value || 'Prédio'}\nAuditor: ${document.getElementById('auditor').value || '—'}`;
-    window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`);
-  }
-  document.getElementById('shareModal').classList.remove('show');
-});
-document.getElementById('shareTeams').addEventListener('click', () => {
-  if (currentImageData) {
-    const text = `Relatório Vistoria: ${document.getElementById('predio').value}`;
-    navigator.clipboard.writeText(text);
-    showToast('Mensagem copiada');
-  }
-  document.getElementById('shareModal').classList.remove('show');
-});
-document.getElementById('shareEmail').addEventListener('click', () => {
-  const subj = `Relatório Vistoria - ${document.getElementById('predio').value}`;
-  window.location.href = `mailto:?subject=${encodeURIComponent(subj)}`;
-  document.getElementById('shareModal').classList.remove('show');
-});
-document.getElementById('shareImage').addEventListener('click', () => {
-  if (currentImageData) {
-    const a = document.createElement('a');
-    a.download = `vistoria_imagem.png`;
-    a.href = currentImageData;
-    a.click();
-  }
-  document.getElementById('shareModal').classList.remove('show');
-});
+document.getElementById('pngBtn').addEventListener('click', async () => { const img = await generateImage(); if(img) { const a = document.createElement('a'); a.download = `vistoria.png`; a.href = img; a.click(); showToast('Imagem salva'); } });
+document.getElementById('shareBtn').addEventListener('click', async () => { currentImageData = await generateImage(); if(currentImageData) document.getElementById('shareModal').classList.add('show'); });
+document.getElementById('shareWA').addEventListener('click', () => { window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent('Vistoria Vivo - ' + new Date().toLocaleDateString())}`); document.getElementById('shareModal').classList.remove('show'); });
+document.getElementById('shareEmail').addEventListener('click', () => { window.location.href = `mailto:?subject=Relatório Vistoria`; document.getElementById('shareModal').classList.remove('show'); });
+document.getElementById('shareImage').addEventListener('click', () => { if(currentImageData) { const a = document.createElement('a'); a.download = `vistoria.png`; a.href = currentImageData; a.click(); } document.getElementById('shareModal').classList.remove('show'); });
 document.getElementById('closeShareModal').addEventListener('click', () => document.getElementById('shareModal').classList.remove('show'));
+const floorInput = document.getElementById('floorInput'), roomInput = document.getElementById('roomInput');
+floorInput.addEventListener('input', updateCurrent); roomInput.addEventListener('input', updateCurrent);
 
 // Inicialização
-updateCurrentDisplay();
-renderRoomsGrid();
+updateCurrent();
+renderRoomsList();
 renderReport();
 </script>
 </body>
 </html>
-```
