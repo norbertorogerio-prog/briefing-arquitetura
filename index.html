@@ -25,20 +25,26 @@ body{
   background:#0b0b12;
   color:#fff;
   font-family:'Inter',sans-serif;
-  padding:20px;
+  padding:16px;
 }
 
-/* ===== LAYOUT ===== */
+/* RESPONSIVO */
 .container{
   display:grid;
-  grid-template-columns: 360px 1fr;
-  gap:20px;
+  grid-template-columns: 1fr;
+  gap:16px;
 }
 
-/* ===== FORM ===== */
+@media(min-width:900px){
+  .container{
+    grid-template-columns: 360px 1fr;
+  }
+}
+
+/* FORM */
 .card{
   background:var(--card);
-  padding:20px;
+  padding:16px;
   border-radius:16px;
 }
 
@@ -53,22 +59,24 @@ input,select{
   color:#fff;
 }
 
-/* ===== BOARD ===== */
+/* BOARD */
 .board{
   background:var(--bg);
   border-radius:16px;
-  padding:24px;
+  padding:20px;
 }
 
 /* HEADER */
 .header{
   display:flex;
   justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
   margin-bottom:20px;
 }
 
 .title{
-  font-size:22px;
+  font-size:20px;
   font-weight:800;
 }
 
@@ -80,20 +88,26 @@ input,select{
 /* KPI */
 .kpis{
   display:grid;
-  grid-template-columns: repeat(5,1fr);
-  gap:12px;
+  grid-template-columns: repeat(2,1fr);
+  gap:10px;
   margin-bottom:20px;
+}
+
+@media(min-width:700px){
+  .kpis{
+    grid-template-columns: repeat(5,1fr);
+  }
 }
 
 .kpi{
   background:#151526;
   border-radius:12px;
-  padding:14px;
+  padding:12px;
   text-align:center;
 }
 
 .kpi .v{
-  font-size:20px;
+  font-size:18px;
   font-weight:800;
 }
 
@@ -118,23 +132,17 @@ input,select{
   line-height:1.6;
 }
 
-/* PHOTOS */
-.photo{
-  width:100%;
-  margin-top:8px;
-  border-radius:10px;
-}
-
 /* BUTTON */
 .btn{
   margin-top:10px;
   width:100%;
-  padding:10px;
+  padding:12px;
   border:none;
   border-radius:10px;
   background:var(--purple);
   color:#fff;
   cursor:pointer;
+  font-weight:700;
 }
 </style>
 </head>
@@ -150,16 +158,20 @@ input,select{
 <input id="auditor">
 
 <label>Prédio</label>
-<input id="predio">
+<select id="predio" onchange="setEndereco()">
+  <option value="">Selecione</option>
+  <option value="Eco Berrini">Eco Berrini</option>
+  <option value="Chucri Zaidan">Chucri Zaidan</option>
+</select>
 
 <label>Endereço</label>
-<input id="endereco">
+<input id="endereco" readonly>
 
 <label>Andar</label>
-<input id="andar" type="number">
+<select id="andar"></select>
 
 <label>Sala</label>
-<input id="sala" type="number">
+<select id="sala"></select>
 
 <select id="status">
 <option value="valid">Validada</option>
@@ -183,10 +195,8 @@ input,select{
 </div>
 
 <div id="kpis" class="kpis"></div>
-
 <div id="resumo" class="block"></div>
 <div id="detalhe" class="block"></div>
-<div id="fotos" class="block"></div>
 
 </div>
 
@@ -194,20 +204,38 @@ input,select{
 
 <script>
 
+/* POPULAR ANDARES E SALAS */
+for(let i=1;i<=32;i++){
+  andar.innerHTML += `<option value="${i}">${String(i).padStart(2,"0")}°</option>`;
+}
+
+for(let i=1;i<=50;i++){
+  sala.innerHTML += `<option value="${i}">${String(i).padStart(2,"0")}</option>`;
+}
+
+/* ENDEREÇO AUTOMÁTICO */
+function setEndereco(){
+  if(predio.value==="Eco Berrini"){
+    endereco.value="Av. Eng. Luís Carlos Berrini, 1376 - São Paulo";
+  }else if(predio.value==="Chucri Zaidan"){
+    endereco.value="Av. Dr. Chucri Zaidan, 2460 - Teatro Vivo - São Paulo";
+  }else{
+    endereco.value="";
+  }
+}
+
 let data=[];
 
 function add(){
-  const item={
+  data.push({
     a:andar.value,
     s:sala.value,
     st:status.value
-  };
-  data.push(item);
+  });
   render();
 }
 
 function render(){
-
   let total=data.length;
   let prob=data.filter(x=>x.st=="prob").length;
   let valid=data.filter(x=>x.st=="valid").length;
@@ -227,22 +255,22 @@ function render(){
   resumo.innerHTML=`
   <h3>Resumo Executivo</h3>
   <div class="text">
-  Foram avaliadas ${total} salas. 
+  Foram avaliadas ${total} salas.
   ${prob>0 ? `Identificados ${prob} pontos críticos.` : "Nenhum problema relevante."}
   Score geral: ${score}%.
   </div>
   `;
 
   detalhe.innerHTML=`<h3>Detalhamento</h3>`+
-  data.map(d=>`<div class="text">Andar ${d.a} Sala ${d.s} - ${d.st}</div>`).join("");
-
+  data.map(d=>`<div class="text">Andar ${String(d.a).padStart(2,"0")} Sala ${String(d.s).padStart(2,"0")} - ${d.st}</div>`).join("");
 }
 
+/* EXPORT PNG (funciona no celular) */
 async function exportPNG(){
   const canvas = await html2canvas(document.getElementById("board"),{scale:2});
   const link=document.createElement("a");
   link.download="relatorio.png";
-  link.href=canvas.toDataURL();
+  link.href=canvas.toDataURL("image/png");
   link.click();
 }
 
