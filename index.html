@@ -1,127 +1,121 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vistoria Executivo</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Relatório de Vistoria | Vivo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
   margin:0;
-  font-family:Inter;
-  background:#0b0b14;
+  font-family:'Inter',sans-serif;
+  background:#0f0f1a;
   color:#fff;
 }
 
-.container{
+.app{
   max-width:1200px;
   margin:auto;
   padding:20px;
+  display:flex;
+  gap:20px;
 }
 
 .card{
-  background:#121225;
-  border-radius:20px;
+  background:#1a1a2e;
   padding:20px;
-  margin-bottom:20px;
+  border-radius:16px;
+  width:350px;
 }
 
-select, button{
+.viewer{
+  flex:1;
+}
+
+input, select{
   width:100%;
-  padding:12px;
-  border-radius:10px;
+  padding:10px;
   margin-top:10px;
+  border-radius:10px;
   border:none;
-  background:#1b1b35;
+  background:#222;
   color:#fff;
 }
 
+.status{
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  cursor:pointer;
+  background:#333;
+}
+
 button{
-  background:linear-gradient(135deg,#6a00ff,#9b3bff);
+  margin-top:10px;
+  padding:10px;
+  width:100%;
+  border:none;
+  border-radius:10px;
+  background:#6a00ff;
+  color:#fff;
   font-weight:700;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
+.phone{
+  margin:auto;
+  width:320px;
+  border-radius:30px;
+  background:#000;
+  padding:15px;
 }
 
-.metric{
-  background:#1a1a30;
-  padding:16px;
-  border-radius:14px;
-  text-align:center;
-}
-
-.metric h1{
-  margin:0;
-}
-
-.building{
-  display:flex;
-  flex-direction:column-reverse;
-  gap:4px;
-}
-
-.floor{
-  background:#1a1a2e;
-  border-left:5px solid #6a00ff;
-  padding:8px;
-  border-radius:6px;
-  font-size:12px;
+.screen{
+  background:#0f0f1a;
+  border-radius:20px;
+  padding:15px;
 }
 
 </style>
 </head>
 
 <body>
-<div class="container">
+
+<div class="app">
 
 <div class="card">
-<h2>Cadastro</h2>
+<h2>Vistoria</h2>
+
+<input id="auditor" placeholder="Auditor">
 
 <select id="predio">
-<option value="">Selecione</option>
-<option value="Eco Berrini">Eco Berrini</option>
-<option value="Chucri Zaidan">Chucri Zaidan</option>
+<option>Eco Berrini</option>
+<option>Chucri Zaidan</option>
 </select>
 
-<select id="andar"></select>
-<select id="sala"></select>
+<input id="endereco" placeholder="Endereço">
 
-<select id="status">
-<option value="valid">Validada</option>
-<option value="lock">Trancada</option>
-<option value="prob">Problemas</option>
-<option value="other">Outros</option>
-</select>
+<input id="andar" type="number" value="1">
+<input id="sala" type="number" value="1">
 
-<button onclick="add()">Adicionar</button>
-<button onclick="share()">Compartilhar</button>
+<div class="status" data-status="valid">Validada</div>
+<div class="status" data-status="lock">Trancada</div>
+<div class="status" data-status="prob">Problemas</div>
+<div class="status" data-status="other">Outros</div>
+
+<button onclick="savePNG()">Exportar PNG</button>
 
 </div>
 
-<div id="report" class="card">
+<div class="viewer">
 
-<h2>Relatório Executivo</h2>
-<p id="meta"></p>
-
-<div class="grid">
-<div class="metric"><h1 id="total">0</h1>Salas</div>
-<div class="metric"><h1 id="ok">0</h1>OK</div>
-<div class="metric"><h1 id="prob">0</h1>Problemas</div>
-<div class="metric"><h1 id="health">0%</h1>Saúde</div>
+<div class="phone" id="capture">
+<div class="screen" id="relatorio">
+Aguardando dados...
 </div>
-
-<h3>Resumo</h3>
-<p id="resumo"></p>
-
-<h3>Prédio</h3>
-<div id="building" class="building"></div>
+</div>
 
 </div>
 
@@ -129,77 +123,73 @@ button{
 
 <script>
 
-const andarSelect = document.getElementById("andar");
-const salaSelect = document.getElementById("sala");
+let entries=[];
 
-for(let i=1;i<=32;i++){
-  andarSelect.innerHTML += `<option>${String(i).padStart(2,'0')}</option>`;
+function statusName(s){
+  return s==="valid"?"Validada":
+         s==="lock"?"Trancada":
+         s==="prob"?"Problemas":"Outros";
 }
 
-for(let i=1;i<=50;i++){
-  salaSelect.innerHTML += `<option>${String(i).padStart(2,'0')}</option>`;
-}
+document.querySelectorAll(".status").forEach(btn=>{
+  btn.onclick=()=>{
 
-let data=[];
+    let andar=parseInt(document.getElementById("andar").value);
+    let sala=parseInt(document.getElementById("sala").value);
 
-function add(){
-  const item={
-    andar:andar.value,
-    sala:sala.value,
-    status:status.value
+    let idx = entries.findIndex(e=>e.andar===andar && e.sala===sala);
+
+    // ✅ CORREÇÃO DO BUG
+    if(idx>=0){
+      entries[idx].status = btn.dataset.status;
+    }else{
+      entries.push({
+        andar,
+        sala,
+        status: btn.dataset.status
+      });
+    }
+
+    render();
   }
-  data.push(item);
-  render();
-}
+});
 
 function render(){
 
-  let ok=0, prob=0;
+  let predio=document.getElementById("predio").value;
+  let endereco=document.getElementById("endereco").value;
+  let auditor=document.getElementById("auditor").value;
 
-  data.forEach(d=>{
-    if(d.status==="valid") ok++;
-    if(d.status==="prob") prob++;
-  });
+  let html=`
+  <h3>Relatório</h3>
+  <p>${predio}</p>
+  <p>${endereco}</p>
+  <p>${auditor}</p>
+  <hr>
+  `;
 
-  total.innerText=data.length;
-  okEl.innerText=ok;
-  probEl.innerText=prob;
+  if(entries.length===0){
+    html+="Sem dados";
+  }else{
+    entries.forEach(e=>{
+      html+=`<p>Andar ${e.andar} Sala ${e.sala} - ${statusName(e.status)}</p>`;
+    });
+  }
 
-  let health = data.length ? Math.round((ok/data.length)*100) : 0;
-  healthEl.innerText=health+"%";
-
-  resumo.innerText=`Foram avaliadas ${data.length} salas. ${prob?prob+" problemas encontrados":"Nenhum problema relevante"}.`;
-
-  building.innerHTML="";
-  data.forEach(d=>{
-    building.innerHTML += `<div class="floor">Andar ${d.andar} Sala ${d.sala} - ${d.status}</div>`;
-  });
-
-  const predio = document.getElementById("predio").value;
-
-  let endereco="";
-  if(predio==="Eco Berrini") endereco="Av. Eng. Luís Carlos Berrini, 1376 - São Paulo";
-  if(predio==="Chucri Zaidan") endereco="Av. Dr. Chucri Zaidan, 2460 - Teatro Vivo";
-
-  meta.innerText=`${predio} • ${endereco} • ${new Date().toLocaleString()}`;
+  document.getElementById("relatorio").innerHTML=html;
 }
 
-async function share(){
+async function savePNG(){
 
-  const canvas = await html2canvas(document.getElementById("report"));
-  const blob = await new Promise(res=>canvas.toBlob(res));
+  const el=document.getElementById("capture");
 
-  const file = new File([blob], "relatorio.png",{type:"image/png"});
+  const canvas=await html2canvas(el);
+  const link=document.createElement("a");
 
-  if(navigator.share){
-    navigator.share({
-      files:[file],
-      title:"Relatório",
-      text:"Relatório executivo"
-    });
-  }else{
-    alert("Compartilhamento não suportado");
-  }
+  link.download="relatorio.png";
+  link.href=canvas.toDataURL();
+
+  link.click();
 }
 
 </script>
