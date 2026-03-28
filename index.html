@@ -1,202 +1,127 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Relatório Executivo | VIVO</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistoria Executivo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-:root{
-  --purple:#6600CC;
-  --bg:#0f0f1a;
-  --card:#1a1a2e;
-  --text:#fff;
-  --muted:#aaa;
-  --green:#00C853;
-  --red:#FF3B3B;
-}
-
-*{box-sizing:border-box;margin:0;padding:0}
-
 body{
-  background:#0b0b12;
+  margin:0;
+  font-family:Inter;
+  background:#0b0b14;
   color:#fff;
-  font-family:'Inter',sans-serif;
-  padding:16px;
 }
 
-/* RESPONSIVO */
 .container{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:16px;
-}
-
-@media(min-width:900px){
-  .container{
-    grid-template-columns: 360px 1fr;
-  }
-}
-
-/* FORM */
-.card{
-  background:var(--card);
-  padding:16px;
-  border-radius:16px;
-}
-
-input,select{
-  width:100%;
-  margin-top:6px;
-  margin-bottom:12px;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #333;
-  background:#111;
-  color:#fff;
-}
-
-/* BOARD */
-.board{
-  background:var(--bg);
-  border-radius:16px;
+  max-width:1200px;
+  margin:auto;
   padding:20px;
 }
 
-/* HEADER */
-.header{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:10px;
+.card{
+  background:#121225;
+  border-radius:20px;
+  padding:20px;
   margin-bottom:20px;
 }
 
-.title{
-  font-size:20px;
-  font-weight:800;
-}
-
-.meta{
-  font-size:12px;
-  color:var(--muted);
-}
-
-/* KPI */
-.kpis{
-  display:grid;
-  grid-template-columns: repeat(2,1fr);
-  gap:10px;
-  margin-bottom:20px;
-}
-
-@media(min-width:700px){
-  .kpis{
-    grid-template-columns: repeat(5,1fr);
-  }
-}
-
-.kpi{
-  background:#151526;
-  border-radius:12px;
+select, button{
+  width:100%;
   padding:12px;
+  border-radius:10px;
+  margin-top:10px;
+  border:none;
+  background:#1b1b35;
+  color:#fff;
+}
+
+button{
+  background:linear-gradient(135deg,#6a00ff,#9b3bff);
+  font-weight:700;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.metric{
+  background:#1a1a30;
+  padding:16px;
+  border-radius:14px;
   text-align:center;
 }
 
-.kpi .v{
-  font-size:18px;
-  font-weight:800;
+.metric h1{
+  margin:0;
 }
 
-.kpi .l{
-  font-size:11px;
-  color:var(--muted);
+.building{
+  display:flex;
+  flex-direction:column-reverse;
+  gap:4px;
 }
 
-/* BLOCKS */
-.block{
-  margin-top:16px;
+.floor{
+  background:#1a1a2e;
+  border-left:5px solid #6a00ff;
+  padding:8px;
+  border-radius:6px;
+  font-size:12px;
 }
 
-.block h3{
-  font-size:13px;
-  margin-bottom:6px;
-  color:#bbb;
-}
-
-.text{
-  font-size:13px;
-  line-height:1.6;
-}
-
-/* BUTTON */
-.btn{
-  margin-top:10px;
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  background:var(--purple);
-  color:#fff;
-  cursor:pointer;
-  font-weight:700;
-}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
-<!-- ESQUERDA -->
 <div class="card">
+<h2>Cadastro</h2>
 
-<label>Auditor</label>
-<input id="auditor">
-
-<label>Prédio</label>
-<select id="predio" onchange="setEndereco()">
-  <option value="">Selecione</option>
-  <option value="Eco Berrini">Eco Berrini</option>
-  <option value="Chucri Zaidan">Chucri Zaidan</option>
+<select id="predio">
+<option value="">Selecione</option>
+<option value="Eco Berrini">Eco Berrini</option>
+<option value="Chucri Zaidan">Chucri Zaidan</option>
 </select>
 
-<label>Endereço</label>
-<input id="endereco" readonly>
-
-<label>Andar</label>
 <select id="andar"></select>
-
-<label>Sala</label>
 <select id="sala"></select>
 
 <select id="status">
 <option value="valid">Validada</option>
-<option value="prob">Problema</option>
 <option value="lock">Trancada</option>
+<option value="prob">Problemas</option>
+<option value="other">Outros</option>
 </select>
 
-<button class="btn" onclick="add()">Adicionar</button>
-<button class="btn" onclick="exportPNG()">Exportar PNG</button>
+<button onclick="add()">Adicionar</button>
+<button onclick="share()">Compartilhar</button>
 
 </div>
 
-<!-- DIREITA -->
-<div id="board" class="board">
+<div id="report" class="card">
 
-<div class="header">
-  <div>
-    <div class="title">Relatório Executivo</div>
-    <div id="meta" class="meta"></div>
-  </div>
+<h2>Relatório Executivo</h2>
+<p id="meta"></p>
+
+<div class="grid">
+<div class="metric"><h1 id="total">0</h1>Salas</div>
+<div class="metric"><h1 id="ok">0</h1>OK</div>
+<div class="metric"><h1 id="prob">0</h1>Problemas</div>
+<div class="metric"><h1 id="health">0%</h1>Saúde</div>
 </div>
 
-<div id="kpis" class="kpis"></div>
-<div id="resumo" class="block"></div>
-<div id="detalhe" class="block"></div>
+<h3>Resumo</h3>
+<p id="resumo"></p>
+
+<h3>Prédio</h3>
+<div id="building" class="building"></div>
 
 </div>
 
@@ -204,74 +129,77 @@ input,select{
 
 <script>
 
-/* POPULAR ANDARES E SALAS */
+const andarSelect = document.getElementById("andar");
+const salaSelect = document.getElementById("sala");
+
 for(let i=1;i<=32;i++){
-  andar.innerHTML += `<option value="${i}">${String(i).padStart(2,"0")}°</option>`;
+  andarSelect.innerHTML += `<option>${String(i).padStart(2,'0')}</option>`;
 }
 
 for(let i=1;i<=50;i++){
-  sala.innerHTML += `<option value="${i}">${String(i).padStart(2,"0")}</option>`;
-}
-
-/* ENDEREÇO AUTOMÁTICO */
-function setEndereco(){
-  if(predio.value==="Eco Berrini"){
-    endereco.value="Av. Eng. Luís Carlos Berrini, 1376 - São Paulo";
-  }else if(predio.value==="Chucri Zaidan"){
-    endereco.value="Av. Dr. Chucri Zaidan, 2460 - Teatro Vivo - São Paulo";
-  }else{
-    endereco.value="";
-  }
+  salaSelect.innerHTML += `<option>${String(i).padStart(2,'0')}</option>`;
 }
 
 let data=[];
 
 function add(){
-  data.push({
-    a:andar.value,
-    s:sala.value,
-    st:status.value
-  });
+  const item={
+    andar:andar.value,
+    sala:sala.value,
+    status:status.value
+  }
+  data.push(item);
   render();
 }
 
 function render(){
-  let total=data.length;
-  let prob=data.filter(x=>x.st=="prob").length;
-  let valid=data.filter(x=>x.st=="valid").length;
 
-  let score = total ? Math.round((valid/total)*100) : 0;
+  let ok=0, prob=0;
 
-  meta.innerText = `${predio.value} • ${new Date().toLocaleString()} • ${auditor.value}`;
+  data.forEach(d=>{
+    if(d.status==="valid") ok++;
+    if(d.status==="prob") prob++;
+  });
 
-  kpis.innerHTML=`
-  <div class="kpi"><div class="v">${total}</div><div class="l">Salas</div></div>
-  <div class="kpi"><div class="v">${valid}</div><div class="l">OK</div></div>
-  <div class="kpi"><div class="v">${prob}</div><div class="l">Problemas</div></div>
-  <div class="kpi"><div class="v">${score}%</div><div class="l">Saúde</div></div>
-  <div class="kpi"><div class="v">${total>0?"Ativo":"-"}</div><div class="l">Status</div></div>
-  `;
+  total.innerText=data.length;
+  okEl.innerText=ok;
+  probEl.innerText=prob;
 
-  resumo.innerHTML=`
-  <h3>Resumo Executivo</h3>
-  <div class="text">
-  Foram avaliadas ${total} salas.
-  ${prob>0 ? `Identificados ${prob} pontos críticos.` : "Nenhum problema relevante."}
-  Score geral: ${score}%.
-  </div>
-  `;
+  let health = data.length ? Math.round((ok/data.length)*100) : 0;
+  healthEl.innerText=health+"%";
 
-  detalhe.innerHTML=`<h3>Detalhamento</h3>`+
-  data.map(d=>`<div class="text">Andar ${String(d.a).padStart(2,"0")} Sala ${String(d.s).padStart(2,"0")} - ${d.st}</div>`).join("");
+  resumo.innerText=`Foram avaliadas ${data.length} salas. ${prob?prob+" problemas encontrados":"Nenhum problema relevante"}.`;
+
+  building.innerHTML="";
+  data.forEach(d=>{
+    building.innerHTML += `<div class="floor">Andar ${d.andar} Sala ${d.sala} - ${d.status}</div>`;
+  });
+
+  const predio = document.getElementById("predio").value;
+
+  let endereco="";
+  if(predio==="Eco Berrini") endereco="Av. Eng. Luís Carlos Berrini, 1376 - São Paulo";
+  if(predio==="Chucri Zaidan") endereco="Av. Dr. Chucri Zaidan, 2460 - Teatro Vivo";
+
+  meta.innerText=`${predio} • ${endereco} • ${new Date().toLocaleString()}`;
 }
 
-/* EXPORT PNG (funciona no celular) */
-async function exportPNG(){
-  const canvas = await html2canvas(document.getElementById("board"),{scale:2});
-  const link=document.createElement("a");
-  link.download="relatorio.png";
-  link.href=canvas.toDataURL("image/png");
-  link.click();
+async function share(){
+
+  const canvas = await html2canvas(document.getElementById("report"));
+  const blob = await new Promise(res=>canvas.toBlob(res));
+
+  const file = new File([blob], "relatorio.png",{type:"image/png"});
+
+  if(navigator.share){
+    navigator.share({
+      files:[file],
+      title:"Relatório",
+      text:"Relatório executivo"
+    });
+  }else{
+    alert("Compartilhamento não suportado");
+  }
 }
 
 </script>
