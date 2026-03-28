@@ -155,33 +155,13 @@ select.form-field{ cursor:pointer; appearance:none; background-image:url("data:i
 .report-content .indicador-dot{width:10px;height:10px;border-radius:50%}
 .report-content .indicador-nome{flex:1}
 .report-content .indicador-valor{font-weight:700;font-size:14px}
-
-/* Fotos dentro do relatório */
-.report-room-photos{margin:16px 0;padding:16px;background:rgba(102,0,204,.1);border-radius:16px}
-.report-room-title{font-weight:700;color:var(--vivo-purple-light);margin-bottom:12px;font-size:14px}
-.report-photo-thumbnails{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
-.report-thumb{width:100px;height:100px;border-radius:12px;object-fit:cover;border:2px solid var(--vivo-purple);cursor:pointer;transition:.2s}
-.report-thumb:hover{transform:scale(1.05)}
-
-/* Toast + Modais */
-.toast{position:fixed;right:20px;bottom:20px;background:rgba(102,0,204,.95);backdrop-filter:blur(10px);
-  padding:12px 20px;border-radius:40px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}
-.toast.show{opacity:1;transform:translateY(0)}
-.share-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center}
-.share-modal.show{display:flex}
-.share-card{background:rgba(26,26,46,.95);backdrop-filter:blur(20px);border:1px solid rgba(102,0,204,.4);border-radius:24px;padding:24px;max-width:340px;width:90%}
-.share-card h4{margin-bottom:20px;font-size:18px;text-align:center}
-.share-buttons{display:flex;flex-direction:column;gap:12px}
-.share-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;border:none;border-radius:16px;font-weight:700;cursor:pointer}
-.share-btn.whatsapp{background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:#fff}
-.share-btn.teams{background:linear-gradient(135deg,#6264A7 0%,#464775 100%);color:#fff}
-.share-btn.email{background:linear-gradient(135deg,#EA4335 0%,#C5221F 100%);color:#fff}
-.share-btn.download{background:var(--grad-primary);color:#fff}
-.close-modal{background:rgba(102,0,204,.2);border:1px solid rgba(102,0,204,.3);border-radius:14px;padding:10px;margin-top:12px;color:#fff;cursor:pointer;width:100%}
-
-.fullscreen-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:20000;align-items:center;justify-content:center;cursor:pointer}
-.fullscreen-modal.show{display:flex}
-.fullscreen-modal img{max-width:95%;max-height:95%;border-radius:16px;box-shadow:0 0 50px rgba(102,0,204,.5)}
+/* Detalhe por andar com ícones e números das salas */
+.detalhe-andar{margin:12px 0 0 0}
+.andar-linha{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:12px 0;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.andar-tag{background:rgba(102,0,204,.3);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;min-width:75px;text-align:center}
+.andar-salas{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+.sala-status-item{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.08);border-radius:20px;padding:3px 10px;font-size:11px}
+.sala-status-item .sala-num{font-weight:600}
 </style>
 </head>
 <body>
@@ -207,15 +187,11 @@ select.form-field{ cursor:pointer; appearance:none; background-image:url("data:i
     <div class="number-input-group">
       <div style="flex:1">
         <label>🏬 Andar</label>
-        <select id="floorInput" class="form-field">
-          <!-- Opções de 01° Andar a 32° Andar geradas via JavaScript -->
-        </select>
+        <select id="floorInput" class="form-field"></select>
       </div>
       <div style="flex:1">
         <label>🚪 Sala</label>
-        <select id="roomInput" class="form-field">
-          <!-- Opções de Sala01 a Sala50 geradas via JavaScript -->
-        </select>
+        <select id="roomInput" class="form-field"></select>
       </div>
     </div>
 
@@ -320,6 +296,7 @@ const pad2 = n => String(n).padStart(2,"0");
 const statusName  = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Ocupado";
 const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"ocupado";
 const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"🟠";
+const getStatusEmoji = (s) => statusEmoji(s);
 
 /* ===== Gerar opções dos selects ===== */
 function populateFloorSelect() {
@@ -333,7 +310,6 @@ function populateFloorSelect() {
     floorSelect.appendChild(option);
   }
 }
-
 function populateRoomSelect() {
   const roomSelect = document.getElementById("roomInput");
   roomSelect.innerHTML = "";
@@ -433,7 +409,7 @@ function renderCreated(){
   });
 }
 
-/* ===== IA de narrativa (sem a linha de resumo) ===== */
+/* ===== IA de narrativa (sem a linha de resumo, com ícones nos detalhes) ===== */
 function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
   const stats={valid:0,lock:0,prob:0,ocupado:0}, floors={};
   entries.forEach(e=>{
@@ -449,46 +425,34 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
 <div class="kv"><b>Data</b><span>${dataStr}</span></div>
 <div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
 
-  // Indicadores em lista vertical (um abaixo do outro)
   const indicadoresHtml = `
 <div class="title">Indicadores</div>
 <div class="h-line"></div>
 <div class="indicadores-list">
-  <div class="indicador-item">
-    <div class="indicador-dot" style="background:#00C853;"></div>
-    <span class="indicador-nome">Validada</span>
-    <span class="indicador-valor">${stats.valid}</span>
-  </div>
-  <div class="indicador-item">
-    <div class="indicador-dot" style="background:#FFD600;"></div>
-    <span class="indicador-nome">Trancada</span>
-    <span class="indicador-valor">${stats.lock}</span>
-  </div>
-  <div class="indicador-item">
-    <div class="indicador-dot" style="background:#FF3B3B;"></div>
-    <span class="indicador-nome">Problemas</span>
-    <span class="indicador-valor">${stats.prob}</span>
-  </div>
-  <div class="indicador-item">
-    <div class="indicador-dot" style="background:#FF9800;"></div>
-    <span class="indicador-nome">Ocupado</span>
-    <span class="indicador-valor">${stats.ocupado}</span>
-  </div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#00C853;"></div><span class="indicador-nome">Validada</span><span class="indicador-valor">${stats.valid}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FFD600;"></div><span class="indicador-nome">Trancada</span><span class="indicador-valor">${stats.lock}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FF3B3B;"></div><span class="indicador-nome">Problemas</span><span class="indicador-valor">${stats.prob}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FF9800;"></div><span class="indicador-nome">Ocupado</span><span class="indicador-valor">${stats.ocupado}</span></div>
 </div>`;
 
-  let detalhe = "";
+  let detalheHtml = "";
   if(total>0){
-    detalhe += `<div class="bullet"><b>Detalhe por andar</b></div>`;
-    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f=>{
-      const a=floors[f], parts=[];
-      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.ocupado.length) parts.push(`🟠 ${a.ocupado.length} (${a.ocupado.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      detalhe += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")||"—"}</div>`;
+    detalheHtml = `<div class="title">Detalhamento</div><div class="h-line"></div><div class="detalhe-andar">`;
+    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f => {
+      const a = floors[f];
+      const salasItems = [];
+      if(a.valid.length) a.valid.sort((x,y)=>x-y).forEach(s => salasItems.push(`<span class="sala-status-item"><span>✅</span><span class="sala-num">${pad2(s)}</span></span>`));
+      if(a.lock.length) a.lock.sort((x,y)=>x-y).forEach(s => salasItems.push(`<span class="sala-status-item"><span>🔒</span><span class="sala-num">${pad2(s)}</span></span>`));
+      if(a.prob.length) a.prob.sort((x,y)=>x-y).forEach(s => salasItems.push(`<span class="sala-status-item"><span>❌</span><span class="sala-num">${pad2(s)}</span></span>`));
+      if(a.ocupado.length) a.ocupado.sort((x,y)=>x-y).forEach(s => salasItems.push(`<span class="sala-status-item"><span>🟠</span><span class="sala-num">${pad2(s)}</span></span>`));
+      detalheHtml += `<div class="andar-linha"><div class="andar-tag">Andar ${pad2(f)}</div><div class="andar-salas">${salasItems.join("") || "—"}</div></div>`;
     });
+    detalheHtml += `</div>`;
+  } else {
+    detalheHtml = `<div class="title">Detalhamento</div><div class="h-line"></div><div class="bullet">Sem entradas.</div>`;
   }
   const fotos = totalFotos?`📸 Evidências registradas: ${totalFotos} foto(s).`:"";
+  const fotosHtml = fotos ? `<div class="h-line"></div><div class="bullet">${fotos}</div>` : "";
 
   return (
 `<div class="title">Resumo IA</div>
@@ -497,10 +461,8 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
 <div class="h-line"></div>
 ${indicadoresHtml}
 <div class="h-line"></div>
-<div class="title">Detalhamento</div>
-<div class="h-line"></div>
-${detalhe || "<div class='bullet'>Sem entradas.</div>"}
-${fotos?`<div class="h-line"></div><div class="bullet">${fotos}</div>`:""}`
+${detalheHtml}
+${fotosHtml}`
   );
 }
 
