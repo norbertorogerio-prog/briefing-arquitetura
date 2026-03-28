@@ -1,83 +1,151 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Relatório de Vistoria | Vivo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vistoria Premium | Vivo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+:root{
+  --purple:#6A1B9A;
+  --bg:#0b0b10;
+  --card:#151520;
+  --text:#fff;
+  --green:#00c853;
+  --yellow:#ffd600;
+  --red:#ff3b3b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:#0f0f1a;
-  color:#fff;
+  font-family:Inter;
+  background:linear-gradient(135deg,#0b0b10,#1a1a2e);
+  color:var(--text);
+  padding:16px;
 }
 
 .app{
-  max-width:1200px;
+  max-width:1400px;
   margin:auto;
-  padding:20px;
-  display:flex;
+  display:grid;
+  grid-template-columns:350px 1fr;
   gap:20px;
 }
 
+@media(max-width:900px){
+  .app{grid-template-columns:1fr}
+}
+
+/* CARD */
 .card{
-  background:#1a1a2e;
-  padding:20px;
-  border-radius:16px;
-  width:350px;
-}
-
-.viewer{
-  flex:1;
-}
-
-input, select{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:10px;
-  border:none;
-  background:#222;
-  color:#fff;
-}
-
-.status{
-  margin-top:10px;
-  padding:10px;
-  border-radius:10px;
-  cursor:pointer;
-  background:#333;
-}
-
-button{
-  margin-top:10px;
-  padding:10px;
-  width:100%;
-  border:none;
-  border-radius:10px;
-  background:#6a00ff;
-  color:#fff;
-  font-weight:700;
-}
-
-.phone{
-  margin:auto;
-  width:320px;
-  border-radius:30px;
-  background:#000;
-  padding:15px;
-}
-
-.screen{
-  background:#0f0f1a;
+  background:rgba(20,20,30,.9);
+  backdrop-filter:blur(16px);
   border-radius:20px;
-  padding:15px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.05);
 }
 
+h2{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:16px;
+}
+
+/* INPUT */
+input,select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-bottom:10px;
+  background:#1f1f2e;
+  color:#fff;
+}
+
+/* STATUS */
+.status{
+  display:flex;
+  gap:8px;
+}
+
+.status button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.valid{background:var(--green)}
+.lock{background:var(--yellow);color:#000}
+.prob{background:var(--red)}
+.other{background:#888}
+
+/* KPI */
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.kpi{
+  background:#1f1f2e;
+  border-radius:14px;
+  padding:12px;
+  text-align:center;
+  font-weight:800;
+  font-size:18px;
+}
+
+/* PRÉDIO */
+.building{
+  background:#111;
+  border-radius:20px;
+  padding:16px;
+}
+
+.floor{
+  display:flex;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.floor-label{
+  width:40px;
+  font-size:11px;
+  color:#aaa;
+}
+
+.floor-bar{
+  flex:1;
+  height:18px;
+  border-radius:6px;
+  background:#222;
+  overflow:hidden;
+}
+
+.floor-fill{
+  height:100%;
+}
+
+/* BOTÃO */
+.btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  background:linear-gradient(135deg,#6A1B9A,#8E24AA);
+  color:#fff;
+  cursor:pointer;
+}
 </style>
 </head>
 
@@ -85,36 +153,45 @@ button{
 
 <div class="app">
 
+<!-- FORM -->
 <div class="card">
-<h2>Vistoria</h2>
+<h2>Cadastro</h2>
 
 <input id="auditor" placeholder="Auditor">
 
 <select id="predio">
+<option value="">Prédio</option>
 <option>Eco Berrini</option>
 <option>Chucri Zaidan</option>
 </select>
 
-<input id="endereco" placeholder="Endereço">
+<input id="andar" type="number" min="1" max="32" placeholder="Andar">
+<input id="sala" type="number" min="1" max="50" placeholder="Sala">
 
-<input id="andar" type="number" value="1">
-<input id="sala" type="number" value="1">
-
-<div class="status" data-status="valid">Validada</div>
-<div class="status" data-status="lock">Trancada</div>
-<div class="status" data-status="prob">Problemas</div>
-<div class="status" data-status="other">Outros</div>
-
-<button onclick="savePNG()">Exportar PNG</button>
-
+<div class="status">
+<button class="valid" onclick="add('valid')">OK</button>
+<button class="lock" onclick="add('lock')">Lock</button>
+<button class="prob" onclick="add('prob')">Problema</button>
+<button class="other" onclick="add('other')">Outro</button>
 </div>
 
-<div class="viewer">
-
-<div class="phone" id="capture">
-<div class="screen" id="relatorio">
-Aguardando dados...
+<button class="btn" onclick="exportPNG()">📸 Exportar</button>
 </div>
+
+<!-- VISUAL -->
+<div class="card">
+
+<div class="kpi-grid">
+<div class="kpi" id="total">0<br><span>Salas</span></div>
+<div class="kpi" id="ok">0<br><span>OK</span></div>
+<div class="kpi" id="prob">0<br><span>Problemas</span></div>
+<div class="kpi" id="health">0%<br><span>Saúde</span></div>
+</div>
+
+<div id="capture">
+
+<div class="building" id="building"></div>
+
 </div>
 
 </div>
@@ -123,73 +200,84 @@ Aguardando dados...
 
 <script>
 
-let entries=[];
+let data=[];
 
-function statusName(s){
-  return s==="valid"?"Validada":
-         s==="lock"?"Trancada":
-         s==="prob"?"Problemas":"Outros";
+function add(status){
+  let f=parseInt(document.getElementById('andar').value);
+  let r=parseInt(document.getElementById('sala').value);
+  if(!f||!r)return;
+
+  data.push({f,r,status});
+  render();
 }
-
-document.querySelectorAll(".status").forEach(btn=>{
-  btn.onclick=()=>{
-
-    let andar=parseInt(document.getElementById("andar").value);
-    let sala=parseInt(document.getElementById("sala").value);
-
-    let idx = entries.findIndex(e=>e.andar===andar && e.sala===sala);
-
-    // ✅ CORREÇÃO DO BUG
-    if(idx>=0){
-      entries[idx].status = btn.dataset.status;
-    }else{
-      entries.push({
-        andar,
-        sala,
-        status: btn.dataset.status
-      });
-    }
-
-    render();
-  }
-});
 
 function render(){
 
-  let predio=document.getElementById("predio").value;
-  let endereco=document.getElementById("endereco").value;
-  let auditor=document.getElementById("auditor").value;
+  let building=document.getElementById('building');
+  building.innerHTML="";
 
-  let html=`
-  <h3>Relatório</h3>
-  <p>${predio}</p>
-  <p>${endereco}</p>
-  <p>${auditor}</p>
-  <hr>
-  `;
+  let floors={};
 
-  if(entries.length===0){
-    html+="Sem dados";
-  }else{
-    entries.forEach(e=>{
-      html+=`<p>Andar ${e.andar} Sala ${e.sala} - ${statusName(e.status)}</p>`;
-    });
+  data.forEach(d=>{
+    if(!floors[d.f])floors[d.f]=[];
+    floors[d.f].push(d);
+  });
+
+  for(let i=32;i>=1;i--){
+    let div=document.createElement('div');
+    div.className='floor';
+
+    let label=document.createElement('div');
+    label.className='floor-label';
+    label.innerText=i;
+
+    let bar=document.createElement('div');
+    bar.className='floor-bar';
+
+    let fill=document.createElement('div');
+    fill.className='floor-fill';
+
+    let items=floors[i]||[];
+
+    let prob=items.filter(x=>x.status=='prob').length;
+    let ok=items.filter(x=>x.status=='valid').length;
+
+    if(prob>0) fill.style.background='red';
+    else if(ok>0) fill.style.background='green';
+    else fill.style.background='#444';
+
+    fill.style.width = items.length*5 + "%";
+
+    bar.appendChild(fill);
+    div.appendChild(label);
+    div.appendChild(bar);
+
+    building.appendChild(div);
   }
 
-  document.getElementById("relatorio").innerHTML=html;
+  updateKPI();
 }
 
-async function savePNG(){
+function updateKPI(){
+  let total=data.length;
+  let ok=data.filter(x=>x.status=='valid').length;
+  let prob=data.filter(x=>x.status=='prob').length;
 
-  const el=document.getElementById("capture");
+  document.getElementById('total').innerHTML=total+"<br><span>Salas</span>";
+  document.getElementById('ok').innerHTML=ok+"<br><span>OK</span>";
+  document.getElementById('prob').innerHTML=prob+"<br><span>Problemas</span>";
 
-  const canvas=await html2canvas(el);
-  const link=document.createElement("a");
+  let health = total ? Math.round((ok/total)*100) : 0;
+  document.getElementById('health').innerHTML=health+"%<br><span>Saúde</span>";
+}
 
-  link.download="relatorio.png";
-  link.href=canvas.toDataURL();
-
-  link.click();
+function exportPNG(){
+  html2canvas(document.getElementById('capture')).then(canvas=>{
+    let link=document.createElement('a');
+    link.download='vistoria.png';
+    link.href=canvas.toDataURL();
+    link.click();
+  });
 }
 
 </script>
