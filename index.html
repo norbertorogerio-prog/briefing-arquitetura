@@ -1,12 +1,3 @@
-Aqui está o código com as alterações solicitadas:
-
-Alterações realizadas:
-
-1. ✅ Status "Outros" alterado para "Ocupado"
-2. ✅ Campo "Andar" agora é um select com opções de 01° Andar a 32° Andar
-3. ✅ Campo "Sala" agora é um select com opções de Sala01 a Sala50
-
-```html
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -159,6 +150,11 @@ select.form-field{ cursor:pointer; appearance:none; background-image:url("data:i
 .report-content .kv{display:flex;gap:10px;font-size:12px;margin:3px 0}
 .report-content .kv b{color:#cfc3ff;min-width:92px;text-transform:uppercase;font-size:11px;letter-spacing:.4px}
 .report-content .bullet{margin:4px 0 0 14px}
+.report-content .indicadores-list{margin:8px 0 0 0;list-style:none}
+.report-content .indicador-item{display:flex;align-items:center;gap:8px;margin:8px 0;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:12px}
+.report-content .indicador-dot{width:10px;height:10px;border-radius:50%}
+.report-content .indicador-nome{flex:1}
+.report-content .indicador-valor{font-weight:700;font-size:14px}
 
 /* Fotos dentro do relatório */
 .report-room-photos{margin:16px 0;padding:16px;background:rgba(102,0,204,.1);border-radius:16px}
@@ -367,7 +363,6 @@ const shareModal   = document.getElementById("shareModal");
 function updateCurrentDisplay(){
   currentFloor = Math.min(32, Math.max(1, parseInt(floorInput.value)||1));
   currentRoom  = Math.min(50, Math.max(1, parseInt(roomInput.value)||1));
-  // Sincroniza os selects
   floorInput.value = currentFloor;
   roomInput.value = currentRoom;
   dispFloor.textContent = pad2(currentFloor);
@@ -438,7 +433,7 @@ function renderCreated(){
   });
 }
 
-/* ===== IA de narrativa ===== */
+/* ===== IA de narrativa (sem a linha de resumo) ===== */
 function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
   const stats={valid:0,lock:0,prob:0,ocupado:0}, floors={};
   entries.forEach(e=>{
@@ -447,9 +442,6 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
     floors[e.f][e.status].push(e.r);
   });
   const total=entries.length, dataStr=new Date().toLocaleString("pt-BR");
-  const headline = total===0
-    ? "Nenhuma sala foi registrada nesta vistoria."
-    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"} e ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios relevantes"} e ${stats.ocupado>0?`${stats.ocupado} sala(s) ocupada(s)`:"nenhuma sala ocupada"}.`;
 
   const meta =
 `<div class="kv"><b>Prédio</b><span>${predio||"—"}</span></div>
@@ -457,7 +449,32 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
 <div class="kv"><b>Data</b><span>${dataStr}</span></div>
 <div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
 
-  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • 🟠 Ocupado: ${stats.ocupado}`;
+  // Indicadores em lista vertical (um abaixo do outro)
+  const indicadoresHtml = `
+<div class="title">Indicadores</div>
+<div class="h-line"></div>
+<div class="indicadores-list">
+  <div class="indicador-item">
+    <div class="indicador-dot" style="background:#00C853;"></div>
+    <span class="indicador-nome">Validada</span>
+    <span class="indicador-valor">${stats.valid}</span>
+  </div>
+  <div class="indicador-item">
+    <div class="indicador-dot" style="background:#FFD600;"></div>
+    <span class="indicador-nome">Trancada</span>
+    <span class="indicador-valor">${stats.lock}</span>
+  </div>
+  <div class="indicador-item">
+    <div class="indicador-dot" style="background:#FF3B3B;"></div>
+    <span class="indicador-nome">Problemas</span>
+    <span class="indicador-valor">${stats.prob}</span>
+  </div>
+  <div class="indicador-item">
+    <div class="indicador-dot" style="background:#FF9800;"></div>
+    <span class="indicador-nome">Ocupado</span>
+    <span class="indicador-valor">${stats.ocupado}</span>
+  </div>
+</div>`;
 
   let detalhe = "";
   if(total>0){
@@ -478,11 +495,7 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
 <div class="h-line"></div>
 <div class="kvs">${meta}</div>
 <div class="h-line"></div>
-<div class="bullet">${headline}</div>
-<div class="h-line"></div>
-<div class="title">Indicadores</div>
-<div class="h-line"></div>
-<div class="bullet">${global}</div>
+${indicadoresHtml}
 <div class="h-line"></div>
 <div class="title">Detalhamento</div>
 <div class="h-line"></div>
@@ -509,6 +522,8 @@ function renderReportWithPhotos(){
     mainHtml = aiComposeReportText({predio,endereco,auditor,entries,totalFotos});
   }else{
     const dataStr = new Date().toLocaleString("pt-BR");
+    const stats={valid:0,lock:0,prob:0,ocupado:0};
+    entries.forEach(e=> stats[e.status]=(stats[e.status]||0)+1);
     mainHtml =
 `<div class="title">Relatório</div>
 <div class="h-line"></div>
@@ -517,6 +532,15 @@ function renderReportWithPhotos(){
   <div class="kv"><b>Endereço</b><span>${endereco}</span></div>
   <div class="kv"><b>Data</b><span>${dataStr}</span></div>
   <div class="kv"><b>Auditor</b><span>${auditor}</span></div>
+</div>
+<div class="h-line"></div>
+<div class="title">Indicadores</div>
+<div class="h-line"></div>
+<div class="indicadores-list">
+  <div class="indicador-item"><div class="indicador-dot" style="background:#00C853;"></div><span class="indicador-nome">Validada</span><span class="indicador-valor">${stats.valid}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FFD600;"></div><span class="indicador-nome">Trancada</span><span class="indicador-valor">${stats.lock}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FF3B3B;"></div><span class="indicador-nome">Problemas</span><span class="indicador-valor">${stats.prob}</span></div>
+  <div class="indicador-item"><div class="indicador-dot" style="background:#FF9800;"></div><span class="indicador-nome">Ocupado</span><span class="indicador-valor">${stats.ocupado}</span></div>
 </div>`;
   }
 
