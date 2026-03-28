@@ -3,22 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vistoria Premium</title>
+<title>Vistoria Prédio Premium</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 body{
-  background:#0b0b10;
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:#0b0b15;
   color:#fff;
-  font-family:Arial;
-  padding:16px;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
 }
 
 .card{
-  background:#151520;
-  border-radius:20px;
+  background:#121225;
   padding:20px;
+  border-radius:20px;
   margin-bottom:20px;
 }
 
@@ -26,97 +32,112 @@ select{
   width:100%;
   padding:12px;
   margin-bottom:10px;
-  border-radius:10px;
-  background:#1f1f2e;
-  color:#fff;
+  border-radius:12px;
   border:none;
+  background:#1f1f3a;
+  color:#fff;
+  font-size:14px;
 }
 
 .status{
   display:flex;
-  gap:8px;
+  gap:10px;
+  margin-top:10px;
 }
 
 .status button{
   flex:1;
   padding:12px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   font-weight:700;
 }
 
-.valid{background:#00c853}
-.lock{background:#ffd600;color:#000}
-.prob{background:#ff3b3b}
-.other{background:#666}
+.valid{background:#00c853;}
+.lock{background:#ffd600;color:#000;}
+.prob{background:#ff3b3b;}
+.occ{background:#888;}
 
-.kpi{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
+.btn{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#6A00FF,#9D4DFF);
+  color:#fff;
+  font-weight:700;
 }
 
-.kpi div{
-  background:#1f1f2e;
-  padding:12px;
-  border-radius:12px;
+/* KPIs */
+.kpis{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.kpi{
+  flex:1;
+  min-width:100px;
+  background:#1a1a30;
+  padding:15px;
+  border-radius:16px;
   text-align:center;
 }
 
 .building{
   margin-top:20px;
-  max-height:500px;
-  overflow:auto;
 }
 
 .floor{
   display:flex;
+  align-items:center;
+  gap:10px;
   margin-bottom:6px;
 }
 
-.label{
+.floor-number{
   width:40px;
   font-size:12px;
-  color:#aaa;
+  opacity:.7;
 }
 
-.bar{
+.floor-bar{
   flex:1;
-  height:16px;
+  height:12px;
   background:#222;
-  border-radius:6px;
+  border-radius:10px;
+  display:flex;
+  overflow:hidden;
 }
 
-.fill{
+.segment{
   height:100%;
-  border-radius:6px;
 }
 
-.btn{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:none;
-  border-radius:12px;
-  background:purple;
-  color:#fff;
-  font-weight:800;
-}
+.valid-bg{background:#00c853;}
+.lock-bg{background:#ffd600;}
+.prob-bg{background:#ff3b3b;}
+.occ-bg{background:#888;}
+
 </style>
 </head>
 
 <body>
+<div class="container">
 
 <div class="card">
 
-<select id="andar"></select>
-<select id="sala"></select>
+<h3>Cadastro</h3>
+
+<select id="floor"></select>
+<select id="room"></select>
 
 <div class="status">
-<button class="valid" onclick="add('valid')">Validado</button>
-<button class="lock" onclick="add('lock')">Lock</button>
-<button class="prob" onclick="add('prob')">Problema</button>
-<button class="other" onclick="add('other')">Ocupado</button>
+  <button class="valid" onclick="add('valid')">Validado</button>
+  <button class="lock" onclick="add('lock')">Lock</button>
+  <button class="prob" onclick="add('prob')">Problema</button>
+  <button class="occ" onclick="add('occ')">Ocupado</button>
 </div>
 
 <button class="btn" onclick="importar()">📲 Importar</button>
@@ -125,151 +146,106 @@ select{
 
 <div class="card">
 
-<div class="kpi">
-<div id="total">0<br>Salas</div>
-<div id="valid">0<br>Validado</div>
-<div id="lockKpi">0<br>Lock</div>
-<div id="probKpi">0<br>Problema</div>
+<div class="kpis">
+  <div class="kpi"><b id="total">0</b><br>Salas</div>
+  <div class="kpi"><b id="valid">0</b><br>Validado</div>
+  <div class="kpi"><b id="lock">0</b><br>Lock</div>
+  <div class="kpi"><b id="prob">0</b><br>Problema</div>
 </div>
 
-<div id="capture">
 <div class="building" id="building"></div>
+
 </div>
 
 </div>
 
 <script>
 
-let entries=[];
+// ===== DATA =====
+let data = {};
 
-/* RANGE 01-32 e 01-50 */
+// ===== POPULAR SELECT =====
 for(let i=1;i<=32;i++){
-  let o=document.createElement("option");
-  o.value=i;
-  o.text=String(i).padStart(2,'0');
-  andar.appendChild(o);
+  floor.innerHTML += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
 }
 
 for(let i=1;i<=50;i++){
-  let o=document.createElement("option");
-  o.value=i;
-  o.text=String(i).padStart(2,'0');
-  sala.appendChild(o);
+  room.innerHTML += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
 }
 
-/* ADD */
+// ===== ADD SALA =====
 function add(status){
-  let f=parseInt(andar.value);
-  let r=parseInt(sala.value);
+  const f = floor.value;
+  const r = room.value;
 
-  const existing = entries.find(e=>e.f===f && e.r===r);
+  if(!data[f]) data[f] = {};
 
-  if(existing){
-    existing.status=status;
-  }else{
-    entries.push({f,r,status});
-  }
+  // NÃO sobrescreve errado → salva por sala única
+  data[f][r] = status;
 
   render();
 }
 
-/* UNIQUE */
-function getUnique(){
-  return Object.values(
-    entries.reduce((acc,cur)=>{
-      acc[`${cur.f}-${cur.r}`]=cur;
-      return acc;
-    },{})
-  );
-}
-
-/* RENDER */
+// ===== RENDER =====
 function render(){
 
-  let building=document.getElementById("building");
-  building.innerHTML="";
+  let total=0, v=0, l=0, p=0, o=0;
 
-  let list=getUnique();
+  let html="";
 
-  let floors={};
+  for(let f=32; f>=1; f--){
 
-  list.forEach(x=>{
-    if(!floors[x.f]) floors[x.f]=[];
-    floors[x.f].push(x);
-  });
+    let floors = data[f] || {};
 
-  for(let i=32;i>=1;i--){
+    let count = {
+      valid:0,
+      lock:0,
+      prob:0,
+      occ:0
+    };
 
-    let row=document.createElement("div");
-    row.className="floor";
+    Object.values(floors).forEach(s=>{
+      total++;
+      count[s]++;
 
-    let label=document.createElement("div");
-    label.className="label";
-    label.innerText=String(i).padStart(2,'0');
-
-    let bar=document.createElement("div");
-    bar.className="bar";
-
-    let fill=document.createElement("div");
-    fill.className="fill";
-
-    let items=floors[i]||[];
-
-    let valid=items.filter(x=>x.status==='valid').length;
-    let lock=items.filter(x=>x.status==='lock').length;
-    let prob=items.filter(x=>x.status==='prob').length;
-
-    if(prob>0) fill.style.background="#ff3b3b";
-    else if(lock>0) fill.style.background="#ffd600";
-    else if(valid>0) fill.style.background="#00c853";
-    else fill.style.background="#444";
-
-    fill.style.width=(items.length*10)+"%";
-
-    bar.appendChild(fill);
-    row.appendChild(label);
-    row.appendChild(bar);
-
-    building.appendChild(row);
-  }
-
-  updateKPI(list);
-}
-
-/* KPI */
-function updateKPI(list){
-
-  let total=list.length;
-  let valid=list.filter(x=>x.status==='valid').length;
-  let lock=list.filter(x=>x.status==='lock').length;
-  let prob=list.filter(x=>x.status==='prob').length;
-
-  document.getElementById("total").innerHTML=total+"<br>Salas";
-  document.getElementById("valid").innerHTML=valid+"<br>Validado";
-  document.getElementById("lockKpi").innerHTML=lock+"<br>Lock";
-  document.getElementById("probKpi").innerHTML=prob+"<br>Problema";
-}
-
-/* IMPORTAR (compartilhar) */
-async function importar(){
-
-  const canvas = await html2canvas(document.getElementById("capture"));
-  const blob = await (await fetch(canvas.toDataURL())).blob();
-
-  const file = new File([blob], "vistoria.png", {type:"image/png"});
-
-  if(navigator.share){
-    navigator.share({
-      files:[file],
-      title:"Relatório",
-      text:"Relatório de vistoria"
+      if(s==="valid") v++;
+      if(s==="lock") l++;
+      if(s==="prob") p++;
+      if(s==="occ") o++;
     });
-  }else{
-    let a=document.createElement("a");
-    a.href=canvas.toDataURL();
-    a.download="vistoria.png";
-    a.click();
+
+    let sum = Object.values(count).reduce((a,b)=>a+b,0);
+
+    let bar="";
+
+    if(sum>0){
+      for(let key in count){
+        if(count[key]>0){
+          bar += `<div class="segment ${key}-bg" style="width:${(count[key]/sum)*100}%"></div>`;
+        }
+      }
+    }
+
+    html += `
+    <div class="floor">
+      <div class="floor-number">${String(f).padStart(2,'0')}</div>
+      <div class="floor-bar">${bar}</div>
+    </div>`;
   }
+
+  building.innerHTML = html;
+
+  document.getElementById("total").innerText = total;
+  document.getElementById("valid").innerText = v;
+  document.getElementById("lock").innerText = l;
+  document.getElementById("prob").innerText = p;
+}
+
+// ===== IMPORTAR =====
+function importar(){
+  const texto = `Relatório:\nTotal salas: ${total.innerText}`;
+  navigator.clipboard.writeText(texto);
+  alert("Relatório copiado! Cole no Teams / WhatsApp");
 }
 
 </script>
