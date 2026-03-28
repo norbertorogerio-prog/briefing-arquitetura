@@ -108,60 +108,329 @@ select.form-field{ cursor:pointer; appearance:none; background-image:url("data:i
 .pill.valid{background:var(--green)} .pill.lock{background:var(--yellow);color:#1A1A2E}
 .pill.prob{background:var(--red)} .pill.ocupado{background:var(--orange)}
 
-/* RELATÓRIO (mock de celular) */
-.report-box{border-radius:16px;background:rgba(0,0,0,.3);overflow:hidden;border:1px solid rgba(102,0,204,.3)}
-.report-title{background:linear-gradient(135deg,rgba(102,0,204,.2) 0%,rgba(76,0,153,.2) 100%);
-  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid rgba(102,0,204,.3)}
-.report-title span{font-size:14px;font-weight:700;background:var(--grad-primary);-webkit-background-clip:text;background-clip:text;color:transparent}
-.report-actions{display:flex;gap:10px;flex-wrap:wrap}
-.btn-action{
-  border:1.5px solid rgba(102,0,204,.3); background:rgba(102,0,204,.15); color:var(--white);
-  font-weight:600; font-size:12px; padding:8px 16px; border-radius:10px; cursor:pointer; transition:.2s
+/* RELATÓRIO (mock de celular) - AJUSTADO PARA CAPTURA COMPLETA */
+.report-box{
+  border-radius:16px;
+  background:rgba(0,0,0,.3);
+  overflow:visible; /* Mudado para visible para não cortar conteúdo */
+  border:1px solid rgba(102,0,204,.3);
 }
-.btn-action:hover{background:rgba(102,0,204,.3); transform:translateY(-1px)}
-.btn-share{background:linear-gradient(135deg,#6600CC 0%,#8833FF 100%); border:none}
-.btn-png{background:linear-gradient(135deg,#4C0099 0%,#6600CC 100%); border:none}
+.report-title{
+  background:linear-gradient(135deg,rgba(102,0,204,.2) 0%,rgba(76,0,153,.2) 100%);
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  border-bottom:1px solid rgba(102,0,204,.3);
+}
+.report-title span{
+  font-size:14px;
+  font-weight:700;
+  background:var(--grad-primary);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.report-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.btn-action{
+  border:1.5px solid rgba(102,0,204,.3);
+  background:rgba(102,0,204,.15);
+  color:var(--white);
+  font-weight:600;
+  font-size:12px;
+  padding:8px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:.2s;
+}
+.btn-action:hover{
+  background:rgba(102,0,204,.3);
+  transform:translateY(-1px);
+}
+.btn-share{
+  background:linear-gradient(135deg,#6600CC 0%,#8833FF 100%);
+  border:none;
+}
+.btn-png{
+  background:linear-gradient(135deg,#4C0099 0%,#6600CC 100%);
+  border:none;
+}
 
-/* Phone mock */
+/* Phone mock - sem overflow hidden para capturar tudo */
 .phone-wrap{
-  margin:10px auto; width:360px; border-radius:40px; padding:14px 12px 18px;
-  background:linear-gradient(180deg,#5d05c7 0%, #4C0099 100%); box-shadow:0 20px 50px rgba(102,0,204,.35);
-  border:2px solid rgba(255,255,255,.08); position:relative;
+  margin:10px auto;
+  width:100%;
+  max-width:380px;
+  border-radius:40px;
+  padding:14px 12px 18px;
+  background:linear-gradient(180deg,#5d05c7 0%, #4C0099 100%);
+  box-shadow:0 20px 50px rgba(102,0,204,.35);
+  border:2px solid rgba(255,255,255,.08);
+  position:relative;
 }
 .phone-notch{width:180px;height:22px;background:rgba(0,0,0,.35);border-radius:0 0 14px 14px;margin:0 auto 10px}
 .phone-screen{
-  background:#0f0f1a; border-radius:28px; border:1px solid rgba(255,255,255,.06); overflow:hidden; position:relative;
+  background:#0f0f1a;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.06);
+  overflow:visible; /* Mudado para visible para não cortar conteúdo na captura */
+  position:relative;
 }
 .phone-footer{
-  display:flex; align-items:center; justify-content:center; padding:14px 10px 18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.04)); border-top:1px solid rgba(255,255,255,.08)
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px 10px 18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.04));
+  border-top:1px solid rgba(255,255,255,.08)
 }
 .vivo-logo{
-  font-weight:900; letter-spacing:2px; font-size:13px;
-  background:linear-gradient(135deg,#fff 0%,#d9c9ff 100%); -webkit-background-clip:text;background-clip:text;color:transparent;
-  border:1px solid rgba(255,255,255,.25); padding:6px 12px; border-radius:999px;
+  font-weight:900;
+  letter-spacing:2px;
+  font-size:13px;
+  background:linear-gradient(135deg,#fff 0%,#d9c9ff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  border:1px solid rgba(255,255,255,.25);
+  padding:6px 12px;
+  border-radius:999px;
 }
 
-/* Conteúdo na "tela" */
-.phone-screen .report-content{background:transparent;padding:18px 16px 6px;max-height:550px;overflow-y:auto;font-size:13px;line-height:1.55}
-.report-content .h-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);margin:10px 0}
-.report-content .title{font-weight:800;font-size:14px;letter-spacing:.3px;color:#eae6ff}
+/* Conteúdo na "tela" - ajustado para não ter barra de rolagem lateral */
+.phone-screen .report-content{
+  background:transparent;
+  padding:18px 16px 16px;
+  max-height:600px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  font-size:13px;
+  line-height:1.55;
+  word-wrap:break-word;
+}
+.report-content .h-line{
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  margin:10px 0;
+}
+.report-content .title{
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:.3px;
+  color:#eae6ff;
+}
 .report-content .kvs{margin:8px 0 0}
-.report-content .kv{display:flex;gap:10px;font-size:12px;margin:3px 0}
-.report-content .kv b{color:#cfc3ff;min-width:92px;text-transform:uppercase;font-size:11px;letter-spacing:.4px}
+.report-content .kv{
+  display:flex;
+  gap:10px;
+  font-size:12px;
+  margin:3px 0;
+  flex-wrap:wrap;
+}
+.report-content .kv b{
+  color:#cfc3ff;
+  min-width:92px;
+  text-transform:uppercase;
+  font-size:11px;
+  letter-spacing:.4px;
+}
 .report-content .bullet{margin:4px 0 0 14px}
 .report-content .indicadores-list{margin:8px 0 0 0;list-style:none}
-.report-content .indicador-item{display:flex;align-items:center;gap:8px;margin:8px 0;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:12px}
+.report-content .indicador-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px 0;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  font-size:12px;
+}
 .report-content .indicador-dot{width:10px;height:10px;border-radius:50%}
 .report-content .indicador-nome{flex:1}
 .report-content .indicador-valor{font-weight:700;font-size:14px}
 /* Detalhe por andar com ícones e números das salas */
 .detalhe-andar{margin:12px 0 0 0}
-.andar-linha{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:12px 0;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
-.andar-tag{background:rgba(102,0,204,.3);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;min-width:75px;text-align:center}
-.andar-salas{display:flex;flex-wrap:wrap;gap:8px;flex:1}
-.sala-status-item{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.08);border-radius:20px;padding:3px 10px;font-size:11px}
+.andar-linha{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:8px;
+  margin:12px 0;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.andar-tag{
+  background:rgba(102,0,204,.3);
+  border-radius:20px;
+  padding:4px 10px;
+  font-size:11px;
+  font-weight:700;
+  min-width:75px;
+  text-align:center;
+}
+.andar-salas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  flex:1;
+}
+.sala-status-item{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:rgba(255,255,255,.08);
+  border-radius:20px;
+  padding:3px 10px;
+  font-size:11px;
+}
 .sala-status-item .sala-num{font-weight:600}
+
+/* Fotos dentro do relatório - TAMANHO REDUZIDO */
+.report-room-photos{
+  margin:12px 0;
+  padding:12px;
+  background:rgba(102,0,204,.1);
+  border-radius:12px;
+}
+.report-room-title{
+  font-weight:700;
+  color:var(--vivo-purple-light);
+  margin-bottom:8px;
+  font-size:12px;
+}
+.report-photo-thumbnails{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+.report-thumb{
+  width:55px;
+  height:55px;
+  border-radius:10px;
+  object-fit:cover;
+  border:1.5px solid var(--vivo-purple);
+  cursor:pointer;
+  transition:.2s;
+}
+.report-thumb:hover{
+  transform:scale(1.05);
+}
+
+/* Toast + Modais */
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:rgba(102,0,204,.95);
+  backdrop-filter:blur(10px);
+  padding:12px 20px;
+  border-radius:40px;
+  font-size:13px;
+  font-weight:500;
+  z-index:9999;
+  opacity:0;
+  transform:translateY(10px);
+  transition:.2s;
+  pointer-events:none;
+}
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.share-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(8px);
+  z-index:10000;
+  align-items:center;
+  justify-content:center;
+}
+.share-modal.show{
+  display:flex;
+}
+.share-card{
+  background:rgba(26,26,46,.95);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(102,0,204,.4);
+  border-radius:24px;
+  padding:24px;
+  max-width:340px;
+  width:90%;
+}
+.share-card h4{
+  margin-bottom:20px;
+  font-size:18px;
+  text-align:center;
+}
+.share-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.share-btn{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 16px;
+  border:none;
+  border-radius:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+.share-btn.whatsapp{
+  background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);
+  color:#fff;
+}
+.share-btn.teams{
+  background:linear-gradient(135deg,#6264A7 0%,#464775 100%);
+  color:#fff;
+}
+.share-btn.email{
+  background:linear-gradient(135deg,#EA4335 0%,#C5221F 100%);
+  color:#fff;
+}
+.share-btn.download{
+  background:var(--grad-primary);
+  color:#fff;
+}
+.close-modal{
+  background:rgba(102,0,204,.2);
+  border:1px solid rgba(102,0,204,.3);
+  border-radius:14px;
+  padding:10px;
+  margin-top:12px;
+  color:#fff;
+  cursor:pointer;
+  width:100%;
+}
+.fullscreen-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.95);
+  z-index:20000;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.fullscreen-modal.show{
+  display:flex;
+}
+.fullscreen-modal img{
+  max-width:95%;
+  max-height:95%;
+  border-radius:16px;
+  box-shadow:0 0 50px rgba(102,0,204,.5);
+}
 </style>
 </head>
 <body>
@@ -409,7 +678,7 @@ function renderCreated(){
   });
 }
 
-/* ===== IA de narrativa (sem a linha de resumo, com ícones nos detalhes) ===== */
+/* ===== IA de narrativa ===== */
 function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
   const stats={valid:0,lock:0,prob:0,ocupado:0}, floors={};
   entries.forEach(e=>{
@@ -520,15 +789,34 @@ function renderReportWithPhotos(){
   document.getElementById("relatorio").innerHTML = mainHtml + photosHtml;
 }
 
-/* ===== PNG ===== */
+/* ===== PNG - CAPTURA COMPLETA SEM CORTE ===== */
 async function generateImage(){
   const phone = document.getElementById("phoneMock");
   if(!phone){ showToast("Nada para gerar"); return null; }
   showToast("📸 Gerando imagem...");
   try{
-    const canvas = await html2canvas(phone,{scale:2,backgroundColor:null,logging:false,useCORS:true});
+    // Configuração para capturar todo o conteúdo sem cortes
+    const canvas = await html2canvas(phone, {
+      scale: 2.5,
+      backgroundColor: null,
+      logging: false,
+      useCORS: true,
+      windowWidth: phone.scrollWidth,
+      windowHeight: phone.scrollHeight,
+      onclone: (clonedDoc, element) => {
+        // Garantir que no clone não haja overflow hidden
+        const clonedPhone = element;
+        if(clonedPhone) {
+          clonedPhone.style.overflow = 'visible';
+        }
+      }
+    });
     return canvas.toDataURL('image/png');
-  }catch(e){ showToast("❌ Erro ao gerar imagem"); return null; }
+  }catch(e){ 
+    console.error(e);
+    showToast("❌ Erro ao gerar imagem"); 
+    return null; 
+  }
 }
 async function saveAsPNG(){
   const data = await generateImage(); if(!data) return;
@@ -541,7 +829,7 @@ async function saveAsPNG(){
 async function openShareModal(){ const d=await generateImage(); if(!d)return; currentImageData=d; shareModal.classList.add("show"); }
 function shareToWhatsApp(){
   if(!currentImageData) return;
-  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
+  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}`;
   if(navigator.share){
     fetch(currentImageData).then(r=>r.blob()).then(b=>{
       navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
@@ -553,7 +841,7 @@ function shareToWhatsApp(){
 }
 function shareToTeams(){
   if(!currentImageData) return;
-  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
+  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}`;
   navigator.clipboard.writeText(msg); showToast("✅ Mensagem copiada! Cole no Teams");
   const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click();
   shareModal.classList.remove("show");
