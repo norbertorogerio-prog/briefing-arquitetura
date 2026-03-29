@@ -7,80 +7,88 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:linear-gradient(135deg,#0F0F1A,#1A1A2E);color:#fff;font-family:'Inter',system-ui,sans-serif;padding:20px;position:relative}
-.building-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%231A1A2E"/><rect x="0" y="0" width="1200" height="800" fill="url(%23grad)"/><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236600CC" stop-opacity="0.2"/><stop offset="100%" stop-color="%234C0099" stop-opacity="0.3"/></linearGradient></defs><rect x="180" y="480" width="70" height="220" fill="%236600CC" fill-opacity="0.2"/><rect x="280" y="510" width="70" height="190" fill="%236600CC" fill-opacity="0.2"/><rect x="380" y="450" width="70" height="250" fill="%236600CC" fill-opacity="0.2"/><rect x="480" y="520" width="70" height="180" fill="%236600CC" fill-opacity="0.2"/><rect x="580" y="470" width="70" height="230" fill="%236600CC" fill-opacity="0.2"/><rect x="680" y="540" width="70" height="160" fill="%236600CC" fill-opacity="0.2"/><rect x="780" y="490" width="70" height="210" fill="%236600CC" fill-opacity="0.2"/><rect x="880" y="440" width="70" height="260" fill="%236600CC" fill-opacity="0.2"/><rect x="980" y="500" width="70" height="200" fill="%236600CC" fill-opacity="0.2"/><text x="550" y="100" font-size="32" fill="%23FFFFFF" fill-opacity="0.1" font-family="Arial">ECO BERRINI</text></svg>');background-size:cover;opacity:0.35;z-index:0;pointer-events:none}
+body{background:linear-gradient(135deg,#0F0F1A,#1A1A2E);color:#fff;font-family:'Inter',system-ui,sans-serif;padding:20px;position:relative;min-height:100vh}
+/* Fundo com imagem real do prédio Eco Berrini */
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80');background-size:cover;background-position:center;opacity:0.2;z-index:0;pointer-events:none}
+/* Overlay gradiente roxo */
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,rgba(102,0,204,0.3),rgba(26,26,46,0.8));z-index:0;pointer-events:none}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 .app{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:20px;position:relative;z-index:1}
-@media(min-width:980px){.app{flex-direction:row;gap:24px}.app>:first-child{width:360px;flex-shrink:0}.app>:last-child{flex:1}}
-.card{background:rgba(26,26,46,0.88);backdrop-filter:blur(12px);border:1px solid rgba(102,0,204,0.4);border-radius:20px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,0.2)}
-h2{margin-bottom:18px;font-size:17px;font-weight:700;background:linear-gradient(135deg,#6600CC,#4C0099);-webkit-background-clip:text;background-clip:text;color:transparent}
-h3{font-size:13px;color:#6A6A7A;margin-bottom:12px;text-transform:uppercase}
-label{display:block;margin:10px 0 5px;font-size:10px;font-weight:600;text-transform:uppercase;color:#6A6A7A}
-.form-field{width:100%;border:1.5px solid rgba(102,0,204,0.3);border-radius:12px;background:rgba(255,255,255,0.08);color:#fff;padding:8px 12px;font-size:12px;outline:none}
-.form-field:focus{border-color:#6600CC;background:rgba(102,0,204,0.15);box-shadow:0 0 0 3px rgba(102,0,204,0.3)}
-textarea.form-field{min-height:55px}
-.status-strip{display:flex;gap:8px;margin:14px 0 16px;flex-wrap:wrap}
-.status{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;border-radius:40px;background:rgba(102,0,204,0.2);border:1.5px solid rgba(102,0,204,0.4);cursor:pointer;font-size:11px;font-weight:600;flex:1;min-width:80px}
-.status:hover{background:rgba(102,0,204,0.35);transform:translateY(-1px)}
-.dot{width:8px;height:8px;border-radius:50%}
-.dot.valid{background:#00C853}
-.dot.lock{background:#FFD600}
-.dot.prob{background:#FF3B3B}
-.dot.other{background:#AA00FF}
-.photo-section{margin-top:16px;padding-top:12px;border-top:1px solid rgba(102,0,204,0.3)}
-.photo-upload-btn{background:rgba(102,0,204,0.2);border:1.5px dashed rgba(102,0,204,0.5);border-radius:12px;padding:10px;text-align:center;cursor:pointer;font-size:11px}
-.photo-gallery{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.photo-item{position:relative;width:65px;height:65px;border-radius:10px;overflow:hidden;border:2px solid rgba(102,0,204,0.4)}
+@media(min-width:980px){.app{flex-direction:row;gap:24px}.app>:first-child{width:380px;flex-shrink:0}.app>:last-child{flex:1}}
+.card{background:rgba(26,26,46,0.92);backdrop-filter:blur(12px);border:1px solid rgba(102,0,204,0.5);border-radius:24px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+h2{font-size:18px;font-weight:700;margin-bottom:20px;background:linear-gradient(135deg,#6600CC,#AA66FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-size:13px;color:#aaa;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px}
+label{display:block;margin:12px 0 5px;font-size:11px;font-weight:600;text-transform:uppercase;color:#aaa;letter-spacing:0.5px}
+.form-field{width:100%;border:1.5px solid rgba(102,0,204,0.4);border-radius:14px;background:rgba(255,255,255,0.08);color:#fff;padding:10px 14px;font-size:13px;outline:none;transition:all 0.2s}
+.form-field:focus{border-color:#6600CC;background:rgba(102,0,204,0.2);box-shadow:0 0 0 3px rgba(102,0,204,0.2)}
+select.form-field{cursor:pointer}
+textarea.form-field{min-height:60px;resize:vertical}
+.number-input-group{display:flex;gap:12px;margin-bottom:5px}
+.number-input-group > div{flex:1}
+.status-strip{display:flex;gap:10px;margin:16px 0 20px;flex-wrap:wrap}
+.status{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:50px;background:rgba(102,0,204,0.2);border:1.5px solid rgba(102,0,204,0.5);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s;flex:1;min-width:85px}
+.status:hover{background:rgba(102,0,204,0.4);transform:translateY(-2px);border-color:#6600CC}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot.valid{background:#00C853;box-shadow:0 0 8px #00C853}
+.dot.lock{background:#FFD600;box-shadow:0 0 8px #FFD600}
+.dot.prob{background:#FF3B3B;box-shadow:0 0 8px #FF3B3B}
+.dot.other{background:#AA00FF;box-shadow:0 0 8px #AA00FF}
+.photo-section{margin-top:20px;padding-top:16px;border-top:1px solid rgba(102,0,204,0.3)}
+.photo-label{font-size:12px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.photo-upload-btn{background:rgba(102,0,204,0.2);border:1.5px dashed rgba(102,0,204,0.6);border-radius:14px;padding:12px;text-align:center;cursor:pointer;font-size:12px;transition:all 0.2s}
+.photo-upload-btn:hover{background:rgba(102,0,204,0.35);border-color:#6600CC}
+.photo-gallery{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.photo-item{position:relative;width:70px;height:70px;border-radius:12px;overflow:hidden;border:2px solid rgba(102,0,204,0.5);background:rgba(0,0,0,0.4)}
 .photo-item img{width:100%;height:100%;object-fit:cover;cursor:pointer}
-.photo-delete{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.8);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;color:#FF3B3B}
-.btn{width:100%;border:none;border-radius:12px;background:linear-gradient(135deg,#6600CC,#4C0099);color:#fff;font-weight:700;padding:9px;cursor:pointer;font-size:11px}
-.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,0,204,0.4)}
-.row{display:flex;gap:10px;margin-top:14px}
-.report-actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn-action{border:1.5px solid rgba(102,0,204,0.4);background:rgba(102,0,204,0.2);color:#fff;font-weight:600;font-size:11px;padding:6px 14px;border-radius:10px;cursor:pointer}
+.photo-delete{position:absolute;top:3px;right:3px;background:rgba(0,0,0,0.8);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:#ff4444;transition:all 0.2s}
+.photo-delete:hover{background:#ff4444;color:#fff}
+.btn{width:100%;border:none;border-radius:14px;background:linear-gradient(135deg,#6600CC,#4C0099);color:#fff;font-weight:700;padding:10px;cursor:pointer;font-size:12px;transition:all 0.2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(102,0,204,0.4)}
+.row{display:flex;gap:12px;margin-top:16px}
+.row button{flex:1}
+.report-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-action{border:1.5px solid rgba(102,0,204,0.5);background:rgba(102,0,204,0.25);color:#fff;font-weight:600;font-size:11px;padding:7px 16px;border-radius:12px;cursor:pointer;transition:all 0.2s}
+.btn-action:hover{background:rgba(102,0,204,0.45);transform:translateY(-1px)}
 .btn-share{background:linear-gradient(135deg,#6600CC,#8833FF);border:none}
 .btn-png{background:linear-gradient(135deg,#4C0099,#6600CC);border:none}
-.section{background:rgba(26,26,46,0.75);backdrop-filter:blur(10px);border:1px solid rgba(102,0,204,0.3);border-radius:20px;padding:18px}
-.small{font-size:10px;color:#6A6A7A;margin-top:10px;text-align:center}
-.created-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:380px;overflow-y:auto;padding:2px}
-.room-card{padding:8px;border-radius:12px;border:1px solid rgba(102,0,204,0.3);background:rgba(102,0,204,0.15);min-width:100px;cursor:pointer}
-.room-card:hover{border-color:#6600CC;transform:translateY(-2px)}
-.badge{font-size:11px;font-weight:700;background:rgba(102,0,204,0.4);border-radius:8px;padding:4px 8px;display:inline-block}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;border-radius:40px;padding:3px 8px;margin-top:5px}
-.pill.valid{background:#00C853}
-.pill.lock{background:#FFD600;color:#1A1A2E}
-.pill.prob{background:#FF3B3B}
-.pill.other{background:#AA00FF}
-.report-box{border-radius:16px;background:rgba(0,0,0,0.45);border:1px solid rgba(102,0,204,0.4)}
-.report-title{background:linear-gradient(135deg,rgba(102,0,204,0.25),rgba(76,0,153,0.25));padding:12px 14px;display:flex;justify-content:space-between;flex-wrap:wrap;border-bottom:1px solid rgba(102,0,204,0.4)}
-.report-content{font-size:11px;line-height:1.5;padding:16px;max-height:420px;overflow-y:auto}
-.report-photo-section{margin-top:20px;padding-top:16px;border-top:2px solid rgba(102,0,204,0.5)}
-.report-room-photos{margin:12px 0;padding:12px;background:rgba(102,0,204,0.15);border-radius:14px}
-.report-room-title{font-weight:700;color:#8833FF;margin-bottom:10px}
-.report-photo-thumbnails{display:flex;flex-wrap:wrap;gap:10px}
-.report-thumb{width:80px;height:80px;border-radius:10px;object-fit:cover;border:2px solid #6600CC;cursor:pointer}
-.toast{position:fixed;right:20px;bottom:20px;background:rgba(102,0,204,0.95);padding:10px 18px;border-radius:40px;font-size:12px;z-index:9999;opacity:0;transition:all 0.2s}
+.section{background:rgba(26,26,46,0.8);backdrop-filter:blur(10px);border:1px solid rgba(102,0,204,0.4);border-radius:20px;padding:20px}
+.small{font-size:11px;color:#888;margin-top:12px;text-align:center}
+.created-grid{display:flex;flex-wrap:wrap;gap:10px;max-height:400px;overflow-y:auto;padding:4px}
+.room-card{padding:10px 12px;border-radius:14px;background:rgba(102,0,204,0.15);border:1px solid rgba(102,0,204,0.3);min-width:120px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:space-between}
+.room-card:hover{background:rgba(102,0,204,0.3);border-color:#6600CC;transform:translateY(-2px)}
+.room-card.valid-card{border-left:4px solid #00C853}
+.room-info{display:flex;align-items:center;gap:10px}
+.room-number{font-size:13px;font-weight:700;color:#fff}
+.room-status{font-size:11px;color:#00C853;display:flex;align-items:center;gap:4px}
+.report-box{border-radius:20px;background:rgba(0,0,0,0.5);border:1px solid rgba(102,0,204,0.5);overflow:hidden}
+.report-title{background:linear-gradient(135deg,rgba(102,0,204,0.3),rgba(76,0,153,0.3));padding:14px 18px;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;border-bottom:1px solid rgba(102,0,204,0.5)}
+.report-title span{font-size:14px;font-weight:700;background:linear-gradient(135deg,#6600CC,#AA66FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.report-content{font-size:12px;line-height:1.6;padding:20px;max-height:450px;overflow-y:auto;font-family:'Inter',monospace}
+.report-photo-section{margin-top:24px;padding-top:20px;border-top:2px solid rgba(102,0,204,0.5)}
+.report-room-photos{margin:16px 0;padding:16px;background:rgba(102,0,204,0.15);border-radius:16px}
+.report-room-title{font-weight:700;color:#AA66FF;margin-bottom:12px;font-size:13px}
+.report-photo-thumbnails{display:flex;flex-wrap:wrap;gap:12px}
+.report-thumb{width:90px;height:90px;border-radius:12px;object-fit:cover;border:2px solid #6600CC;cursor:pointer;transition:transform 0.2s}
+.report-thumb:hover{transform:scale(1.05)}
+.toast{position:fixed;right:20px;bottom:20px;background:rgba(102,0,204,0.95);backdrop-filter:blur(10px);padding:12px 24px;border-radius:50px;font-size:13px;z-index:9999;opacity:0;transition:all 0.2s;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
 .toast.show{opacity:1}
-.number-input-group{display:flex;gap:12px}
-.number-input-group input{flex:1}
 .fullscreen-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:20000;align-items:center;justify-content:center;cursor:pointer}
 .fullscreen-modal.show{display:flex}
-.fullscreen-modal img{max-width:95%;max-height:95%;border-radius:16px}
-.share-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:10000;align-items:center;justify-content:center}
+.fullscreen-modal img{max-width:95%;max-height:95%;border-radius:20px;box-shadow:0 0 50px rgba(102,0,204,0.5)}
+.share-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center}
 .share-modal.show{display:flex}
-.share-card{background:rgba(26,26,46,0.95);border:1px solid rgba(102,0,204,0.5);border-radius:24px;padding:24px;max-width:340px;width:90%}
-.share-card h4{text-align:center;margin-bottom:20px}
+.share-card{background:rgba(26,26,46,0.98);border:1px solid rgba(102,0,204,0.6);border-radius:28px;padding:28px;max-width:360px;width:90%}
+.share-card h4{text-align:center;margin-bottom:24px;font-size:20px}
 .share-buttons{display:flex;flex-direction:column;gap:12px}
-.share-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;border:none;border-radius:16px;font-weight:700;cursor:pointer}
+.share-btn{display:flex;align-items:center;gap:12px;padding:14px 18px;border:none;border-radius:20px;font-weight:700;cursor:pointer;font-size:14px}
 .share-btn.whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff}
 .share-btn.teams{background:linear-gradient(135deg,#6264A7,#464775);color:#fff}
 .share-btn.email{background:linear-gradient(135deg,#EA4335,#C5221F);color:#fff}
 .share-btn.download{background:linear-gradient(135deg,#6600CC,#4C0099);color:#fff}
-.close-modal{background:rgba(102,0,204,0.25);border:1px solid rgba(102,0,204,0.4);border-radius:14px;padding:10px;margin-top:12px;color:#fff;cursor:pointer;width:100%}
+.close-modal{background:rgba(102,0,204,0.3);border:1px solid rgba(102,0,204,0.5);border-radius:16px;padding:12px;margin-top:16px;color:#fff;cursor:pointer;width:100%;font-weight:600}
 </style>
 </head>
 <body>
-<div class="building-bg"></div>
 <div class="app">
 <div class="card">
 <h2>🏢 Eco Berrini - Vistoria Técnica</h2>
@@ -89,27 +97,27 @@ textarea.form-field{min-height:55px}
 <label>📍 Complemento</label>
 <input id="endereco" class="form-field" placeholder="Av. Eng. Luís Carlos Berrini, 1376" value="Av. Eng. Luís Carlos Berrini, 1376"/>
 <div class="number-input-group">
-<div><label>🏬 Andar</label><input type="number" id="floorInput" class="form-field" min="1" max="32" value="1"/></div>
-<div><label>🚪 Sala</label><input type="number" id="roomInput" class="form-field" min="1" max="50" value="1"/></div>
+<div><label>🏬 Andar (01 a 32)</label><select id="floorSelect" class="form-field"></select></div>
+<div><label>🚪 Sala (SL-01 a SL-50)</label><select id="roomSelect" class="form-field"></select></div>
 </div>
 <label>📌 Status</label>
 <div class="status-strip">
-<button class="status" data-status="valid"><span class="dot valid"></span>Validada</button>
-<button class="status" data-status="lock"><span class="dot lock"></span>Trancada</button>
-<button class="status" data-status="prob"><span class="dot prob"></span>Problemas</button>
-<button class="status" data-status="other"><span class="dot other"></span>Outros</button>
+<button class="status" data-status="valid"><span class="dot valid"></span>Validada ✓</button>
+<button class="status" data-status="lock"><span class="dot lock"></span>Trancada 🔒</button>
+<button class="status" data-status="prob"><span class="dot prob"></span>Problemas ⚠️</button>
+<button class="status" data-status="other"><span class="dot other"></span>Outros 📌</button>
 </div>
 <div class="photo-section">
-<div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">01</span></div>
+<div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>° - <span id="currentDisplayRoom">SL-01</span></div>
 <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto</div>
 <input type="file" id="photoInput" accept="image/*" style="display:none" multiple>
 <div id="photoGallery" class="photo-gallery"></div>
 </div>
 <div class="row"><button id="btnClear" class="btn">🗑️ Limpar Tudo</button></div>
-<p class="small">💡 Digite andar/sala → clique no status para registrar</p>
+<p class="small">💡 Selecione andar e sala → clique no status para registrar</p>
 </div>
 <div class="viewer">
-<div class="section"><h3>📦 Salas vistoriadas (<span id="totalSalasCount">0</span>)</h3><div id="createdGrid" class="created-grid"><p class="small">Nenhuma sala registrada</p></div></div>
+<div class="section"><h3>📦 Salas Vistoriadas</h3><div id="createdGrid" class="created-grid"><p class="small">Nenhuma sala registrada</p></div></div>
 <div class="section">
 <div class="report-box">
 <div class="report-title"><span>📋 Relatório de Vistoria - Eco Berrini</span><div class="report-actions"><button id="btnShare" class="btn-action btn-share">📱 Compartilhar</button><button id="btnPNG" class="btn-action btn-png">📸 Salvar PNG</button></div></div>
@@ -121,22 +129,26 @@ textarea.form-field{min-height:55px}
 <div id="shareModal" class="share-modal"><div class="share-card"><h4>✨ Compartilhar Relatório</h4><div class="share-buttons"><button id="shareWhatsApp" class="share-btn whatsapp">💬 WhatsApp</button><button id="shareTeams" class="share-btn teams">💼 Teams</button><button id="shareEmail" class="share-btn email">📧 E-mail</button><button id="shareSave" class="share-btn download">📸 Salvar imagem</button></div><button id="closeModal" class="close-modal">Fechar</button></div></div>
 <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()"><img id="fullscreenImage" src=""></div>
 <script>
-const STORAGE_KEY="vistoria_eco_final";
+const STORAGE_KEY="vistoria_eco_v2";
 let entries=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 let currentFloor=1,currentRoom=1,currentImageData=null;
 const pad2=n=>String(n).padStart(2,"0");
+const formatRoom=n=>`SL-${pad2(n)}`;
 const statusName=s=>s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Outros";
 const statusClass=s=>s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"other";
-const statusEmoji=s=>s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"◻️";
-const floorInput=document.getElementById("floorInput");
-const roomInput=document.getElementById("roomInput");
+const statusIcon=s=>s==="valid"?"✓":s==="lock"?"🔒":s==="prob"?"⚠️":"📌";
+// Preencher selects
+const floorSelect=document.getElementById("floorSelect");
+const roomSelect=document.getElementById("roomSelect");
 const currentDisplayFloor=document.getElementById("currentDisplayFloor");
 const currentDisplayRoom=document.getElementById("currentDisplayRoom");
 const totalSalasCount=document.getElementById("totalSalasCount");
-function updateDisplay(){currentFloor=Math.min(32,Math.max(1,parseInt(floorInput.value)||1));currentRoom=Math.min(50,Math.max(1,parseInt(roomInput.value)||1));floorInput.value=currentFloor;roomInput.value=currentRoom;currentDisplayFloor.textContent=pad2(currentFloor);currentDisplayRoom.textContent=pad2(currentRoom);}
-floorInput.addEventListener("input",()=>{updateDisplay();renderCurrentPhotos();});
-roomInput.addEventListener("input",()=>{updateDisplay();renderCurrentPhotos();});
-function getRoomKey(f,r){return `A${pad2(f)}-S${pad2(r)}`;}
+for(let i=1;i<=32;i++){let opt=document.createElement("option");opt.value=i;opt.textContent=pad2(i);floorSelect.appendChild(opt);}
+for(let i=1;i<=50;i++){let opt=document.createElement("option");opt.value=i;opt.textContent=`SL-${pad2(i)}`;roomSelect.appendChild(opt);}
+function updateDisplay(){currentFloor=parseInt(floorSelect.value);currentRoom=parseInt(roomSelect.value);currentDisplayFloor.textContent=pad2(currentFloor);currentDisplayRoom.textContent=formatRoom(currentRoom);}
+floorSelect.addEventListener("change",()=>{updateDisplay();renderCurrentPhotos();});
+roomSelect.addEventListener("change",()=>{updateDisplay();renderCurrentPhotos();});
+function getRoomKey(f,r){return `${pad2(f)}-SL-${pad2(r)}`;}
 function getRoomPhotos(f,r){const p=localStorage.getItem(`photos_${getRoomKey(f,r)}`);return p?JSON.parse(p):[];}
 function saveRoomPhotos(f,r,p){localStorage.setItem(`photos_${getRoomKey(f,r)}`,JSON.stringify(p));}
 function addPhotoToRoom(f,r,data){let p=getRoomPhotos(f,r);p.push(data);saveRoomPhotos(f,r,p);if(currentFloor===f&&currentRoom===r)renderCurrentPhotos();renderCreated();renderReport();showToast("📸 Foto adicionada!");}
@@ -145,13 +157,13 @@ function renderCurrentPhotos(){let g=document.getElementById("photoGallery");let
 g.innerHTML="";p.forEach((photo,idx)=>{let div=document.createElement("div");div.className="photo-item";div.innerHTML=`<img src="${photo}" onclick="showFullscreenImage('${photo}')"><div class="photo-delete" onclick="event.stopPropagation();deletePhotoFromRoom(${currentFloor},${currentRoom},${idx})">✕</div>`;g.appendChild(div);});}
 window.showFullscreenImage=function(src){document.getElementById("fullscreenImage").src=src;document.getElementById("fullscreenModal").classList.add("show");};
 window.closeFullscreen=function(){document.getElementById("fullscreenModal").classList.remove("show");};
-document.querySelectorAll(".status").forEach(btn=>{btn.addEventListener("click",()=>{let status=btn.dataset.status;let idx=entries.findIndex(e=>e.f===currentFloor&&e.r===currentRoom);if(idx>=0)entries[idx].status=status;else entries.push({f:currentFloor,r:currentRoom,status});persist();renderCreated();renderReport();showToast(`✅ A${pad2(currentFloor)}-S${pad2(currentRoom)}: ${statusName(status)}`);});});
-function renderCreated(){let sorted=[...entries].sort((a,b)=>a.f-b.f||a.r-b.r);totalSalasCount.textContent=entries.length;let grid=document.getElementById("createdGrid");if(sorted.length===0){grid.innerHTML='<p class="small">Nenhuma sala registrada</p>';return;}
-grid.innerHTML="";sorted.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);let hasPhotos=photos.length>0;let card=document.createElement("div");card.className=`room-card ${hasPhotos?"has-photo":""}`;card.onclick=()=>{floorInput.value=item.f;roomInput.value=item.r;updateDisplay();renderCurrentPhotos();};card.innerHTML=`<div class="badge">A${pad2(item.f)} • S${pad2(item.r)}${hasPhotos?" 📸":""}</div><div class="pill ${statusClass(item.status)}">${statusEmoji(item.status)} ${statusName(item.status)}</div>${hasPhotos?`<div class="photo-indicator">📸 ${photos.length}</div>`:""}`;grid.appendChild(card);});}
-function renderReport(){let predio="Eco Berrini";let endereco=document.getElementById("endereco").value||"Av. Eng. Luís Carlos Berrini, 1376";let auditor=document.getElementById("auditor").value||"Não informado";let obs=document.getElementById("obs")?.value||"";let data=new Date().toLocaleString("pt-BR");let stats={valid:0,lock:0,prob:0,other:0};entries.forEach(e=>stats[e.status]++);let total=entries.length;let info="";if(total===0)info="Nenhuma sala vistoriada.";else{info=`TOTAL: ${total} sala(s) | ✅${stats.valid} 🔒${stats.lock} ❌${stats.prob} ◻️${stats.other}\n\n`;let byFloor={};entries.forEach(e=>{if(!byFloor[e.f])byFloor[e.f]=[];byFloor[e.f].push({r:e.r,status:e.status});});let floors=Object.keys(byFloor).map(Number).sort((a,b)=>a-b);info+="DETALHAMENTO:\n";floors.forEach(f=>{let rooms=byFloor[f];let v=rooms.filter(r=>r.status==="valid").length;let l=rooms.filter(r=>r.status==="lock").length;let p=rooms.filter(r=>r.status==="prob").length;let o=rooms.filter(r=>r.status==="other").length;info+=`  Andar ${pad2(f)}: ✅${v} 🔒${l} ❌${p} ◻️${o}\n`;});}
-let totalFotos=0;let roomsWithPhotos=[];entries.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);if(photos.length>0){totalFotos+=photos.length;roomsWithPhotos.push({room:`A${pad2(item.f)}-S${pad2(item.r)}`,status:statusName(item.status),emoji:statusEmoji(item.status),photos:photos,count:photos.length});}});
+document.querySelectorAll(".status").forEach(btn=>{btn.addEventListener("click",()=>{let status=btn.dataset.status;let idx=entries.findIndex(e=>e.f===currentFloor&&e.r===currentRoom);if(idx>=0)entries[idx].status=status;else entries.push({f:currentFloor,r:currentRoom,status});persist();renderCreated();renderReport();showToast(`✅ ${pad2(currentFloor)}° - ${formatRoom(currentRoom)}: ${statusName(status)}`);});});
+function renderCreated(){let sorted=[...entries].sort((a,b)=>a.f-b.f||a.r-b.r);let grid=document.getElementById("createdGrid");if(sorted.length===0){grid.innerHTML='<p class="small">Nenhuma sala registrada</p>';return;}
+grid.innerHTML="";sorted.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);let hasPhotos=photos.length>0;let card=document.createElement("div");card.className=`room-card`;card.onclick=()=>{floorSelect.value=item.f;roomSelect.value=item.r;updateDisplay();renderCurrentPhotos();};card.innerHTML=`<div class="room-info"><span class="room-number">${pad2(item.f)}° - ${formatRoom(item.r)}</span><span class="room-status">✓ ${statusName(item.status)}</span></div>`;grid.appendChild(card);});}
+function renderReport(){let endereco=document.getElementById("endereco").value||"Av. Eng. Luís Carlos Berrini, 1376";let auditor=document.getElementById("auditor").value||"Não informado";let obs=document.getElementById("obs")?.value||"";let data=new Date().toLocaleString("pt-BR");let stats={valid:0,lock:0,prob:0,other:0};entries.forEach(e=>stats[e.status]++);let total=entries.length;let info="";if(total===0)info="Nenhuma sala vistoriada.";else{info=`TOTAL: ${total} sala(s) | ✅${stats.valid} 🔒${stats.lock} ⚠️${stats.prob} 📌${stats.other}\n\n`;let byFloor={};entries.forEach(e=>{if(!byFloor[e.f])byFloor[e.f]=[];byFloor[e.f].push({r:e.r,status:e.status});});let floors=Object.keys(byFloor).map(Number).sort((a,b)=>a-b);info+="DETALHAMENTO:\n";floors.forEach(f=>{let rooms=byFloor[f];let v=rooms.filter(r=>r.status==="valid").length;let l=rooms.filter(r=>r.status==="lock").length;let p=rooms.filter(r=>r.status==="prob").length;let o=rooms.filter(r=>r.status==="other").length;info+=`  Andar ${pad2(f)}: ✅${v} 🔒${l} ⚠️${p} 📌${o}\n`;});}
+let totalFotos=0;let roomsWithPhotos=[];entries.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);if(photos.length>0){totalFotos+=photos.length;roomsWithPhotos.push({room:`${pad2(item.f)}° - ${formatRoom(item.r)}`,status:statusName(item.status),icon:statusIcon(item.status),photos:photos,count:photos.length});}});
 let fotosInfo=totalFotos>0?`\n📸 Total de fotos: ${totalFotos}\n`:"";
-let photosHtml="";if(roomsWithPhotos.length>0){photosHtml=`<div class="report-photo-section"><div style="font-weight:700;margin-bottom:12px;">📸 REGISTRO FOTOGRÁFICO</div>`;roomsWithPhotos.forEach(room=>{photosHtml+=`<div class="report-room-photos"><div class="report-room-title">${room.emoji} ${room.room} - ${room.status} (${room.count})</div><div class="report-photo-thumbnails">`;room.photos.forEach(photo=>{photosHtml+=`<img src="${photo}" class="report-thumb" onclick="showFullscreenImage('${photo}')">`;});photosHtml+=`</div></div>`;});photosHtml+=`</div>`;}
+let photosHtml="";if(roomsWithPhotos.length>0){photosHtml=`<div class="report-photo-section"><div style="font-weight:700;margin-bottom:16px;">📸 REGISTRO FOTOGRÁFICO</div>`;roomsWithPhotos.forEach(room=>{photosHtml+=`<div class="report-room-photos"><div class="report-room-title">${room.icon} ${room.room} - ${room.status} (${room.count} foto${room.count>1?'s':''})</div><div class="report-photo-thumbnails">`;room.photos.forEach(photo=>{photosHtml+=`<img src="${photo}" class="report-thumb" onclick="showFullscreenImage('${photo}')">`;});photosHtml+=`</div></div>`;});photosHtml+=`</div>`;}
 let obsHtml=obs?`\n📝 OBSERVAÇÕES:\n${obs}\n`:"";
 let html=`<div style="font-family:monospace;white-space:pre-wrap;">═══════════════════════════════<br>   RELATÓRIO DE VISTORIA<br>        ECO BERRINI<br>═══════════════════════════════<br>📍 ${endereco}<br>📅 ${data}<br>👤 Auditor: ${auditor}<br>───────────────────────────────<br>📊 ESTATÍSTICAS<br>${info}${fotosInfo}${obsHtml}───────────────────────────────<br></div>${photosHtml}`;document.getElementById("relatorio").innerHTML=html;}
 async function generateImage(){let el=document.getElementById("reportCaptureArea");if(el.innerHTML.includes("Aguardando")){showToast("Nada para gerar");return null;}showToast("📸 Gerando imagem...");try{let c=await html2canvas(el,{scale:2,backgroundColor:"#1A1A2E",logging:false,useCORS:true});return c.toDataURL("image/png");}catch(e){showToast("❌ Erro");return null;}}
@@ -172,10 +184,9 @@ document.getElementById("closeModal").addEventListener("click",()=>document.getE
 document.getElementById("photoUploadBtn").addEventListener("click",()=>document.getElementById("photoInput").click());
 document.getElementById("photoInput").addEventListener("change",(e)=>{Array.from(e.target.files).forEach(file=>{let r=new FileReader();r.onload=ev=>addPhotoToRoom(currentFloor,currentRoom,ev.target.result);r.readAsDataURL(file);});e.target.value="";});
 function persist(){localStorage.setItem(STORAGE_KEY,JSON.stringify(entries));}
-document.getElementById("btnClear").addEventListener("click",()=>{if(!confirm("⚠️ Limpar TODOS os registros e fotos?"))return;entries=[];for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&k.startsWith("photos_"))localStorage.removeItem(k);}document.getElementById("auditor").value="";document.getElementById("endereco").value="Av. Eng. Luís Carlos Berrini, 1376";if(document.getElementById("obs"))document.getElementById("obs").value="";persist();renderCreated();renderReport();renderCurrentPhotos();showToast("✓ Todos os dados removidos");});
+document.getElementById("btnClear").addEventListener("click",()=>{if(!confirm("⚠️ Limpar TODOS os registros e fotos?"))return;entries=[];for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&k.startsWith("photos_"))localStorage.removeItem(k);}document.getElementById("auditor").value="";document.getElementById("endereco").value="Av. Eng. Luís Carlos Berrini, 1376";persist();renderCreated();renderReport();renderCurrentPhotos();showToast("✓ Todos os dados removidos");});
 document.getElementById("auditor").addEventListener("input",renderReport);
 document.getElementById("endereco").addEventListener("input",renderReport);
-if(document.getElementById("obs"))document.getElementById("obs").addEventListener("input",renderReport);
 (function init(){updateDisplay();renderCreated();renderReport();renderCurrentPhotos();})();
 </script>
 </body>
