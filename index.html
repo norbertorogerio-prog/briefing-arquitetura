@@ -20,7 +20,6 @@
     --vivo-gray: #4A4A5A;
     --vivo-gray-light: #6A6A7A;
     --vivo-white: #FFFFFF;
-    --vivo-offwhite: #F5F5F7;
     --green: #00C853;
     --yellow: #FFD600;
     --red: #FF3B3B;
@@ -45,19 +44,18 @@
     position: relative;
   }
   
-  /* Fundo com imagem do prédio */
-  body::before {
-    content: '';
+  /* Fundo com imagem do prédio Eco Berrini */
+  .building-bg {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%231A1A2E"/><rect x="0" y="0" width="1200" height="800" fill="url(%23grad)"/><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236600CC" stop-opacity="0.15"/><stop offset="100%" stop-color="%234C0099" stop-opacity="0.25"/></linearGradient></defs><path d="M200,400 L300,350 L400,380 L500,320 L600,360 L700,340 L800,370 L900,330 L1000,350 L1100,380 L1100,700 L200,700 Z" fill="%236600CC" fill-opacity="0.1"/><rect x="250" y="450" width="80" height="250" fill="%236600CC" fill-opacity="0.15"/><rect x="380" y="480" width="80" height="220" fill="%236600CC" fill-opacity="0.15"/><rect x="510" y="420" width="80" height="280" fill="%236600CC" fill-opacity="0.15"/><rect x="640" y="460" width="80" height="240" fill="%236600CC" fill-opacity="0.15"/><rect x="770" y="500" width="80" height="200" fill="%236600CC" fill-opacity="0.15"/><rect x="900" y="440" width="80" height="260" fill="%236600CC" fill-opacity="0.15"/><circle cx="400" cy="250" r="40" fill="%23FFD966" fill-opacity="0.3"/><circle cx="700" cy="220" r="35" fill="%23FFD966" fill-opacity="0.3"/><circle cx="950" cy="280" r="45" fill="%23FFD966" fill-opacity="0.3"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%231A1A2E"/><rect x="0" y="0" width="1200" height="800" fill="url(%23grad)"/><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236600CC" stop-opacity="0.2"/><stop offset="100%" stop-color="%234C0099" stop-opacity="0.3"/></linearGradient></defs><path d="M150,450 L250,380 L350,420 L450,360 L550,400 L650,350 L750,390 L850,340 L950,380 L1050,410 L1050,700 L150,700 Z" fill="%236600CC" fill-opacity="0.15"/><rect x="180" y="480" width="70" height="220" fill="%236600CC" fill-opacity="0.2"/><rect x="280" y="510" width="70" height="190" fill="%236600CC" fill-opacity="0.2"/><rect x="380" y="450" width="70" height="250" fill="%236600CC" fill-opacity="0.2"/><rect x="480" y="520" width="70" height="180" fill="%236600CC" fill-opacity="0.2"/><rect x="580" y="470" width="70" height="230" fill="%236600CC" fill-opacity="0.2"/><rect x="680" y="540" width="70" height="160" fill="%236600CC" fill-opacity="0.2"/><rect x="780" y="490" width="70" height="210" fill="%236600CC" fill-opacity="0.2"/><rect x="880" y="440" width="70" height="260" fill="%236600CC" fill-opacity="0.2"/><rect x="980" y="500" width="70" height="200" fill="%236600CC" fill-opacity="0.2"/><text x="550" y="100" font-size="32" font-weight="bold" fill="%23FFFFFF" fill-opacity="0.1" font-family="Arial">ECO BERRINI</text><text x="500" y="150" font-size="18" fill="%23FFFFFF" fill-opacity="0.1" font-family="Arial">Edifício Corporativo</text></svg>');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    opacity: 0.3;
+    opacity: 0.35;
     z-index: 0;
     pointer-events: none;
   }
@@ -94,7 +92,7 @@
   }
 
   .card{
-    background: rgba(26, 26, 46, 0.85);
+    background: rgba(26, 26, 46, 0.88);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(102, 0, 204, 0.4);
     border-radius:20px;
@@ -189,10 +187,6 @@
     border-color: var(--vivo-purple);
   }
   
-  .status:active{
-    transform: translateY(0);
-  }
-  
   .dot{
     width:8px;
     height:8px;
@@ -282,7 +276,6 @@
     color: white;
   }
 
-  /* BOTÕES */
   .btn{
     width:100%;
     border: none;
@@ -311,7 +304,6 @@
     flex:1;
   }
 
-  /* BOTÕES DE AÇÃO */
   .report-actions{
     display:flex;
     gap:8px;
@@ -347,7 +339,7 @@
   }
 
   .section{
-    background: rgba(26, 26, 46, 0.7);
+    background: rgba(26, 26, 46, 0.75);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(102, 0, 204, 0.3);
     border-radius:20px;
@@ -361,7 +353,6 @@
     text-align: center;
   }
 
-  /* GRADE DE ITENS */
   .created-grid{
     display:flex;
     flex-wrap:wrap;
@@ -425,10 +416,9 @@
   .pill.prob{background: var(--red);}
   .pill.other{background: var(--purple-status);}
 
-  /* RELATÓRIO */
   .report-box{
     border-radius:16px;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
     overflow: hidden;
     border: 1px solid rgba(102, 0, 204, 0.4);
   }
@@ -461,7 +451,6 @@
     overflow-y:auto;
   }
   
-  /* Seção de fotos no relatório */
   .report-photo-section{
     margin-top: 20px;
     padding-top: 16px;
@@ -496,11 +485,6 @@
     object-fit: cover;
     border: 2px solid var(--vivo-purple);
     cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  
-  .report-thumb:hover{
-    transform: scale(1.05);
   }
 
   .toast{
@@ -582,7 +566,6 @@
   .share-btn.download{background: var(--gradient-primary); color:#fff;}
   .close-modal{background: rgba(102, 0, 204, 0.25); border: 1px solid rgba(102, 0, 204, 0.4); border-radius:14px; padding:10px; margin-top:12px; color:white; cursor:pointer; width:100%;}
   
-  /* Modal de fotos ampliadas */
   .fullscreen-modal{
     display: none;
     position: fixed;
@@ -605,10 +588,8 @@
     max-width: 95%;
     max-height: 95%;
     border-radius: 16px;
-    box-shadow: 0 0 50px rgba(102,0,204,0.5);
   }
   
-  /* Inputs de número */
   .number-input-group{
     display: flex;
     gap: 12px;
@@ -619,7 +600,6 @@
     flex: 1;
   }
   
-  /* Scrollbar personalizada */
   .created-grid::-webkit-scrollbar,
   .report-content::-webkit-scrollbar{
     width: 5px;
@@ -639,16 +619,18 @@
 </style>
 </head>
 <body>
+<div class="building-bg"></div>
+
 <div class="app">
   <!-- ESQUERDA -->
   <div class="card">
     <h2>🏢 Eco Berrini - Vistoria Técnica</h2>
 
     <label>👤 Auditor</label>
-    <input id="auditor" class="form-field" placeholder="Nome completo"/>
+    <input id="auditor" class="form-field" placeholder="Nome completo" value=""/>
 
     <label>📍 Complemento</label>
-    <input id="endereco" class="form-field" placeholder="Av. Eng. Luís Carlos Berrini, 1376"/>
+    <input id="endereco" class="form-field" placeholder="Av. Eng. Luís Carlos Berrini, 1376" value="Av. Eng. Luís Carlos Berrini, 1376"/>
 
     <div class="number-input-group">
       <div style="flex:1">
@@ -669,7 +651,6 @@
       <button class="status" data-status="other"><span class="dot other"></span>Outros</button>
     </div>
 
-    <!-- ÁREA DE FOTOS DA SALA SELECIONADA -->
     <div class="photo-section">
       <div class="photo-label">
         📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">01</span>
@@ -691,7 +672,7 @@
   <!-- DIREITA -->
   <div class="viewer">
     <div class="section">
-      <h3>📦 Salas vistoriadas</h3>
+      <h3>📦 Salas vistoriadas (<span id="totalSalasCount">0</span>)</h3>
       <div id="createdGrid" class="created-grid">
         <p class="small" style="text-align:center; width:100%">Nenhuma sala registrada</p>
       </div>
@@ -720,7 +701,6 @@ Aguardando registros...
   </div>
 </div>
 
-<!-- Modal de Compartilhamento -->
 <div id="shareModal" class="share-modal">
   <div class="share-card">
     <h4>✨ Compartilhar Relatório</h4>
@@ -734,13 +714,12 @@ Aguardando registros...
   </div>
 </div>
 
-<!-- Modal para fotos em tela cheia -->
 <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
   <img id="fullscreenImage" src="">
 </div>
 
 <script>
-  const STORAGE_KEY = "vistoria_eco_berrini";
+  const STORAGE_KEY = "vistoria_eco_berrini_final";
   let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   let currentFloor = 1;
   let currentRoom = 1;
@@ -755,6 +734,7 @@ Aguardando registros...
   const roomInput = document.getElementById("roomInput");
   const currentDisplayFloor = document.getElementById("currentDisplayFloor");
   const currentDisplayRoom = document.getElementById("currentDisplayRoom");
+  const totalSalasCount = document.getElementById("totalSalasCount");
 
   function updateCurrentDisplay() {
     currentFloor = parseInt(floorInput.value) || 1;
@@ -798,6 +778,7 @@ Aguardando registros...
     }
     renderCreated();
     renderReportWithPhotos();
+    showToast("📸 Foto adicionada!");
   }
   
   function deletePhotoFromRoom(f, r, index) {
@@ -864,8 +845,7 @@ Aguardando registros...
 
   function renderCreated(){
     const sorted = [...entries].sort((a,b)=> a.f - b.f || a.r - b.r);
-    const sectionTitle = document.querySelector('.section h3');
-    sectionTitle.innerHTML = `📦 Salas vistoriadas (${entries.length})`;
+    totalSalasCount.textContent = entries.length;
     
     if(sorted.length === 0){
       createdGrid.innerHTML = '<p class="small" style="text-align:center; width:100%">Nenhuma sala registrada</p>';
@@ -1041,7 +1021,7 @@ ${photosHtml}`;
   
   function shareToWhatsApp() {
     if (!currentImageData) return;
-    const text = `🏢 RELATÓRIO ECO BERRINI\n\n👤 Auditor: ${auditorInp.value || "Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Fotos inclusas`;
+    const text = `🏢 ECO BERRINI - RELATÓRIO DE VISTORIA\n\n👤 Auditor: ${auditorInp.value || "Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Fotos inclusas`;
     if (navigator.share) {
       fetch(currentImageData).then(res => res.blob()).then(blob => {
         navigator.share({ title: 'Relatório Eco Berrini', text: text, files: [new File([blob], "relatorio.png", { type: "image/png" })] });
