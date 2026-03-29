@@ -7,21 +7,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:linear-gradient(135deg,#0F0F1A,#1A1A2E);color:#fff;font-family:'Inter',system-ui,sans-serif;padding:20px;position:relative;min-height:100vh}
-/* Fundo com imagem do Edifício Eco Berrini */
+body{
+    background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 100%);
+    color:#fff;
+    font-family:'Inter',system-ui,sans-serif;
+    padding:20px;
+    position:relative;
+    min-height:100vh;
+}
+/* Fundo com imagem do Edifício Eco Berrini - MAIS VISÍVEL */
 .building-bg{
     position:fixed;
     top:0;
     left:0;
     right:0;
     bottom:0;
-    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%231A1A2E"/><rect x="0" y="0" width="1200" height="800" fill="url(%23grad)"/><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236600CC" stop-opacity="0.15"/><stop offset="100%" stop-color="%234C0099" stop-opacity="0.25"/></linearGradient></defs><text x="100" y="150" font-size="48" font-weight="bold" fill="%23FFFFFF" fill-opacity="0.08" font-family="Arial">ECO BERRINI</text><text x="100" y="220" font-size="28" fill="%23FFFFFF" fill-opacity="0.08" font-family="Arial">Edifício Corporativo</text><rect x="200" y="280" width="60" height="420" fill="%236600CC" fill-opacity="0.2"/><rect x="300" y="320" width="60" height="380" fill="%236600CC" fill-opacity="0.2"/><rect x="400" y="240" width="60" height="460" fill="%236600CC" fill-opacity="0.2"/><rect x="500" y="290" width="60" height="410" fill="%236600CC" fill-opacity="0.2"/><rect x="600" y="350" width="60" height="350" fill="%236600CC" fill-opacity="0.2"/><rect x="700" y="270" width="60" height="430" fill="%236600CC" fill-opacity="0.2"/><rect x="800" y="310" width="60" height="390" fill="%236600CC" fill-opacity="0.2"/><rect x="900" y="250" width="60" height="450" fill="%236600CC" fill-opacity="0.2"/><circle cx="650" cy="150" r="45" fill="%23FFD966" fill-opacity="0.15"/><circle cx="450" cy="120" r="35" fill="%23FFD966" fill-opacity="0.15"/><circle cx="850" cy="180" r="40" fill="%23FFD966" fill-opacity="0.15"/><path d="M100,700 L1100,700 L1050,750 L150,750 Z" fill="%236600CC" fill-opacity="0.1"/><text x="480" y="720" font-size="20" fill="%23FFFFFF" fill-opacity="0.2" font-family="Arial">Av. Eng. Luís Carlos Berrini, 1376</text></svg>');
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
-    opacity:0.4;
-    z-index:0;
-    pointer-events:none;
+    background: linear-gradient(135deg, rgba(102,0,204,0.3) 0%, rgba(26,26,46,0.5) 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect width="1200" height="800" fill="%231A1A2E"/><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%236600CC" stop-opacity="0.4"/><stop offset="100%" stop-color="%234C0099" stop-opacity="0.6"/></linearGradient></defs><rect width="1200" height="800" fill="url(%23g1)"/><text x="100" y="150" font-size="58" font-weight="bold" fill="%23FFFFFF" fill-opacity="0.2" font-family="Arial, sans-serif">ECO BERRINI</text><text x="100" y="230" font-size="32" fill="%23FFFFFF" fill-opacity="0.2" font-family="Arial, sans-serif">Edifício Corporativo</text><rect x="150" y="280" width="70" height="450" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="260" y="320" width="70" height="410" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="370" y="250" width="70" height="480" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="480" y="300" width="70" height="430" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="590" y="350" width="70" height="380" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="700" y="280" width="70" height="450" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="810" y="320" width="70" height="410" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="920" y="270" width="70" height="460" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><rect x="1030" y="310" width="70" height="420" fill="%23FFFFFF" fill-opacity="0.15" rx="5"/><circle cx="650" cy="120" r="55" fill="%23FFD966" fill-opacity="0.2"/><circle cx="450" cy="90" r="40" fill="%23FFD966" fill-opacity="0.2"/><circle cx="850" cy="150" r="48" fill="%23FFD966" fill-opacity="0.2"/><path d="M100,700 L1100,700 L1050,760 L150,760 Z" fill="%236600CC" fill-opacity="0.2"/><text x="430" y="740" font-size="22" fill="%23FFFFFF" fill-opacity="0.35" font-family="Arial">Av. Eng. Luís Carlos Berrini, 1376</text><text x="500" y="780" font-size="16" fill="%23FFFFFF" fill-opacity="0.25" font-family="Arial">São Paulo - SP</text></svg>');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.55;
+    z-index: 0;
+    pointer-events: none;
 }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 .app{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:20px;position:relative;z-index:1}
@@ -140,13 +148,12 @@ textarea.form-field{min-height:60px;resize:vertical}
 <div id="shareModal" class="share-modal"><div class="share-card"><h4>✨ Compartilhar Relatório</h4><div class="share-buttons"><button id="shareWhatsApp" class="share-btn whatsapp">💬 WhatsApp</button><button id="shareTeams" class="share-btn teams">💼 Teams</button><button id="shareEmail" class="share-btn email">📧 E-mail</button><button id="shareSave" class="share-btn download">📸 Salvar imagem</button></div><button id="closeModal" class="close-modal">Fechar</button></div></div>
 <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()"><img id="fullscreenImage" src=""></div>
 <script>
-const STORAGE_KEY="vistoria_eco_v3";
+const STORAGE_KEY="vistoria_eco_v4";
 let entries=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
 let currentFloor=1,currentRoom=1,currentImageData=null;
 const pad2=n=>String(n).padStart(2,"0");
 const formatRoom=n=>`SL-${pad2(n)}`;
 const statusName=s=>s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Outros";
-const statusClass=s=>s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"other";
 const statusIcon=s=>s==="valid"?"✓":s==="lock"?"🔒":s==="prob"?"⚠️":"📌";
 const floorSelect=document.getElementById("floorSelect");
 const roomSelect=document.getElementById("roomSelect");
@@ -169,7 +176,7 @@ window.showFullscreenImage=function(src){document.getElementById("fullscreenImag
 window.closeFullscreen=function(){document.getElementById("fullscreenModal").classList.remove("show");};
 document.querySelectorAll(".status").forEach(btn=>{btn.addEventListener("click",()=>{let status=btn.dataset.status;let idx=entries.findIndex(e=>e.f===currentFloor&&e.r===currentRoom);if(idx>=0)entries[idx].status=status;else entries.push({f:currentFloor,r:currentRoom,status});persist();renderCreated();renderReport();showToast(`✅ ${pad2(currentFloor)}° - ${formatRoom(currentRoom)}: ${statusName(status)}`);});});
 function renderCreated(){let sorted=[...entries].sort((a,b)=>a.f-b.f||a.r-b.r);totalSalasCount.textContent=entries.length;let grid=document.getElementById("createdGrid");if(sorted.length===0){grid.innerHTML='<p class="small">Nenhuma sala registrada</p>';return;}
-grid.innerHTML="";sorted.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);let hasPhotos=photos.length>0;let card=document.createElement("div");card.className=`room-card`;card.onclick=()=>{floorSelect.value=item.f;roomSelect.value=item.r;updateDisplay();renderCurrentPhotos();};card.innerHTML=`<div class="room-info"><span class="room-number">${pad2(item.f)}° - ${formatRoom(item.r)}</span><span class="room-status">✓ ${statusName(item.status)}</span></div>`;grid.appendChild(card);});}
+grid.innerHTML="";sorted.forEach(item=>{let card=document.createElement("div");card.className="room-card";card.onclick=()=>{floorSelect.value=item.f;roomSelect.value=item.r;updateDisplay();renderCurrentPhotos();};card.innerHTML=`<div class="room-info"><span class="room-number">${pad2(item.f)}° - ${formatRoom(item.r)}</span><span class="room-status">✓ ${statusName(item.status)}</span></div>`;grid.appendChild(card);});}
 function renderReport(){let endereco=document.getElementById("endereco").value||"Av. Eng. Luís Carlos Berrini, 1376";let auditor=document.getElementById("auditor").value||"Não informado";let obs=document.getElementById("obs")?.value||"";let data=new Date().toLocaleString("pt-BR");let stats={valid:0,lock:0,prob:0,other:0};entries.forEach(e=>stats[e.status]++);let total=entries.length;let info="";if(total===0)info="Nenhuma sala vistoriada.";else{info=`TOTAL: ${total} sala(s) | ✅${stats.valid} 🔒${stats.lock} ⚠️${stats.prob} 📌${stats.other}\n\n`;let byFloor={};entries.forEach(e=>{if(!byFloor[e.f])byFloor[e.f]=[];byFloor[e.f].push({r:e.r,status:e.status});});let floors=Object.keys(byFloor).map(Number).sort((a,b)=>a-b);info+="DETALHAMENTO:\n";floors.forEach(f=>{let rooms=byFloor[f];let v=rooms.filter(r=>r.status==="valid").length;let l=rooms.filter(r=>r.status==="lock").length;let p=rooms.filter(r=>r.status==="prob").length;let o=rooms.filter(r=>r.status==="other").length;info+=`  Andar ${pad2(f)}: ✅${v} 🔒${l} ⚠️${p} 📌${o}\n`;});}
 let totalFotos=0;let roomsWithPhotos=[];entries.forEach(item=>{let photos=getRoomPhotos(item.f,item.r);if(photos.length>0){totalFotos+=photos.length;roomsWithPhotos.push({room:`${pad2(item.f)}° - ${formatRoom(item.r)}`,status:statusName(item.status),icon:statusIcon(item.status),photos:photos,count:photos.length});}});
 let fotosInfo=totalFotos>0?`\n📸 Total de fotos: ${totalFotos}\n`:"";
