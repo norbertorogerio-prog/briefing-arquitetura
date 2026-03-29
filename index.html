@@ -719,7 +719,7 @@ Aguardando registros...
 </div>
 
 <script>
-  const STORAGE_KEY = "vistoria_eco_berrini_final";
+  const STORAGE_KEY = "vistoria_eco_berrini_completo";
   let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   let currentFloor = 1;
   let currentRoom = 1;
@@ -825,6 +825,7 @@ Aguardando registros...
     document.getElementById("fullscreenModal").classList.remove("show");
   }
 
+  // Registrar sala ao clicar no status
   document.querySelectorAll(".status").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       const status = btn.dataset.status;
@@ -1021,7 +1022,7 @@ ${photosHtml}`;
   
   function shareToWhatsApp() {
     if (!currentImageData) return;
-    const text = `🏢 ECO BERRINI RELATÓRIO DE VISTORIA\n\n👤 Auditor: ${auditorInp.value || "Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Fotos inclusas`;
+    const text = `🏢 ECO BERRINI - RELATÓRIO DE VISTORIA\n\n👤 Auditor: ${auditorInp.value || "Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Fotos inclusas`;
     if (navigator.share) {
       fetch(currentImageData).then(res => res.blob()).then(blob => {
         navigator.share({ title: 'Relatório Eco Berrini', text: text, files: [new File([blob], "relatorio.png", { type: "image/png" })] });
