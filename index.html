@@ -1,272 +1,218 @@
+Aqui está o código modificado com os ícones do relatório posicionados dentro do desenho do prédio:
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Relatório de Vistoria | Eco Berrini - Mapa Interativo</title>
+  <title>Relatório de Vistoria | Vivo (Mapa com Ícones)</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg1:#0F0F1A; --bg2:#1A1A2E;
+      --card:rgba(26,26,46,.78);
+      --stroke:rgba(102,0,204,.28);
+      --purple:#6600CC; --purple2:#4C0099;
+      --txt:#fff; --muted:#b7b7c8;
+
+      --ok:#00C853;
+      --warn:#FFD600;
+      --bad:#FF3B3B;
+      --other:#AA00FF;
     }
 
-    body {
-      background: linear-gradient(145deg, #0A0A14 0%, #11111F 100%);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      padding: 20px;
-      color: #ffffff;
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:linear-gradient(135deg,var(--bg2),var(--bg1));
+      color:var(--txt);
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      min-height:100vh;
+      padding:18px;
     }
 
-    /* Container principal */
-    .dashboard {
-      max-width: 1600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    .app{max-width:1500px;margin:0 auto;display:grid;gap:16px}
+    @media(min-width:1040px){
+      .app{grid-template-columns:380px 1fr;align-items:start}
     }
 
-    @media (min-width: 1100px) {
-      .dashboard {
-        display: grid;
-        grid-template-columns: 360px 1fr;
-        align-items: start;
-      }
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 26px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
     }
 
-    /* Cards */
-    .card {
-      background: rgba(18, 18, 32, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(102, 0, 204, 0.4);
-      border-radius: 28px;
-      padding: 22px;
-      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
-      transition: all 0.2s ease;
+    h2{
+      margin:0 0 14px 0;
+      font-weight:800;
+      font-size:18px;
+      background:linear-gradient(135deg,#6600CC,#8833FF);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      display:inline-block;
+    }
+    label{
+      display:block;
+      margin:12px 0 6px;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      color:var(--muted);
+      letter-spacing:.35px;
+    }
+    .field{
+      width:100%;
+      border:1.5px solid rgba(102,0,204,.22);
+      border-radius:12px;
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      padding:10px 12px;
+      font-size:13px;
+      outline:none;
+      transition:.15s;
+    }
+    .field:focus{
+      border-color:#6600CC;
+      box-shadow:0 0 0 3px rgba(102,0,204,.20);
+      background:rgba(102,0,204,.10);
+    }
+    .row{display:flex;gap:10px}
+    .row > *{flex:1}
+
+    .status-strip{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .status{
+      flex:1;
+      min-width:120px;
+      border-radius:999px;
+      padding:10px 12px;
+      cursor:pointer;
+      border:1.5px solid rgba(102,0,204,.32);
+      background:rgba(102,0,204,.14);
+      color:#fff;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:.15s;
+      user-select:none;
+    }
+    .status:hover{transform:translateY(-1px);background:rgba(102,0,204,.26)}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .dot.ok{background:var(--ok);box-shadow:0 0 8px rgba(0,200,83,.5)}
+    .dot.warn{background:var(--warn);box-shadow:0 0 8px rgba(255,214,0,.45)}
+    .dot.bad{background:var(--bad);box-shadow:0 0 8px rgba(255,59,59,.45)}
+    .dot.other{background:var(--other);box-shadow:0 0 8px rgba(170,0,255,.45)}
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      color:#fff;
+      background:linear-gradient(135deg,#6600CC,#4C0099);
+      transition:.15s;
+      margin-top:12px;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(102,0,204,.25)}
+    .btn.ghost{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      font-weight:800;
     }
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(102, 0, 204, 0.3);
-      padding-bottom: 12px;
+    /* ===== MAPA ===== */
+    .map-wrap{
+      display:grid;
+      gap:14px;
+    }
+    .map-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .map-title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .map-title h3{
+      margin:0;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+      color:var(--muted);
+    }
+    .map-title .meta{
+      font-size:12px;
+      color:#cfc3ff;
+      font-weight:700;
     }
 
-    .card-header h2 {
-      font-size: 1.4rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #AA66FF, #6600CC);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      letter-spacing: -0.3px;
+    .legend{
+      display:flex;gap:10px;flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .leg{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      font-size:12px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .leg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+    .map-body{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    @media(max-width:1039px){
+      .map-body{grid-template-columns:1fr}
     }
 
-    /* Formulário */
-    .field-group {
-      margin-bottom: 18px;
+    .building{
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(102,0,204,.25);
+      border-radius:16px;
+      padding:14px;
+      position:relative;
+      overflow:visible;
+      min-height:560px;
     }
 
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #A0A0C0;
-      margin-bottom: 6px;
-    }
-
-    .field, select.field {
-      width: 100%;
-      background: rgba(10, 10, 20, 0.7);
-      border: 1.5px solid rgba(102, 0, 204, 0.4);
-      border-radius: 14px;
-      padding: 12px 14px;
-      color: white;
-      font-size: 13px;
-      font-weight: 500;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .field:focus, select.field:focus {
-      border-color: #AA66FF;
-      box-shadow: 0 0 0 3px rgba(170, 102, 255, 0.2);
-      background: rgba(30, 30, 55, 0.9);
-    }
-
-    .row-2 {
-      display: flex;
-      gap: 12px;
-    }
-    .row-2 > * {
-      flex: 1;
-    }
-
-    /* Status Icons bar */
-    .status-bar {
-      display: flex;
-      gap: 12px;
-      margin: 20px 0 16px;
-      flex-wrap: wrap;
-    }
-
-    .status-btn {
-      flex: 1;
-      background: rgba(30, 30, 55, 0.6);
-      border: 1px solid rgba(102, 0, 204, 0.5);
-      border-radius: 60px;
-      padding: 10px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-weight: 800;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: white;
-    }
-
-    .status-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(102, 0, 204, 0.3);
-      border-color: #AA66FF;
-    }
-
-    .dot-icon {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .dot-valid { background: #00E676; box-shadow: 0 0 6px #00E676; }
-    .dot-lock { background: #FFD600; box-shadow: 0 0 6px #FFD600; }
-    .dot-prob { background: #FF5252; box-shadow: 0 0 6px #FF5252; }
-    .dot-other { background: #D500F9; box-shadow: 0 0 6px #D500F9; }
-
-    .btn {
-      width: 100%;
-      background: linear-gradient(95deg, #6600CC, #8A2BE2);
-      border: none;
-      border-radius: 18px;
-      padding: 12px;
-      font-weight: 800;
-      font-size: 14px;
-      color: white;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: 0.2s;
-    }
-
-    .btn-outline {
-      background: rgba(102, 0, 204, 0.2);
-      border: 1px solid rgba(170, 102, 255, 0.5);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      filter: brightness(1.05);
-      box-shadow: 0 8px 18px rgba(102, 0, 204, 0.3);
-    }
-
-    /* ========= MAPA COM DESENHO E ÍCONES DENTRO ========= */
-    .map-main {
-      background: rgba(8, 8, 18, 0.7);
-      border-radius: 28px;
-      border: 1px solid rgba(102, 0, 204, 0.5);
-      overflow: hidden;
-      backdrop-filter: blur(4px);
-    }
-
-    .map-header {
-      padding: 18px 22px;
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid rgba(102, 0, 204, 0.3);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .map-title h3 {
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: -0.2px;
-    }
-    .map-meta {
-      font-size: 12px;
-      color: #C0B0FF;
-      margin-top: 4px;
-      font-weight: 500;
-    }
-
-    .legend-icons {
-      display: flex;
-      gap: 16px;
-    }
-    .leg-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(255,255,255,0.05);
-      padding: 5px 12px;
-      border-radius: 40px;
-    }
-
-    /* CORPO DO MAPA: DESENHO ESQUERDO + GRADE DIREITA */
-    .map-body-container {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 0;
-      min-height: 560px;
-    }
-
-    @media (max-width: 900px) {
-      .map-body-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Desenho artístico do prédio com ícones de status EMBUTIDOS */
-    .building-art {
-      background: linear-gradient(145deg, #0C0C18, #0A0A14);
+    /* Container do SVG com posicionamento relativo para os ícones */
+    .building-svg-container {
       position: relative;
-      border-right: 1px solid rgba(102, 0, 204, 0.4);
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .svg-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 240px;
-      margin: 0 auto;
-    }
-
-    .building-svg {
       width: 100%;
       height: auto;
-      display: block;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
     }
-
-    /* Container dos ícones sobrepostos no desenho */
-    .icons-overlay {
+    
+    .building svg{
+      width:100%;
+      height:auto;
+      display: block;
+    }
+    
+    /* Camada de ícones sobrepostos ao SVG */
+    .icons-layer {
       position: absolute;
       top: 0;
       left: 0;
@@ -274,509 +220,654 @@
       height: 100%;
       pointer-events: none;
     }
-
+    
     .icon-marker {
       position: absolute;
-      width: 24px;
-      height: 24px;
-      border-radius: 30px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 900;
-      color: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-      pointer-events: auto;
       cursor: pointer;
-      transition: 0.1s ease;
-      z-index: 20;
-      backdrop-filter: blur(2px);
-      border: 1px solid rgba(255,255,255,0.3);
+      pointer-events: auto;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,255,255,0.3);
+      z-index: 10;
     }
+    
     .icon-marker:hover {
-      transform: scale(1.1);
-      z-index: 30;
+      transform: scale(1.15);
+      z-index: 20;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
-    .icon-valid { background: #00E676; color: #000; }
-    .icon-lock { background: #FFD600; color: #000; }
-    .icon-prob { background: #FF5252; color: white; }
-    .icon-other { background: #D500F9; color: white; }
-
-    /* tooltip flutuante */
-    .marker-tooltip {
+    
+    .icon-valid {
+      background: var(--ok);
+      color: #000;
+    }
+    .icon-lock {
+      background: var(--warn);
+      color: #000;
+    }
+    .icon-prob {
+      background: var(--bad);
+      color: #fff;
+    }
+    .icon-other {
+      background: var(--other);
+      color: #fff;
+    }
+    
+    .icon-marker::after {
+      content: attr(data-tooltip);
       position: absolute;
-      background: #1A1A2E;
-      color: white;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 16px;
-      white-space: nowrap;
-      top: -22px;
+      bottom: 100%;
       left: 50%;
       transform: translateX(-50%);
-      pointer-events: none;
-      border: 1px solid #AA66FF;
-    }
-
-    /* Grade das salas */
-    .grid-floors {
-      padding: 18px;
-      overflow-y: auto;
-      max-height: 620px;
-      background: rgba(0,0,0,0.2);
-    }
-
-    .floor-line {
-      display: grid;
-      grid-template-columns: 60px 1fr;
-      gap: 12px;
-      margin-bottom: 8px;
-      align-items: center;
-    }
-
-    .floor-number {
-      background: rgba(102, 0, 204, 0.25);
-      border-radius: 14px;
-      padding: 8px 5px;
-      text-align: center;
-      font-weight: 800;
-      font-size: 13px;
-      border: 1px solid rgba(102, 0, 204, 0.5);
-    }
-
-    .rooms-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-      gap: 8px;
-    }
-
-    .room-card {
-      background: rgba(30, 30, 55, 0.6);
-      border-radius: 12px;
-      padding: 8px 4px;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.1s;
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(2px);
-    }
-    .room-card.valid { background: #00E676cc; color: #000; border-color: #00E676; }
-    .room-card.lock { background: #FFD600cc; color: #000; border-color: #FFD600; }
-    .room-card.prob { background: #FF5252cc; color: white; border-color: #FF5252; }
-    .room-card.other { background: #D500F9cc; color: white; border-color: #D500F9; }
-    .room-card.active-room {
-      outline: 3px solid white;
-      transform: scale(1.02);
-      box-shadow: 0 0 12px rgba(255,255,255,0.6);
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #6600CC;
-      padding: 12px 20px;
-      border-radius: 40px;
-      font-weight: bold;
-      opacity: 0;
-      transition: 0.2s;
-      z-index: 999;
-      pointer-events: none;
-    }
-    .toast.show { opacity: 1; transform: translateY(-5px);}
-    .small-note {
+      background: rgba(0,0,0,0.9);
+      color: white;
       font-size: 10px;
-      text-align: center;
-      margin-top: 12px;
-      color: #8a8ac0;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      margin-bottom: 4px;
     }
+    
+    .icon-marker:hover::after {
+      opacity: 1;
+    }
+    
+    .zones{
+      position:absolute;
+      left:10px;
+      top:14px;
+      bottom:14px;
+      width:100px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      pointer-events:none;
+      opacity:.95;
+      z-index: 5;
+    }
+    .zone{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:14px;
+      padding:10px;
+      font-size:11px;
+      font-weight:900;
+      color:#fff;
+      line-height:1.25;
+    }
+    .zone b{display:block;color:#cfc3ff;margin-top:4px;font-weight:900}
+
+    .gridbox{
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(102,0,204,.25);
+      border-radius:16px;
+      padding:14px;
+      overflow:auto;
+    }
+
+    .floor-row{
+      display:grid;
+      grid-template-columns: 64px 1fr;
+      gap:10px;
+      align-items:center;
+      margin-bottom:7px;
+    }
+    .floor-tag{
+      font-size:12px;
+      font-weight:900;
+      color:#cfc3ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 6px;
+      border-radius:12px;
+      background:rgba(102,0,204,.14);
+      border:1px solid rgba(102,0,204,.22);
+    }
+
+    .cells{
+      display:grid;
+      gap:7px;
+      align-items:center;
+    }
+
+    .cell{
+      height:30px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      box-shadow:0 2px 8px rgba(0,0,0,.18);
+      transition:.12s;
+      white-space:nowrap;
+    }
+    .cell:hover{transform:translateY(-1px);filter:brightness(1.06)}
+    .cell.empty{
+      background:rgba(255,255,255,.04);
+      border:1px dashed rgba(255,255,255,.12);
+      color:rgba(255,255,255,.22);
+      box-shadow:none;
+      cursor:default;
+    }
+
+    /* cores por status */
+    .s-ok{background:rgba(0,200,83,.80)}
+    .s-warn{background:rgba(255,214,0,.85); color:#1A1A2E}
+    .s-bad{background:rgba(255,59,59,.82)}
+    .s-other{background:rgba(170,0,255,.75)}
+
+    .cell.active{
+      outline:3px solid rgba(255,255,255,.35);
+      transform:translateY(-1px);
+    }
+
+    .toast{
+      position:fixed;right:16px;bottom:16px;
+      background:rgba(102,0,204,.95);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      opacity:0;
+      transform:translateY(8px);
+      transition:.18s;
+      pointer-events:none;
+      z-index:9999;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+    .small{margin-top:10px;font-size:11px;color:#aab;text-align:center}
   </style>
 </head>
-<body>
 
-<div class="dashboard">
-  <!-- Painel de Controle -->
+<body>
+<div class="app">
+
+  <!-- CONTROLE -->
   <div class="card">
-    <div class="card-header">
-      <h2>🔍 VISTORIA TÉCNICA</h2>
-    </div>
-    <div class="field-group">
-      <label>👤 AUDITOR RESPONSÁVEL</label>
-      <input type="text" id="auditorName" class="field" placeholder="Ex: Carlos Mendes" value="André Costa">
-    </div>
-    <div class="field-group">
-      <label>🏢 EMPREENDIMENTO</label>
-      <select id="buildingSelect" class="field">
-        <option value="Eco Berrini">Eco Berrini</option>
-        <option value="Chucri Zaidan">Chucri Zaidan</option>
-      </select>
-    </div>
-    <div class="field-group">
-      <label>📍 ENDEREÇO</label>
-      <input type="text" id="addressField" class="field" readonly placeholder="Endereço automático">
-    </div>
-    <div class="row-2">
-      <div class="field-group">
-        <label>🏬 ANDAR</label>
-        <select id="floorSelect" class="field"></select>
+    <h2>✨ Vistoria Técnica</h2>
+
+    <label>👤 Auditor</label>
+    <input id="auditor" class="field" placeholder="Nome completo"/>
+
+    <label>🏢 Prédio</label>
+    <select id="predio" class="field">
+      <option value="">Selecione o prédio</option>
+      <option value="Eco Berrini">Eco Berrini</option>
+      <option value="Chucri Zaidan">Chucri Zaidan</option>
+    </select>
+
+    <label>📍 Endereço</label>
+    <input id="endereco" class="field" placeholder="Automático" />
+
+    <div class="row">
+      <div>
+        <label>🏬 Andar</label>
+        <select id="floorInput" class="field"></select>
       </div>
-      <div class="field-group">
-        <label>🚪 SALA / UNIDADE</label>
-        <select id="roomSelect" class="field"></select>
+      <div>
+        <label>🚪 Sala</label>
+        <select id="roomInput" class="field"></select>
       </div>
     </div>
-    
-    <div class="status-bar">
-      <div class="status-btn" data-status="valid"><span class="dot-icon dot-valid"></span> VALIDADA</div>
-      <div class="status-btn" data-status="lock"><span class="dot-icon dot-lock"></span> TRANCADA</div>
-      <div class="status-btn" data-status="prob"><span class="dot-icon dot-prob"></span> PROBLEMAS</div>
-      <div class="status-btn" data-status="other"><span class="dot-icon dot-other"></span> OUTROS</div>
+
+    <label>📌 Status</label>
+    <div class="status-strip">
+      <div class="status" data-status="valid"><span class="dot ok"></span>Validada</div>
+      <div class="status" data-status="lock"><span class="dot warn"></span>Trancada</div>
+      <div class="status" data-status="prob"><span class="dot bad"></span>Problemas</div>
+      <div class="status" data-status="other"><span class="dot other"></span>Outros</div>
     </div>
-    
-    <button id="clearAllBtn" class="btn btn-outline">🗑️ LIMPAR TODOS OS REGISTROS</button>
-    <button id="exportPngBtn" class="btn">📸 EXPORTAR MAPA (PNG)</button>
-    <div class="small-note">💡 Clique nos ícones sobre o desenho do prédio ou na grade lateral para navegar e aplicar status.</div>
+
+    <button id="btnPng" class="btn">📸 Salvar PNG do Mapa</button>
+    <button id="btnClear" class="btn ghost">🗑️ Limpar Tudo</button>
+
+    <p class="small">💡 Selecione andar/sala e clique no status → ícones aparecem no desenho do prédio</p>
   </div>
 
-  <!-- MAPA COM ÍCONES DENTRO DO DESENHO -->
-  <div class="map-main" id="mapCaptureArea">
+  <!-- MAPA -->
+  <div class="card map-wrap" id="mapCapture">
     <div class="map-header">
       <div class="map-title">
-        <h3>🏙️ RELATÓRIO – MAPA DO PRÉDIO</h3>
-        <div class="map-meta" id="metaInfo">Carregando...</div>
+        <h3>📋 Relatório – Mapa do Prédio</h3>
+        <div class="meta" id="metaLine">Aguardando...</div>
       </div>
-      <div class="legend-icons">
-        <div class="leg-item"><span class="dot-icon dot-valid"></span> Validada</div>
-        <div class="leg-item"><span class="dot-icon dot-lock"></span> Trancada</div>
-        <div class="leg-item"><span class="dot-icon dot-prob"></span> Problemas</div>
-        <div class="leg-item"><span class="dot-icon dot-other"></span> Outros</div>
+
+      <div class="legend">
+        <span class="leg"><i style="background:rgba(0,200,83,.85)"></i>Validada</span>
+        <span class="leg"><i style="background:rgba(255,214,0,.90)"></i>Trancada</span>
+        <span class="leg"><i style="background:rgba(255,59,59,.85)"></i>Problemas</span>
+        <span class="leg"><i style="background:rgba(170,0,255,.80)"></i>Outros</span>
       </div>
     </div>
-    
-    <div class="map-body-container">
-      <!-- LADO ESQUERDO: DESENHO ESTILIZADO DO PRÉDIO COM ÍCONES SOBREPOSTOS -->
-      <div class="building-art">
-        <div class="svg-wrapper" style="position: relative;">
-          <svg class="building-svg" viewBox="0 0 240 500" xmlns="http://www.w3.org/2000/svg">
+
+    <div class="map-body">
+      <div class="building">
+        <div class="zones">
+          <div class="zone">
+            Zona Alta
+            <b>(Pisos 16 a 32)</b>
+          </div>
+          <div class="zone">
+            Zona Baixa
+            <b>(Pisos 01 a 15)</b>
+          </div>
+        </div>
+
+        <!-- Desenho do prédio com container para ícones sobrepostos -->
+        <div class="building-svg-container" id="buildingSvgContainer">
+          <svg viewBox="0 0 280 520" aria-label="Prédio" style="width:100%; height:auto;">
             <defs>
-              <linearGradient id="wallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#3A2A5F"/>
-                <stop offset="100%" stop-color="#1F1A3A"/>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0" stop-color="rgba(255,255,255,.18)"/>
+                <stop offset="1" stop-color="rgba(255,255,255,.05)"/>
               </linearGradient>
-              <filter id="shadow" x="-0.02" y="-0.02" width="1.06" height="1.06">
-                <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
-                <feOffset dx="2" dy="2"/>
-                <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-                <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
+              <linearGradient id="windowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(100,100,150,.3)"/>
+                <stop offset="100%" stop-color="rgba(50,50,80,.2)"/>
+              </linearGradient>
             </defs>
-            <!-- Estrutura principal -->
-            <rect x="45" y="30" width="150" height="440" rx="16" fill="url(#wallGrad)" stroke="#AA66FF" stroke-width="1.8" filter="url(#shadow)"/>
-            <!-- Janelas linha vertical -->
-            <rect x="65" y="65" width="25" height="35" rx="4" fill="#2A2350" stroke="#BB99FF" stroke-width="1"/>
-            <rect x="110" y="65" width="25" height="35" rx="4" fill="#2A2350" stroke="#BB99FF" stroke-width="1"/>
-            <rect x="155" y="65" width="25" height="35" rx="4" fill="#2A2350" stroke="#BB99FF" stroke-width="1"/>
-            <!-- representação de andares (linhas) -->
-            <line x1="50" y1="120" x2="190" y2="120" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <line x1="50" y1="180" x2="190" y2="180" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <line x1="50" y1="240" x2="190" y2="240" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <line x1="50" y1="300" x2="190" y2="300" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <line x1="50" y1="360" x2="190" y2="360" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <line x1="50" y1="420" x2="190" y2="420" stroke="#AA88FF" stroke-width="1.2" stroke-dasharray="3 3"/>
-            <text x="25" y="80" fill="#C0C0FF" font-size="8" font-weight="bold">ZONA</text>
-            <text x="22" y="100" fill="#D9C8FF" font-size="9" font-weight="bold">ALTA</text>
-            <text x="22" y="380" fill="#D9C8FF" font-size="9" font-weight="bold">ZONA</text>
-            <text x="22" y="400" fill="#D9C8FF" font-size="9" font-weight="bold">BAIXA</text>
-            <text x="200" y="460" fill="#AA99FF" font-size="7">Eco Berrini</text>
+
+            <!-- base do prédio -->
+            <rect x="40" y="420" width="200" height="70" rx="10" fill="url(#g1)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+            <rect x="60" y="438" width="40" height="36" rx="6" fill="rgba(0,0,0,.20)" stroke="rgba(255,255,255,.18)" />
+            <rect x="180" y="438" width="40" height="36" rx="6" fill="rgba(0,0,0,.20)" stroke="rgba(255,255,255,.18)" />
+
+            <!-- torre principal -->
+            <rect x="90" y="60" width="100" height="360" rx="12" fill="url(#g1)" stroke="rgba(255,255,255,.24)" stroke-width="2"/>
+            
+            <!-- janelas decorativas - representando os andares -->
+            <g fill="rgba(80,80,120,.3)" stroke="rgba(255,255,255,.15)" stroke-width="0.5">
+              <rect x="100" y="85" width="20" height="22" rx="3"/>
+              <rect x="125" y="85" width="20" height="22" rx="3"/>
+              <rect x="150" y="85" width="20" height="22" rx="3"/>
+              <rect x="100" y="115" width="20" height="22" rx="3"/>
+              <rect x="125" y="115" width="20" height="22" rx="3"/>
+              <rect x="150" y="115" width="20" height="22" rx="3"/>
+              <rect x="100" y="145" width="20" height="22" rx="3"/>
+              <rect x="125" y="145" width="20" height="22" rx="3"/>
+              <rect x="150" y="145" width="20" height="22" rx="3"/>
+              <rect x="100" y="175" width="20" height="22" rx="3"/>
+              <rect x="125" y="175" width="20" height="22" rx="3"/>
+              <rect x="150" y="175" width="20" height="22" rx="3"/>
+              <rect x="100" y="205" width="20" height="22" rx="3"/>
+              <rect x="125" y="205" width="20" height="22" rx="3"/>
+              <rect x="150" y="205" width="20" height="22" rx="3"/>
+              <rect x="100" y="235" width="20" height="22" rx="3"/>
+              <rect x="125" y="235" width="20" height="22" rx="3"/>
+              <rect x="150" y="235" width="20" height="22" rx="3"/>
+              <rect x="100" y="265" width="20" height="22" rx="3"/>
+              <rect x="125" y="265" width="20" height="22" rx="3"/>
+              <rect x="150" y="265" width="20" height="22" rx="3"/>
+              <rect x="100" y="295" width="20" height="22" rx="3"/>
+              <rect x="125" y="295" width="20" height="22" rx="3"/>
+              <rect x="150" y="295" width="20" height="22" rx="3"/>
+              <rect x="100" y="325" width="20" height="22" rx="3"/>
+              <rect x="125" y="325" width="20" height="22" rx="3"/>
+              <rect x="150" y="325" width="20" height="22" rx="3"/>
+              <rect x="100" y="355" width="20" height="22" rx="3"/>
+              <rect x="125" y="355" width="20" height="22" rx="3"/>
+              <rect x="150" y="355" width="20" height="22" rx="3"/>
+              <rect x="100" y="385" width="20" height="22" rx="3"/>
+              <rect x="125" y="385" width="20" height="22" rx="3"/>
+              <rect x="150" y="385" width="20" height="22" rx="3"/>
+            </g>
+
+            <!-- contorno lateral decorativo -->
+            <path d="M90 80 L65 110 L65 420 L90 420" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+            <path d="M190 80 L215 110 L215 420 L190 420" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+            
+            <!-- texto de identificação -->
+            <text x="120" y="470" fill="rgba(255,255,255,.6)" font-size="8" text-anchor="middle">ECO BERRINI</text>
           </svg>
           
-          <!-- CONTÊINER DOS ÍCONES FLUTUANTES SOBRE O DESENHO (relatório em ícones) -->
-          <div id="dynamicIconsContainer" class="icons-overlay"></div>
+          <!-- Camada para os ícones do relatório sobre o desenho -->
+          <div id="iconsLayer" class="icons-layer"></div>
         </div>
-        <div style="margin-top: 12px; font-size: 10px; text-align: center; color: #AA99FF;">⬤ Ícones representam salas com vistoria</div>
       </div>
-      
-      <!-- GRADE DETALHADA DAS SALAS -->
-      <div class="grid-floors" id="roomsGridContainer"></div>
+
+      <div class="gridbox">
+        <div id="grid"></div>
+      </div>
     </div>
   </div>
+
 </div>
 
-<div id="toastMsg" class="toast">✅ Ação concluída</div>
+<div class="toast" id="toast"></div>
 
 <script>
-  // --------------------------------------------------------------
-  // DADOS DOS PRÉDIOS (Eco Berrini com 32 andares / 15 salas cada)
-  // --------------------------------------------------------------
-  const buildingsData = {
-    "Eco Berrini": {
-      address: "Av. Eng. Luís Carlos Berrini, 1376 - São Paulo/SP",
-      floors: Array.from({length: 32}, (_, i) => String(i+1).padStart(2,'0')).reverse(),
-      roomsPerFloor: Array.from({length: 15}, (_, i) => String(i+1).padStart(2,'0'))
-    },
-    "Chucri Zaidan": {
-      address: "Av. Dr. Chucri Zaidan, 2460 - São Paulo/SP",
-      floors: Array.from({length: 32}, (_, i) => String(i+1).padStart(2,'0')).reverse(),
-      roomsPerFloor: Array.from({length: 13}, (_, i) => String(i+1).padStart(2,'0'))
-    }
-  };
+/* ===== Modelo de dados ===== */
+const PREDIOS_MODEL = {
+  "Eco Berrini": {
+    endereco: "Av. Eng. Luís Carlos Berrini, 1376 - SP",
+    andares: {}
+  },
+  "Chucri Zaidan": {
+    endereco: "Av. Dr. Chucri Zaidan, 2460 - SP",
+    andares: {}
+  }
+};
 
-  // Estado dos registros (vistorias)
-  let vistoriaEntries = []; // { building, floor, room, status }
-  let currentBuilding = "Eco Berrini";
-  let currentFloor = "32";
-  let currentRoom = "01";
+// Preenche os andares para Eco Berrini (01 a 32, cada um com 15 salas)
+for(let i = 1; i <= 32; i++) {
+  const andar = String(i).padStart(2, '0');
+  PREDIOS_MODEL["Eco Berrini"].andares[andar] = [];
+  for(let j = 1; j <= 15; j++) {
+    PREDIOS_MODEL["Eco Berrini"].andares[andar].push(String(j).padStart(2, '0'));
+  }
+}
 
-  // DOM elements
-  const buildingSelect = document.getElementById("buildingSelect");
-  const addressField = document.getElementById("addressField");
-  const floorSelect = document.getElementById("floorSelect");
-  const roomSelect = document.getElementById("roomSelect");
-  const auditorName = document.getElementById("auditorName");
-  const metaInfoSpan = document.getElementById("metaInfo");
-  const roomsGridContainer = document.getElementById("roomsGridContainer");
-  const iconsContainer = document.getElementById("dynamicIconsContainer");
-  const toastMsg = document.getElementById("toastMsg");
+// Preenche os andares para Chucri Zaidan (01 a 32, cada um com 13 salas)
+for(let i = 1; i <= 32; i++) {
+  const andar = String(i).padStart(2, '0');
+  PREDIOS_MODEL["Chucri Zaidan"].andares[andar] = [];
+  for(let j = 1; j <= 13; j++) {
+    PREDIOS_MODEL["Chucri Zaidan"].andares[andar].push(String(j).padStart(2, '0'));
+  }
+}
 
-  function showToast(text) {
-    toastMsg.textContent = text;
-    toastMsg.classList.add("show");
-    setTimeout(() => toastMsg.classList.remove("show"), 2000);
+/* ===== Estado ===== */
+const STORAGE_KEY = "vistoria_map_v1";
+let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+let currentFloor = "01";
+let currentRoom  = "01";
+
+/* ===== DOM ===== */
+const auditorInp = document.getElementById("auditor");
+const predioSel  = document.getElementById("predio");
+const endInp     = document.getElementById("endereco");
+const floorSel   = document.getElementById("floorInput");
+const roomSel    = document.getElementById("roomInput");
+const gridEl     = document.getElementById("grid");
+const metaLine   = document.getElementById("metaLine");
+const toastEl    = document.getElementById("toast");
+const iconsLayer = document.getElementById("iconsLayer");
+
+/* ===== Helpers ===== */
+const pad2 = n => String(n).padStart(2,"0");
+
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  setTimeout(()=>toastEl.classList.remove("show"), 2000);
+}
+
+function persist(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+function statusToClass(s){
+  if(s==="valid") return "s-ok";
+  if(s==="lock")  return "s-warn";
+  if(s==="prob")  return "s-bad";
+  return "s-other";
+}
+
+function statusToIconClass(s){
+  if(s==="valid") return "icon-valid";
+  if(s==="lock")  return "icon-lock";
+  if(s==="prob")  return "icon-prob";
+  return "icon-other";
+}
+
+function statusToIconSymbol(s){
+  if(s==="valid") return "✓";
+  if(s==="lock")  return "🔒";
+  if(s==="prob")  return "⚠";
+  return "◉";
+}
+
+function statusToName(s){
+  if(s==="valid") return "Validada";
+  if(s==="lock")  return "Trancada";
+  if(s==="prob")  return "Problemas";
+  return "Outros";
+}
+
+function getModel(){
+  return PREDIOS_MODEL[predioSel.value] || null;
+}
+
+function setOptions(selectEl, arr, keep){
+  selectEl.innerHTML = "";
+  (arr||[]).forEach(v=>{
+    const o=document.createElement("option");
+    o.value=v; o.textContent=v;
+    selectEl.appendChild(o);
+  });
+  if(keep && arr.includes(keep)) selectEl.value = keep;
+  else selectEl.value = arr[0] || "01";
+}
+
+function refreshSelectors(keepFloor, keepRoom){
+  const m = getModel();
+  if(!m){
+    endInp.value = "";
+    setOptions(floorSel, ["01"], "01");
+    setOptions(roomSel,  ["01"], "01");
+    currentFloor="01"; currentRoom="01";
+    render();
+    return;
   }
 
-  function saveToLocal() {
-    localStorage.setItem("vistoria_eco_map", JSON.stringify(vistoriaEntries));
-  }
+  endInp.value = m.endereco || "";
+  const floors = Object.keys(m.andares||{}).sort((a,b)=>parseInt(a)-parseInt(b));
+  setOptions(floorSel, floors.length?floors:["01"], keepFloor);
 
-  function loadFromLocal() {
-    const saved = localStorage.getItem("vistoria_eco_map");
-    if(saved) vistoriaEntries = JSON.parse(saved);
-    else vistoriaEntries = [];
-  }
+  const rooms = (m.andares[floorSel.value] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
+  setOptions(roomSel, rooms, keepRoom);
 
-  // Obter status de uma sala específica
-  function getStatus(building, floor, room) {
-    const entry = vistoriaEntries.find(e => e.building === building && e.floor === floor && e.room === room);
-    return entry ? entry.status : null;
-  }
+  currentFloor = floorSel.value;
+  currentRoom  = roomSel.value;
 
-  // Atualizar ou adicionar registro
-  function setStatus(building, floor, room, status) {
-    const idx = vistoriaEntries.findIndex(e => e.building === building && e.floor === floor && e.room === room);
-    if(idx !== -1) vistoriaEntries[idx] = { building, floor, room, status };
-    else vistoriaEntries.push({ building, floor, room, status });
-    saveToLocal();
-    refreshAll();
-    showToast(`📍 ${floor}-S${room} → ${statusText(status)}`);
-  }
+  render();
+}
 
-  function statusText(st) {
-    if(st==="valid") return "Validada";
-    if(st==="lock") return "Trancada";
-    if(st==="prob") return "Problemas";
-    return "Outros";
-  }
+function entryIndex(floor, room){
+  return entries.findIndex(e => e.predio===predioSel.value && e.floor===floor && e.room===room);
+}
 
-  // Atualiza selects de andar e sala
-  function updateSelectors() {
-    const data = buildingsData[currentBuilding];
-    if(!data) return;
-    addressField.value = data.address;
-    const floorsList = data.floors;
-    floorSelect.innerHTML = "";
-    floorsList.forEach(f => {
-      const opt = document.createElement("option");
-      opt.value = f;
-      opt.textContent = `Andar ${f}`;
-      floorSelect.appendChild(opt);
-    });
-    if(!floorsList.includes(currentFloor)) currentFloor = floorsList[0];
-    floorSelect.value = currentFloor;
+/* ===== Função para desenhar os ícones no SVG ===== */
+function renderIconsOnBuilding() {
+  if(!iconsLayer) return;
+  iconsLayer.innerHTML = "";
+  
+  const predioAtual = predioSel.value;
+  if(!predioAtual) return;
+  
+  const entriesDoPredio = entries.filter(e => e.predio === predioAtual);
+  if(entriesDoPredio.length === 0) return;
+  
+  // Posições baseadas no andar (mapeamento Y) e na sala (mapeamento X)
+  // Andar 32 (topo) -> Y ~ 85, Andar 01 (base) -> Y ~ 385
+  entriesDoPredio.forEach(entry => {
+    const andarNum = parseInt(entry.floor);
+    const salaNum = parseInt(entry.room);
     
-    const roomsList = data.roomsPerFloor;
-    roomSelect.innerHTML = "";
-    roomsList.forEach(r => {
-      const opt = document.createElement("option");
-      opt.value = r;
-      opt.textContent = `Sala ${r}`;
-      roomSelect.appendChild(opt);
-    });
-    if(!roomsList.includes(currentRoom)) currentRoom = roomsList[0];
-    roomSelect.value = currentRoom;
-  }
-
-  // Renderiza a grade detalhada (direita)
-  function renderRoomsGrid() {
-    const data = buildingsData[currentBuilding];
-    if(!data) return;
-    const floors = data.floors;
-    const rooms = data.roomsPerFloor;
-    let html = "";
-    for(let fl of floors) {
-      html += `<div class="floor-line">
-        <div class="floor-number">${fl}</div>
-        <div class="rooms-grid">`;
-      for(let rm of rooms) {
-        const status = getStatus(currentBuilding, fl, rm);
-        let statusClass = "";
-        if(status === "valid") statusClass = "valid";
-        else if(status === "lock") statusClass = "lock";
-        else if(status === "prob") statusClass = "prob";
-        else if(status === "other") statusClass = "other";
-        const activeClass = (currentFloor === fl && currentRoom === rm) ? "active-room" : "";
-        html += `<div class="room-card ${statusClass} ${activeClass}" data-floor="${fl}" data-room="${rm}">
-                  ${fl}-S${rm}
-                </div>`;
+    // Mapeia o andar para posição Y (invertido: andar maior fica mais alto)
+    const yPos = 385 - ((andarNum - 1) * (300 / 31)); // 385 a 85 aproximadamente
+    // Mapeia a sala para posição X (distribui entre 100 e 170)
+    const maxSalas = predioAtual === "Eco Berrini" ? 15 : 13;
+    const xPos = 100 + (salaNum - 1) * (70 / maxSalas);
+    
+    const icon = document.createElement("div");
+    icon.className = `icon-marker ${statusToIconClass(entry.status)}`;
+    icon.style.left = `${xPos}px`;
+    icon.style.top = `${yPos}px`;
+    icon.innerHTML = statusToIconSymbol(entry.status);
+    icon.setAttribute("data-tooltip", `${entry.floor}-S${entry.room}: ${statusToName(entry.status)}`);
+    
+    // Clique no ícone seleciona a sala correspondente
+    icon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      currentFloor = entry.floor;
+      currentRoom = entry.room;
+      floorSel.value = currentFloor;
+      
+      const m = getModel();
+      if(m) {
+        const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
+        setOptions(roomSel, rooms, currentRoom);
       }
-      html += `</div></div>`;
-    }
-    roomsGridContainer.innerHTML = html;
+      render();
+      showToast(`📍 Selecionado: ${entry.floor}-S${entry.room}`);
+    });
     
-    // eventos clique na grade
-    document.querySelectorAll(".room-card").forEach(card => {
-      card.addEventListener("click", (e) => {
-        const fl = card.dataset.floor;
-        const rm = card.dataset.room;
-        if(fl && rm) {
-          currentFloor = fl;
-          currentRoom = rm;
-          floorSelect.value = currentFloor;
-          roomSelect.value = currentRoom;
-          refreshAll();
-        }
-      });
-    });
+    iconsLayer.appendChild(icon);
+  });
+}
+
+/* ===== Render do MAPA ===== */
+function render(){
+  const predio = predioSel.value || "Não selecionado";
+  const auditor = auditorInp.value || "Não informado";
+  const dataStr = new Date().toLocaleString("pt-BR");
+  metaLine.textContent = `🏢 ${predio}  •  👤 ${auditor}  •  🕒 ${dataStr}  •  📌 Registros: ${entries.filter(e=>e.predio===predioSel.value).length}`;
+
+  const m = getModel();
+  if(!m){
+    gridEl.innerHTML = `<div style="color:#9aa;font-weight:800">Selecione um prédio para carregar o mapa.</div>`;
+    renderIconsOnBuilding();
+    return;
   }
 
-  // GERAR ÍCONES SOBRE O SVG (posições fixas relativas para cada andar simbólico)
-  function renderIconsOnDrawing() {
-    iconsContainer.innerHTML = "";
-    const data = buildingsData[currentBuilding];
-    if(!data) return;
-    // Mapeamento y aproximado para cada andar (32 andares => mapear de 30 a 440)
-    // Andar 32 fica em Y~55, Andar 01 fica Y~435
-    const allEntriesForBuilding = vistoriaEntries.filter(e => e.building === currentBuilding);
-    if(allEntriesForBuilding.length === 0) return;
-    
-    // definir posições fixas para os ícones baseado no número do andar (visual)
-    allEntriesForBuilding.forEach(entry => {
-      const floorNum = parseInt(entry.floor);
-      // mapeia Y: floor 32 => y=55, floor 1 => y=435
-      const yPos = 435 - ((floorNum - 1) * (380 / 31));
-      // X varia conforme a sala (até 3 colunas no desenho)
-      const roomNum = parseInt(entry.room);
-      let xPos = 75 + ((roomNum % 5) * 22);
-      if(xPos > 190) xPos = 170;
-      if(xPos < 65) xPos = 70;
-      
-      let iconClass = "";
-      let iconChar = "✓";
-      if(entry.status === "valid") { iconClass = "icon-valid"; iconChar = "✓"; }
-      else if(entry.status === "lock") { iconClass = "icon-lock"; iconChar = "🔒"; }
-      else if(entry.status === "prob") { iconClass = "icon-prob"; iconChar = "⚠"; }
-      else if(entry.status === "other") { iconClass = "icon-other"; iconChar = "◉"; }
-      
-      const iconDiv = document.createElement("div");
-      iconDiv.className = `icon-marker ${iconClass}`;
-      iconDiv.style.left = `${xPos}px`;
-      iconDiv.style.top = `${yPos}px`;
-      iconDiv.innerHTML = `<span style="font-size:11px;">${iconChar}</span>`;
-      iconDiv.title = `${entry.floor}-S${entry.room} : ${statusText(entry.status)}`;
-      
-      // Clique no ícone seleciona a sala e mostra
-      iconDiv.addEventListener("click", (e) => {
-        e.stopPropagation();
-        currentFloor = entry.floor;
-        currentRoom = entry.room;
-        floorSelect.value = currentFloor;
-        roomSelect.value = currentRoom;
-        refreshAll();
-        showToast(`Sala selecionada: ${entry.floor}-S${entry.room}`);
-      });
-      iconsContainer.appendChild(iconDiv);
-    });
-  }
-
-  // Atualiza header de meta
-  function updateMeta() {
-    const totalReg = vistoriaEntries.filter(e => e.building === currentBuilding).length;
-    const auditor = auditorName.value.trim() || "Não informado";
-    const dateStr = new Date().toLocaleString("pt-BR");
-    metaInfoSpan.innerHTML = `🏢 ${currentBuilding}  |  👤 ${auditor}  |  📅 ${dateStr}  |  🏷️ Registros: ${totalReg}`;
-  }
-
-  // refresh total do mapa e ícones
-  function refreshAll() {
-    updateSelectors();
-    renderRoomsGrid();
-    renderIconsOnDrawing();
-    updateMeta();
-  }
-
-  // Evento de mudança de prédio
-  buildingSelect.addEventListener("change", (e) => {
-    currentBuilding = e.target.value;
-    const floors = buildingsData[currentBuilding].floors;
-    currentFloor = floors[0];
-    currentRoom = buildingsData[currentBuilding].roomsPerFloor[0];
-    refreshAll();
+  // Descobre maior quantidade de salas para padronizar a grade
+  const floors = Object.keys(m.andares).map(x=>parseInt(x)).sort((a,b)=>b-a);
+  let maxCols = 1;
+  floors.forEach(f=>{
+    const arr = m.andares[pad2(f)] || [];
+    if(arr.length > maxCols) maxCols = arr.length;
   });
 
-  floorSelect.addEventListener("change", (e) => {
-    currentFloor = e.target.value;
-    refreshAll();
-  });
-  roomSelect.addEventListener("change", (e) => {
-    currentRoom = e.target.value;
-    refreshAll();
-  });
-  auditorName.addEventListener("input", () => updateMeta());
+  // Monta a grade de andares
+  let html = "";
+  floors.forEach(f=>{
+    const f2 = pad2(f);
+    const rooms = (m.andares[f2] || []).slice().sort((a,b)=>parseInt(a)-parseInt(b));
 
-  // Ações dos status
-  document.querySelectorAll(".status-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const statusVal = btn.dataset.status;
-      if(!currentBuilding || !currentFloor || !currentRoom) return;
-      setStatus(currentBuilding, currentFloor, currentRoom, statusVal);
-    });
-  });
+    html += `<div class="floor-row">
+      <div class="floor-tag">${f2}</div>
+      <div class="cells" style="grid-template-columns: repeat(${maxCols}, minmax(86px, 1fr));">`;
 
-  document.getElementById("clearAllBtn").addEventListener("click", () => {
-    if(confirm("⚠️ Limpar TODOS os registros de vistoria deste navegador?")) {
-      vistoriaEntries = [];
-      saveToLocal();
-      refreshAll();
-      showToast("Todos os registros foram removidos.");
+    for(let i=0;i<maxCols;i++){
+      const r = rooms[i];
+      if(!r){
+        html += `<div class="cell empty">—</div>`;
+        continue;
+      }
+
+      const idx = entries.findIndex(e => e.predio===predioSel.value && e.floor===f2 && e.room===r);
+      const st = idx>=0 ? entries[idx].status : null;
+      const cls = st ? statusToClass(st) : "empty";
+      const active = (currentFloor===f2 && currentRoom===r) ? "active" : "";
+      const label = `${f2}-S${r}`;
+
+      html += `<div class="cell ${st?cls:"empty"} ${active}" data-floor="${f2}" data-room="${r}" title="${label}${st?(" — "+statusToName(st)):""}">${label}</div>`;
     }
+
+    html += `</div></div>`;
   });
 
-  // Export PNG
-  document.getElementById("exportPngBtn").addEventListener("click", async () => {
-    const element = document.getElementById("mapCaptureArea");
-    showToast("Gerando PNG...");
-    try {
-      const canvas = await html2canvas(element, { scale: 2, backgroundColor: "#0A0A14", useCORS: true });
-      const link = document.createElement("a");
-      const ts = new Date().toISOString().slice(0,19).replace(/:/g, "-");
-      link.download = `vistoria_${currentBuilding}_${ts}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-      showToast("✅ Mapa exportado com sucesso!");
-    } catch(e) {
-      showToast("❌ Erro ao gerar imagem");
-    }
-  });
+  gridEl.innerHTML = html;
 
-  // Inicialização
-  loadFromLocal();
-  currentBuilding = "Eco Berrini";
-  currentFloor = "32";
-  currentRoom = "01";
-  refreshAll();
+  // Clique nas células da grade
+  gridEl.querySelectorAll(".cell").forEach(c=>{
+    if(c.classList.contains("empty") && !c.dataset.floor) return;
+    c.addEventListener("click", ()=>{
+      if(!c.dataset.floor) return;
+      currentFloor = c.dataset.floor;
+      currentRoom  = c.dataset.room;
+      floorSel.value = currentFloor;
+
+      const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
+      setOptions(roomSel, rooms, currentRoom);
+      render();
+    });
+  });
+  
+  // Renderiza os ícones sobre o desenho do prédio
+  renderIconsOnBuilding();
+}
+
+/* ===== Ações ===== */
+predioSel.addEventListener("change", ()=> refreshSelectors(currentFloor, currentRoom));
+floorSel.addEventListener("change", ()=>{
+  const m=getModel(); if(!m) return;
+  currentFloor = floorSel.value;
+  const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
+  setOptions(roomSel, rooms, rooms[0] || "01");
+  currentRoom = roomSel.value;
+  render();
+});
+roomSel.addEventListener("change", ()=>{ currentRoom = roomSel.value; render(); });
+
+document.querySelectorAll(".status").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const st = btn.dataset.status;
+    const pred = predioSel.value;
+    if(!pred) return showToast("Selecione o prédio primeiro.");
+
+    const idx = entryIndex(currentFloor, currentRoom);
+    const obj = { predio: pred, floor: currentFloor, room: currentRoom, status: st };
+
+    if(idx>=0) entries[idx] = obj;
+    else entries.push(obj);
+
+    persist();
+    render();
+    showToast(`✓ ${currentFloor}-S${currentRoom}: ${statusToName(st)}`);
+  });
+});
+
+document.getElementById("btnClear").addEventListener("click", ()=>{
+  if(!confirm("⚠️ Limpar todos os registros?")) return;
+  entries = [];
+  persist();
+  render();
+  showToast("✓ Dados removidos");
+});
+
+document.getElementById("btnPng").addEventListener("click", async ()=>{
+  const el = document.getElementById("mapCapture");
+  showToast("📸 Gerando PNG...");
+  try{
+    const canvas = await html2canvas(el, {scale:2, backgroundColor:null, useCORS:true});
+    const data = canvas.toDataURL("image/png");
+    const a = document.createElement("a");
+    const pred = predioSel.value || "predio";
+    const ts = new Date().toISOString().slice(0,19).replace(/:/g,"-");
+    a.download = `mapa_vistoria_${pred}_${ts}.png`;
+    a.href = data;
+    a.click();
+    showToast("✅ PNG salvo!");
+  }catch(e){
+    showToast("❌ Falha ao gerar PNG");
+  }
+});
+
+/* ===== Boot ===== */
+(function init(){
+  refreshSelectors("01","01");
+})();
 </script>
 </body>
 </html>
