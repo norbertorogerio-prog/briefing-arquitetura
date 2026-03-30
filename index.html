@@ -1,4 +1,4 @@
-Aqui está um código HTML completo que cria um sistema interativo de monitoramento para um prédio de 32 andares com 50 salas, incluindo visualização em forma de "janelas", seleção de prédio, identificação do auditor e geração de relatório.
+Com certeza! Vou criar uma versão melhorada com uma interface dividida: à esquerda uma lista vertical dos andares (1 a 32) e à direita a representação das 50 salas/janelas do andar selecionado, exatamente como na sua referência. O fluxo será: selecionar o andar → selecionar a sala → escolher o status → atualizar automaticamente o relatório.
 
 ```html
 <!DOCTYPE html>
@@ -6,237 +6,267 @@ Aqui está um código HTML completo que cria um sistema interativo de monitorame
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SysAudit - Monitoramento de Prédios | Berrini / Chucri</title>
+    <title>SysAudit Pro - Monitoramento de Prédios | Berrini / Chucri</title>
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            user-select: none; /* melhor para cliques em massa, mas sem impedir texto */
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(145deg, #e0eaf4 0%, #cfdef5 100%);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
             min-height: 100vh;
+            padding: 20px;
         }
 
-        /* container principal */
-        .dashboard {
+        /* Container principal */
+        .main-container {
             max-width: 1600px;
             margin: 0 auto;
-            background: rgba(255,255,240,0.85);
-            border-radius: 2rem;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-            backdrop-filter: blur(1px);
+            background: #f5f7fc;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
             overflow: hidden;
-            padding: 20px 24px 30px 24px;
         }
 
-        /* cabeçalho com auditor e seleção */
-        .header-bar {
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c5c 0%, #0a2a44 100%);
+            padding: 20px 30px;
+            color: white;
+        }
+
+        .header-top {
             display: flex;
-            flex-wrap: wrap;
+flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 20px;
-            margin-bottom: 28px;
-            background: #1e2f4e;
-            padding: 16px 24px;
-            border-radius: 60px;
-            color: white;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
         }
 
-        .auditor-area {
+        .auditor-section {
             display: flex;
             align-items: center;
             gap: 15px;
-            background: #0f1a2c;
-            padding: 6px 20px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 20px;
             border-radius: 40px;
+            backdrop-filter: blur(5px);
         }
 
-        .auditor-area label {
-            font-weight: bold;
+        .auditor-section label {
+            font-weight: 600;
             letter-spacing: 1px;
-            font-size: 1rem;
         }
 
         #auditorName {
             background: white;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 20px;
             border-radius: 30px;
             font-weight: bold;
-            color: #1e2f4e;
-            width: 180px;
+            color: #1e3c5c;
+            width: 200px;
             outline: none;
             font-size: 0.9rem;
         }
 
-        .predio-selector {
+        .predio-section {
             display: flex;
-            gap: 20px;
-            background: #0f1a2c;
-            padding: 6px 25px;
+            gap: 25px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 25px;
             border-radius: 40px;
         }
 
-        .predio-opt {
+        .predio-option {
             display: flex;
-            gap: 12px;
             align-items: center;
+            gap: 8px;
+            cursor: pointer;
         }
 
-        .predio-opt input {
-            transform: scale(1.1);
-            margin-right: 4px;
+        .predio-option input {
+            transform: scale(1.2);
+            cursor: pointer;
         }
 
-        .predio-opt label {
+        .predio-option label {
             font-weight: 600;
             cursor: pointer;
             font-size: 1rem;
         }
 
         .endereco-box {
-            background: #2c3e5c;
+            background: #ffd966;
+            color: #2c3e50;
             padding: 8px 20px;
-            border-radius: 32px;
+            border-radius: 40px;
+            font-weight: bold;
             font-size: 0.85rem;
             font-family: monospace;
-            font-weight: bold;
         }
 
-        /* grade do prédio: visual de janelas */
-        .building-wrapper {
-            background: #1f2a3e;
-            border-radius: 2rem;
-            padding: 20px 15px 15px 15px;
-            margin: 25px 0 20px 0;
-            box-shadow: inset 0 0 0 2px #c0cfdf, 0 12px 24px rgba(0,0,0,0.2);
+        /* Layout principal: esquerda (andares) + direita (salas) */
+        .content-split {
+            display: flex;
+            min-height: 600px;
+            background: #eef2f7;
         }
 
-        .building-title {
+        /* SIDEBAR ESQUERDA - ANDARES */
+        .floors-sidebar {
+            width: 110px;
+            background: #2c3e50;
+            border-right: 4px solid #ffc107;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        .floor-item {
+            padding: 14px 8px;
             text-align: center;
-            font-size: 1.7rem;
-            font-weight: 800;
-            color: #ffdd99;
-            text-shadow: 2px 2px 0 #5a3e1b;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-
-        .floors-container {
-            display: flex;
-            flex-direction: column-reverse; /* andar 1 embaixo, andar 32 no topo visual */
-            gap: 10px;
-        }
-
-        .floor-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(0,0,0,0.25);
-            border-radius: 20px;
-            padding: 6px 12px;
-            transition: 0.1s;
-        }
-
-        .floor-number {
-            width: 55px;
             font-weight: bold;
-            color: #FFE5B4;
-            background: #2b3b4e;
-            text-align: center;
-            padding: 6px 0;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-family: monospace;
-            letter-spacing: 1px;
-        }
-
-        .windows {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            flex: 1;
-            justify-content: flex-start;
-        }
-
-        /* cada janela (sala) */
-        .window {
-            width: 48px;
-            height: 48px;
-            background-color: #4b6e8a;
-            border-radius: 12px 12px 8px 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
+            font-size: 1rem;
+            color: #ecf0f1;
+            border-bottom: 1px solid #3e5a6b;
             cursor: pointer;
-            transition: all 0.15s ease;
-            box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            background: #2c3e50;
+        }
+
+        .floor-item:hover {
+            background: #3e5a6b;
+            transform: translateX(3px);
+        }
+
+        .floor-item.active {
+            background: #ffc107;
+            color: #1e2f4e;
+            border-left: 4px solid white;
+            font-weight: 800;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* ÁREA DIREITA - SALAS (JANELAS) */
+        .rooms-area {
+            flex: 1;
+            padding: 20px 25px;
+            background: #f8fafd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .current-floor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ffc107;
+        }
+
+        .current-floor-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e466e;
+        }
+
+        .current-floor-title span {
+            background: #ffc107;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 1.8rem;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 80px));
+            gap: 12px;
+            justify-content: flex-start;
+            max-height: 550px;
+            overflow-y: auto;
+            padding: 10px 5px;
+        }
+
+        /* Cada sala = janela */
+        .room-card {
+            background: #4a6a85;
+            border-radius: 12px 12px 10px 10px;
+            padding: 12px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
             color: white;
-            text-shadow: 0 0 2px black;
-            font-family: monospace;
-            position: relative;
+            font-weight: bold;
         }
 
-        /* tooltip simples */
-        .window:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 110%;
-            background: #1a1f2c;
-            color: #fff;
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 12px;
-            white-space: nowrap;
-            z-index: 10;
-            pointer-events: none;
+        .room-card:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
         }
 
-        /* cores de status */
-        .window.validada {
-            background: #2b9348;
-            box-shadow: 0 0 0 2px #b0ffb0, inset 0 -2px 0 #1c6b2f;
+        .room-card.selected {
+            border: 3px solid #ffc107;
+            box-shadow: 0 0 0 3px rgba(255,193,7,0.5);
+            transform: scale(1.02);
         }
-        .window.trancada {
-            background: #5e548e;
-            box-shadow: 0 0 0 2px #cdb4ff;
+
+        /* Cores de status */
+        .room-card.validada {
+            background: #2e7d32;
+            box-shadow: 0 2px 8px rgba(46,125,50,0.4);
         }
-        .window.problema {
-            background: #e85d04;
-            box-shadow: 0 0 0 2px #ffb570;
+        .room-card.trancada {
+            background: #5e35b1;
+        }
+        .room-card.problema {
+            background: #f57c00;
             animation: pulseWarning 1s infinite;
         }
-        .window.ocupada {
-            background: #f4acb7;
-            color: #5d2e3a;
-            text-shadow: none;
-            box-shadow: 0 0 0 2px #ffe5e5;
+        .room-card.ocupada {
+            background: #d81b60;
         }
 
         @keyframes pulseWarning {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; background: #ff7b2c; }
-            100% { opacity: 0.9; }
+            0% { opacity: 0.9; background: #f57c00; }
+            50% { opacity: 1; background: #ff9800; }
+            100% { opacity: 0.9; background: #f57c00; }
         }
 
-        /* legenda + controles */
-        .legend-panel {
+        .room-number {
+            font-size: 1rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .room-status-badge {
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 2px 6px;
+            margin-top: 6px;
+            display: inline-block;
+        }
+
+        /* Painel de status */
+        .status-panel {
+            margin-top: 25px;
+            background: white;
+            border-radius: 28px;
+            padding: 15px 20px;
             display: flex;
+            gap: 20px;
             flex-wrap: wrap;
-            justify-content: space-between;
             align-items: center;
-            margin: 20px 0 18px;
-            background: #eef3fc;
-            padding: 12px 20px;
-            border-radius: 60px;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e0e7ed;
         }
 
         .status-buttons {
@@ -246,180 +276,213 @@ Aqui está um código HTML completo que cria um sistema interativo de monitorame
         }
 
         .status-btn {
-            padding: 6px 18px;
+            padding: 8px 24px;
             border-radius: 40px;
             border: none;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.1s;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: 0.15s;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .status-btn.validada { background: #2b9348; color: white; }
-        .status-btn.trancada { background: #5e548e; color: white; }
-        .status-btn.problema { background: #e85d04; color: white; }
-        .status-btn.ocupada { background: #f4acb7; color: #3b1e28; }
+        .status-btn.active-status {
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px white, 0 0 0 5px #1e466e;
+        }
+
+        .status-btn.validada { background: #2e7d32; color: white; }
+        .status-btn.trancada { background: #5e35b1; color: white; }
+        .status-btn.problema { background: #f57c00; color: white; }
+        .status-btn.ocupada { background: #d81b60; color: white; }
 
         .action-buttons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .action {
-            background: #1e466e;
+        .action-btn {
+            background: #34495e;
             color: white;
             border: none;
-            padding: 6px 18px;
-            border-radius: 30px;
+            padding: 8px 20px;
+            border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.1s;
         }
 
-        .action.reset {
-            background: #7f5539;
+        .action-btn.reset {
+            background: #7f8c8d;
         }
 
-        /* relatório */
-        .report-area {
-            background: #fef9e8;
-            border-radius: 28px;
-            padding: 16px 20px;
-            margin-top: 20px;
-            border-left: 12px solid #2c5f8a;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+        /* Relatório */
+        .report-section {
+            background: #fffef7;
+            border-top: 4px solid #ffc107;
+            padding: 20px 30px;
+            margin-top: 0;
         }
 
         .report-header {
-            font-size: 1.5rem;
-            font-weight: bold;
             display: flex;
             justify-content: space-between;
-            border-bottom: 2px dashed #b0b8c5;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .report-header h3 {
+            color: #1e466e;
+            font-size: 1.4rem;
         }
 
         .report-stats {
             display: flex;
-            gap: 28px;
+            gap: 25px;
             flex-wrap: wrap;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
+            background: #ecf0f1;
+            padding: 12px 18px;
+            border-radius: 40px;
+        }
+
+        .stat-item {
             font-weight: bold;
         }
 
-        .report-stats span {
-            background: #e9ecef;
-            padding: 4px 12px;
-            border-radius: 26px;
-        }
-
         .report-detail {
-            font-size: 0.85rem;
-            max-height: 140px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 15px;
+            max-height: 200px;
             overflow-y: auto;
-            background: #fff6e0;
-            padding: 12px;
-            border-radius: 24px;
-            font-family: monospace;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            border-left: 5px solid #ffc107;
         }
 
         footer {
             text-align: center;
+            padding: 15px;
             font-size: 0.7rem;
-            margin-top: 20px;
-            color: #2c3e66;
+            color: #7f8c8d;
+            background: #eef2f7;
         }
 
         @media (max-width: 800px) {
-            .window { width: 38px; height: 38px; font-size: 9px; }
-            .floor-number { width: 45px; font-size: 0.7rem; }
+            .floors-sidebar { width: 70px; }
+            .floor-item { font-size: 0.7rem; padding: 10px 4px; }
+            .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(55px, 65px)); }
+            .room-card { padding: 8px 3px; }
         }
     </style>
 </head>
 <body>
-<div class="dashboard">
-    <div class="header-bar">
-        <div class="auditor-area">
-            <label>🕵️ Auditor:</label>
-            <input type="text" id="auditorName" placeholder="Nome do auditor" value="Carlos Mendes">
-        </div>
-        <div class="predio-selector">
-            <div class="predio-opt">
-                <input type="radio" name="predio" id="predioBerrini" value="berrini" checked>
-                <label for="predioBerrini">🏢 Berrini</label>
+<div class="main-container">
+    <!-- CABEÇALHO -->
+    <div class="header">
+        <div class="header-top">
+            <div class="auditor-section">
+                <label>🕵️‍♂️ AUDITOR:</label>
+                <input type="text" id="auditorName" placeholder="Nome completo" value="Roberto Almeida">
             </div>
-            <div class="predio-opt">
-                <input type="radio" name="predio" id="predioChucri" value="chucri">
-                <label for="predioChucri">🏙️ Chucri</label>
+            <div class="predio-section">
+                <div class="predio-option">
+                    <input type="radio" name="predio" id="predioBerrini" value="berrini" checked>
+                    <label for="predioBerrini">🏢 BERRINI</label>
+                </div>
+                <div class="predio-option">
+                    <input type="radio" name="predio" id="predioChucri" value="chucri">
+                    <label for="predioChucri">🏙️ CHUCRI</label>
+                </div>
+            </div>
+            <div class="endereco-box" id="enderecoDisplay">
+                📍 Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, SP
             </div>
         </div>
-        <div class="endereco-box" id="enderecoCompleto">
-            📍 Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, SP
+        <div style="font-size: 0.85rem; opacity: 0.9;">📋 Sistema de Validação | 32 Andares | 50 Salas por andar | Total 1600 ambientes</div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL: ESQUERDA ANDARES | DIREITA SALAS -->
+    <div class="content-split">
+        <!-- Lista vertical andares 1 a 32 -->
+        <div class="floors-sidebar" id="floorsSidebar"></div>
+
+        <!-- Área das salas do andar selecionado -->
+        <div class="rooms-area">
+            <div class="current-floor-header">
+                <div class="current-floor-title">
+                    🪟 ANDAR <span id="currentFloorNumber">1</span>° - SALAS
+                </div>
+                <div style="font-size: 0.8rem; color: #4a6a85;">⬅️ Selecione o andar ao lado | Clique na sala para alterar</div>
+            </div>
+            <div class="rooms-grid" id="roomsGrid"></div>
+
+            <!-- Painel de status -->
+            <div class="status-panel">
+                <div class="status-buttons" id="statusButtons">
+                    <button class="status-btn validada" data-status="validada">✅ VALIDADA</button>
+                    <button class="status-btn trancada" data-status="trancada">🔒 TRANCADA</button>
+                    <button class="status-btn problema" data-status="problema">⚠️ PROBLEMA</button>
+                    <button class="status-btn ocupada" data-status="ocupada">👥 OCUPADA</button>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn" id="resetAllBtn">🔄 Resetar Tudo (Validada)</button>
+                    <button class="action-btn" id="refreshReportBtn">📊 Atualizar Relatório</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- PRÉDIO VISUAL (JANELAS) 32 ANDARES, 50 SALAS (distribuídas: algumas andares com 2 janelas a mais, mas total 1600 janelas? NÃO: 32 andares * 50 salas = 1600 janelas, performance ok, mas vou usar um layout prático: cada andar com 50 salas = 50 janelas. -->
-    <div class="building-wrapper">
-        <div class="building-title" id="buildingNameDisplay">🏛️ EDIFÍCIO BERRINI - MONITORAMENTO POR JANELAS 🪟</div>
-        <div class="floors-container" id="floorsContainer"></div>
-    </div>
-
-    <!-- PAINEL DE CONTROLE E LEGENDA -->
-    <div class="legend-panel">
-        <div class="status-buttons">
-            <button class="status-btn validada" data-status="validada">✅ Validada</button>
-            <button class="status-btn trancada" data-status="trancada">🔒 Trancada</button>
-            <button class="status-btn problema" data-status="problema">⚠️ Problema</button>
-            <button class="status-btn ocupada" data-status="ocupada">👥 Ocupada</button>
-        </div>
-        <div class="action-buttons">
-            <button class="action" id="resetAllBtn">🔄 Resetar tudo (Pendente)</button>
-            <button class="action" id="generateReportBtn">📋 Gerar Relatório Detalhado</button>
-        </div>
-    </div>
-
-    <!-- ÁREA DE RELATÓRIO -->
-    <div class="report-area" id="reportArea">
+    <!-- RELATÓRIO -->
+    <div class="report-section">
         <div class="report-header">
-            <span>📄 RELATÓRIO DE VALIDAÇÃO</span>
-            <span id="reportTimestamp"></span>
+            <h3>📄 RELATÓRIO DE VALIDAÇÃO</h3>
+            <span id="reportTime" style="color:#5a6874; font-size:0.8rem;"></span>
         </div>
-        <div class="report-stats" id="reportStats">
-            <!-- estatísticas serão inseridas via JS -->
-        </div>
+        <div class="report-stats" id="reportStats"></div>
         <div class="report-detail" id="reportDetail">
-            Clique em "Gerar Relatório" ou altere os status para visualizar.
+            Selecione um andar e uma sala para alterar o status. As alterações vão direto para o relatório.
         </div>
     </div>
-    <footer>🔍 Clique em qualquer janela para alterar status | Cada janela = 1 sala | Prédio 32 andares x 50 salas = 1600 ambientes</footer>
+    <footer>
+        🟢 Clique no andar à esquerda → escolha a sala → selecione o status → atualização automática no relatório.
+        Cada sala é uma "janela" do prédio. Status: Validada, Trancada, Problema, Ocupada.
+    </footer>
 </div>
 
 <script>
-    // Configurações
+    // CONFIGURAÇÕES
     const TOTAL_FLOORS = 32;
-    const ROOMS_PER_FLOOR = 50;  // 50 salas por andar -> total 1600 janelas
-    // status possíveis
-    const STATUS_LIST = ['validada', 'trancada', 'problema', 'ocupada'];
-    // Mapeamento de endereços
-    const enderecos = {
+    const ROOMS_PER_FLOOR = 50;
+
+    // Dados: matrix[floorIndex][roomIndex] = status
+    let buildingData = [];
+
+    // Estado atual: andar selecionado (1-index)
+    let currentFloor = 1;
+    // Sala selecionada atualmente (1-index)
+    let selectedRoom = null;
+
+    // Status ativo para aplicar (quando clicar em sala)
+    let activeStatus = 'validada';
+
+    // Endereços dos prédios
+    const addresses = {
         berrini: "Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, São Paulo - SP, 04571-010",
         chucri: "Av. Dr. Chucri Zaidan, 940 - Vila Cordeiro, São Paulo - SP, 04583-906"
     };
-    
-    // Estrutura de dados: matrix[floor-1][room-1] = status string
-    let buildingData = [];
-    
-    // Inicializar com status padrão "validada" (mas pode ser qualquer um, vou por algumas variadas para demonstração)
-    function initBuildingData() {
+
+    // Inicializar dados com status variado (demonstração)
+    function initData() {
         const data = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
             const floorRooms = [];
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                // para dar um exemplo inicial diversificado, mas sem perder clareza:
-                // 70% validada, 10% trancada, 10% problema, 10% ocupada (apenas para demonstrar)
+                // Distribuição inicial: 65% validada, 15% trancada, 10% problema, 10% ocupada
                 const rand = Math.random();
-                if (rand < 0.7) floorRooms.push('validada');
+                if (rand < 0.65) floorRooms.push('validada');
                 else if (rand < 0.8) floorRooms.push('trancada');
                 else if (rand < 0.9) floorRooms.push('problema');
                 else floorRooms.push('ocupada');
@@ -428,251 +491,250 @@ Aqui está um código HTML completo que cria um sistema interativo de monitorame
         }
         return data;
     }
-    
-    // atualiza toda a interface gráfica (prédio de janelas)
-    let currentData = initBuildingData();
-    
-    // referências DOM
-    const floorsContainer = document.getElementById('floorsContainer');
-    const buildingNameDisplay = document.getElementById('buildingNameDisplay');
-    const enderecoSpan = document.getElementById('enderecoCompleto');
-    const radioBerrini = document.getElementById('predioBerrini');
-    const radioChucri = document.getElementById('predioChucri');
+
+    buildingData = initData();
+
+    // DOM elements
+    const floorsSidebar = document.getElementById('floorsSidebar');
+    const roomsGrid = document.getElementById('roomsGrid');
+    const currentFloorNumberSpan = document.getElementById('currentFloorNumber');
     const auditorInput = document.getElementById('auditorName');
-    const resetAllBtn = document.getElementById('resetAllBtn');
-    const generateReportBtn = document.getElementById('generateReportBtn');
     const reportStatsDiv = document.getElementById('reportStats');
     const reportDetailDiv = document.getElementById('reportDetail');
-    const reportTimestampSpan = document.getElementById('reportTimestamp');
-    
-    // Status ativo para aplicar ao clicar (qual botão de status está selecionado)
-    let activeStatus = 'validada'; // padrão
-    
-    // Renderizar completamente o prédio (32 andares, cada um com suas 50 janelas)
-    function renderBuilding() {
-        floorsContainer.innerHTML = '';
-        // percorrer andares (do 32 ao 1 visualmente com flex-direction column-reverse já no CSS)
-        for (let floorIdx = TOTAL_FLOORS - 1; floorIdx >= 0; floorIdx--) {
-            const floorNumber = floorIdx + 1;
-            const floorRow = document.createElement('div');
-            floorRow.className = 'floor-row';
-            
-            const floorLabel = document.createElement('div');
-            floorLabel.className = 'floor-number';
-            floorLabel.innerText = `${floorNumber}°`;
-            floorRow.appendChild(floorLabel);
-            
-            const windowsContainer = document.createElement('div');
-            windowsContainer.className = 'windows';
-            
-            // criar as 50 janelas para este andar
-            const roomsStatus = currentData[floorIdx];
-            for (let roomIdx = 0; roomIdx < ROOMS_PER_FLOOR; roomIdx++) {
-                const status = roomsStatus[roomIdx];
-                const windowDiv = document.createElement('div');
-                windowDiv.className = `window ${status}`;
-                // Mostrar número da sala resumido (opcional: sala 1..50)
-                windowDiv.innerText = `${roomIdx+1}`;
-                // tooltip informativo
-                let statusText = '';
-                if (status === 'validada') statusText = '✅ Validada';
-                else if (status === 'trancada') statusText = '🔒 Trancada';
-                else if (status === 'problema') statusText = '⚠️ Problema';
-                else statusText = '👥 Ocupada';
-                windowDiv.setAttribute('data-tooltip', `Andar ${floorNumber} | Sala ${roomIdx+1} | ${statusText}`);
-                // evento de clique para alterar status
-                windowDiv.addEventListener('click', (function(f, r) {
-                    return function() { updateRoomStatus(f, r, activeStatus); };
-                })(floorIdx, roomIdx));
-                windowsContainer.appendChild(windowDiv);
-            }
-            floorRow.appendChild(windowsContainer);
-            floorsContainer.appendChild(floorRow);
+    const reportTimeSpan = document.getElementById('reportTime');
+    const enderecoDisplay = document.getElementById('enderecoDisplay');
+    const radioBerrini = document.getElementById('predioBerrini');
+    const radioChucri = document.getElementById('predioChucri');
+    const resetAllBtn = document.getElementById('resetAllBtn');
+    const refreshReportBtn = document.getElementById('refreshReportBtn');
+
+    // Renderizar a lista de andares à esquerda (1 a 32)
+    function renderFloorsList() {
+        floorsSidebar.innerHTML = '';
+        for (let i = 1; i <= TOTAL_FLOORS; i++) {
+            const floorDiv = document.createElement('div');
+            floorDiv.className = 'floor-item';
+            if (i === currentFloor) floorDiv.classList.add('active');
+            floorDiv.innerText = `${i}°`;
+            floorDiv.addEventListener('click', (function(floorNum) {
+                return function() { selectFloor(floorNum); };
+            })(i));
+            floorsSidebar.appendChild(floorDiv);
         }
-        updateEnderecoETitulo();
     }
-    
-    // atualizar status de uma sala específica e re-renderizar só aquela janela (otimizado)
-    function updateRoomStatus(floorIdx, roomIdx, newStatus) {
-        if (currentData[floorIdx][roomIdx] === newStatus) return;
-        currentData[floorIdx][roomIdx] = newStatus;
-        // rerenderizar apenas a janela modificada para eficiência
-        const floorRows = document.querySelectorAll('.floor-row');
-        // a ordem é invertida (visualmente 32 primeiro)
-        const visualIndex = TOTAL_FLOORS - 1 - floorIdx;
-        const targetFloor = floorRows[visualIndex];
-        if (targetFloor) {
-            const windowsDiv = targetFloor.querySelector('.windows');
-            if (windowsDiv) {
-                const allWindows = windowsDiv.children;
-                if (allWindows[roomIdx]) {
-                    const win = allWindows[roomIdx];
-                    // reset classes
-                    win.className = `window ${newStatus}`;
-                    let statusText = '';
-                    if (newStatus === 'validada') statusText = '✅ Validada';
-                    else if (newStatus === 'trancada') statusText = '🔒 Trancada';
-                    else if (newStatus === 'problema') statusText = '⚠️ Problema';
-                    else statusText = '👥 Ocupada';
-                    win.setAttribute('data-tooltip', `Andar ${floorIdx+1} | Sala ${roomIdx+1} | ${statusText}`);
-                    win.innerText = `${roomIdx+1}`;
+
+    // Selecionar andar
+    function selectFloor(floorNum) {
+        currentFloor = floorNum;
+        selectedRoom = null; // reset da sala selecionada ao trocar andar
+        currentFloorNumberSpan.innerText = currentFloor;
+        // Atualizar classe active na sidebar
+        document.querySelectorAll('.floor-item').forEach((el, idx) => {
+            if (idx + 1 === currentFloor) el.classList.add('active');
+            else el.classList.remove('active');
+        });
+        renderRoomsForCurrentFloor();
+        updateReport(); // atualiza relatório para mostrar o novo andar no resumo? sim, mantém
+    }
+
+    // Renderizar as 50 salas do andar atual (como janelas)
+    function renderRoomsForCurrentFloor() {
+        const floorIndex = currentFloor - 1;
+        const roomsStatus = buildingData[floorIndex];
+        roomsGrid.innerHTML = '';
+        
+        for (let i = 0; i < ROOMS_PER_FLOOR; i++) {
+            const status = roomsStatus[i];
+            const roomNum = i + 1;
+            const roomDiv = document.createElement('div');
+            roomDiv.className = `room-card ${status}`;
+            if (selectedRoom === roomNum) roomDiv.classList.add('selected');
+            
+            // Conteúdo
+            const roomNumberSpan = document.createElement('span');
+            roomNumberSpan.className = 'room-number';
+            roomNumberSpan.innerText = `SALA ${roomNum}`;
+            const statusBadge = document.createElement('span');
+            statusBadge.className = 'room-status-badge';
+            let statusText = '';
+            if (status === 'validada') statusText = '✅';
+            else if (status === 'trancada') statusText = '🔒';
+            else if (status === 'problema') statusText = '⚠️';
+            else statusText = '👥';
+            statusBadge.innerText = statusText;
+            
+            roomDiv.appendChild(roomNumberSpan);
+            roomDiv.appendChild(statusBadge);
+            
+            // evento de clique para selecionar a sala e aplicar status
+            roomDiv.addEventListener('click', (function(roomIdx) {
+                return function(e) {
+                    e.stopPropagation();
+                    selectAndApplyStatus(roomIdx + 1);
+                };
+            })(i));
+            
+            roomsGrid.appendChild(roomDiv);
+        }
+    }
+
+    // Função: selecionar sala e aplicar o status ativo atual
+    function selectAndApplyStatus(roomNumber) {
+        selectedRoom = roomNumber;
+        const floorIndex = currentFloor - 1;
+        const roomIndex = roomNumber - 1;
+        const oldStatus = buildingData[floorIndex][roomIndex];
+        const newStatus = activeStatus;
+        
+        if (oldStatus !== newStatus) {
+            // atualizar dado
+            buildingData[floorIndex][roomIndex] = newStatus;
+            // re-renderizar as salas do andar atual (para atualizar cor e badge)
+            renderRoomsForCurrentFloor();
+            // atualizar relatório imediatamente
+            updateReport();
+        } else {
+            // mesmo status, apenas realça visual
+            renderRoomsForCurrentFloor();
+        }
+    }
+
+    // Atualizar relatório com estatísticas completas e detalhe
+    function updateReport() {
+        // estatísticas totais
+        const stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0 };
+        for (let f = 0; f < TOTAL_FLOORS; f++) {
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                const s = buildingData[f][r];
+                stats[s]++;
+            }
+        }
+        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
+        
+        // Informações do auditor e prédio
+        const auditor = auditorInput.value.trim() || "Não informado";
+        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
+        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
+        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
+        
+        // Atualizar endereço no topo
+        enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
+        
+        // Atualizar stats visuais
+        reportStatsDiv.innerHTML = `
+            <div class="stat-item">✅ Validada: ${stats.validada}</div>
+            <div class="stat-item">🔒 Trancada: ${stats.trancada}</div>
+            <div class="stat-item">⚠️ Problema: ${stats.problema}</div>
+            <div class="stat-item">👥 Ocupada: ${stats.ocupada}</div>
+            <div class="stat-item">🏢 Total Salas: ${total}</div>
+        `;
+        
+        // Gerar relatório detalhado por andar (compacto)
+        let porAndarHtml = `<strong>📋 Resumo por andar (32 andares):</strong><br>`;
+        for (let f = 0; f < TOTAL_FLOORS; f++) {
+            const floorNum = f+1;
+            let andarStats = { validada:0, trancada:0, problema:0, ocupada:0 };
+            for (let r=0; r<ROOMS_PER_FLOOR; r++) {
+                andarStats[buildingData[f][r]]++;
+            }
+            porAndarHtml += `[${floorNum}°] ✅${andarStats.validada} 🔒${andarStats.trancada} ⚠️${andarStats.problema} 👥${andarStats.ocupada} | `;
+            if ((f+1) % 4 === 0) porAndarHtml += `<br>`;
+        }
+        
+        const dataHora = new Date().toLocaleString();
+        reportTimeSpan.innerText = `📅 ${dataHora}`;
+        
+        // Detalhe extra da última ação e sala selecionada
+        let lastActionMsg = '';
+        if (selectedRoom !== null) {
+            const floorIdx = currentFloor;
+            const roomIdx = selectedRoom;
+            const statusAtualSala = buildingData[floorIdx-1][roomIdx-1];
+            let statusNome = '';
+            if (statusAtualSala === 'validada') statusNome = 'VALIDADA';
+            else if (statusAtualSala === 'trancada') statusNome = 'TRANCADA';
+            else if (statusAtualSala === 'problema') statusNome = 'PROBLEMA';
+            else statusNome = 'OCUPADA';
+            lastActionMsg = `<div style="background:#e9ecef; padding:6px; border-radius:16px; margin-top:8px;">🎯 Última alteração: Andar ${currentFloor}°, Sala ${selectedRoom} → status: <strong>${statusNome}</strong></div>`;
+        }
+        
+        reportDetailDiv.innerHTML = `
+            <div><strong>👤 Auditor:</strong> ${auditor}</div>
+            <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
+            <div><strong>📊 Consolidado:</strong> ${stats.validada} validadas | ${stats.trancada} trancadas | ${stats.problema} com problema | ${stats.ocupada} ocupadas</div>
+            <div style="margin-top:10px;">${porAndarHtml}</div>
+            ${lastActionMsg}
+            <div style="margin-top:10px; font-style:italic;">✔️ Validação dinâmica: cada sala pode ser atualizada clicando nela e escolhendo status.</div>
+        `;
+    }
+
+    // Resetar todas as salas para 'validada'
+    function resetAllToValidada() {
+        if (confirm("⚠️ ATENÇÃO: Isso irá resetar TODAS as 1600 salas para status 'VALIDADA'. Essa ação não pode ser desfeita. Continuar?")) {
+            for (let f = 0; f < TOTAL_FLOORS; f++) {
+                for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                    buildingData[f][r] = 'validada';
                 }
             }
+            selectedRoom = null;
+            renderRoomsForCurrentFloor();
+            updateReport();
         }
-        // atualizar relatório automaticamente de forma simples (pode chamar generateReportLight)
-        updateReportQuick();
     }
-    
-    // atualização rápida sem gerar relatório completo pesado
-    function updateReportQuick() {
-        const stats = getStatistics();
-        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        reportStatsDiv.innerHTML = `
-            <span>✅ Validada: ${stats.validada}</span>
-            <span>🔒 Trancada: ${stats.trancada}</span>
-            <span>⚠️ Problema: ${stats.problema}</span>
-            <span>👥 Ocupada: ${stats.ocupada}</span>
-            <span>🏢 Total Salas: ${total}</span>
-        `;
-        const auditorNome = auditorInput.value.trim() || "Não informado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        reportDetailDiv.innerHTML = `🕵️ Auditor: ${auditorNome} | Edifício: ${predioNome} <br>
-        📊 Resumo dinâmico: ${stats.validada} salas validadas, ${stats.trancada} trancadas, ${stats.problema} com problema, ${stats.ocupada} ocupadas. <br>
-        🧾 Última modificação registrada. Clique em "Gerar Relatório Completo" para detalhes por andar.`;
-        const now = new Date().toLocaleString();
-        reportTimestampSpan.innerText = `🕘 ${now}`;
+
+    // Atualizar endereço e título com base no prédio
+    function updateAddressAndReport() {
+        const predio = document.querySelector('input[name="predio"]:checked').value;
+        const endereco = predio === 'berrini' ? addresses.berrini : addresses.chucri;
+        enderecoDisplay.innerHTML = `📍 ${endereco}`;
+        updateReport(); // atualiza relatório com novo endereço
     }
-    
-    // calcular estatísticas completas
-    function getStatistics() {
-        let counts = { validada: 0, trancada: 0, problema: 0, ocupada: 0 };
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const st = currentData[f][r];
-                counts[st]++;
-            }
-        }
-        return counts;
-    }
-    
-    // gerar relatório detalhado por andar
-    function generateFullReport() {
-        const stats = getStatistics();
-        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        const auditorNome = auditorInput.value.trim() || "Auditor não identificado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        const enderecoAtual = predioSelecionado === 'berrini' ? enderecos.berrini : enderecos.chucri;
-        
-        let porAndarHtml = `<div style="font-weight:bold;">📋 Detalhamento por andar (32 andares, 50 salas/andar):</div><ul style="margin-top:8px;">`;
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floorNumber = f+1;
-            let andarCount = { validada:0, trancada:0, problema:0, ocupada:0 };
-            for (let r=0; r<ROOMS_PER_FLOOR; r++) {
-                andarCount[currentData[f][r]]++;
-            }
-            porAndarHtml += `<li><strong>${floorNumber}° andar</strong> — ✅ ${andarCount.validada} | 🔒 ${andarCount.trancada} | ⚠️ ${andarCount.problema} | 👥 ${andarCount.ocupada}</li>`;
-        }
-        porAndarHtml += `</ul>`;
-        
-        const now = new Date().toLocaleString();
-        reportStatsDiv.innerHTML = `
-            <span>✅ Validada: ${stats.validada}</span>
-            <span>🔒 Trancada: ${stats.trancada}</span>
-            <span>⚠️ Problema: ${stats.problema}</span>
-            <span>👥 Ocupada: ${stats.ocupada}</span>
-            <span>🏢 Total Salas: ${total}</span>
-        `;
-        reportDetailDiv.innerHTML = `
-            <div><strong>👤 Auditor:</strong> ${auditorNome}</div>
-            <div><strong>🏛️ Prédio:</strong> ${predioNome} - ${enderecoAtual}</div>
-            <div><strong>📅 Emissão:</strong> ${now}</div>
-            <div><strong>📊 Consolidado:</strong> Validada: ${stats.validada} | Trancada: ${stats.trancada} | Problema: ${stats.problema} | Ocupada: ${stats.ocupada}</div>
-            <div style="margin-top:12px;">${porAndarHtml}</div>
-            <div style="font-style:italic; margin-top:12px;">✔️ Validação concluída com base na inspeção visual de cada janela.</div>
-        `;
-        reportTimestampSpan.innerText = `🕘 ${now}`;
-    }
-    
-    // Resetar todas as salas para "validada"
-    function resetAllToValidada() {
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                currentData[f][r] = 'validada';
-            }
-        }
-        renderBuilding();  // rerender completo
-        updateReportQuick();
-    }
-    
-    // Atualizar título e endereço conforme prédio selecionado
-    function updateEnderecoETitulo() {
-        const isBerrini = document.getElementById('predioBerrini').checked;
-        const predioKey = isBerrini ? 'berrini' : 'chucri';
-        const endereco = enderecos[predioKey];
-        enderecoSpan.innerHTML = `📍 ${endereco}`;
-        const nomePredio = isBerrini ? "BERRINI" : "CHUCRI ZAIDAN";
-        buildingNameDisplay.innerHTML = `🏙️ EDIFÍCIO ${nomePredio} - MONITORAMENTO DE JANELAS (32 andares | 1600 salas)`;
-        // Não precisa re-renderizar dados, apenas visual, mas mantém dados intactos
-        // atualiza relatório para refletir endereço
-        updateReportQuick();
-    }
-    
+
     // Eventos de seleção de prédio
     radioBerrini.addEventListener('change', () => {
-        if (radioBerrini.checked) {
-            updateEnderecoETitulo();
-            generateFullReport(); // atualiza relatório com novo endereço
-        }
+        if (radioBerrini.checked) updateAddressAndReport();
     });
     radioChucri.addEventListener('change', () => {
-        if (radioChucri.checked) {
-            updateEnderecoETitulo();
-            generateFullReport();
-        }
+        if (radioChucri.checked) updateAddressAndReport();
     });
     
-    // Seleção de status ativo via botões
-    document.querySelectorAll('.status-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const status = btn.getAttribute('data-status');
-            if (status && STATUS_LIST.includes(status)) {
-                activeStatus = status;
-                // Destaque visual simples: remover todos os outlines e adicionar borda
-                document.querySelectorAll('.status-btn').forEach(b => b.style.border = 'none');
-                btn.style.border = '3px solid white';
-                btn.style.boxShadow = '0 0 0 2px #1e466e';
+    // Mudança no nome do auditor: atualizar relatório
+    auditorInput.addEventListener('input', () => updateReport());
+    
+    // Reset all
+    resetAllBtn.addEventListener('click', resetAllToValidada);
+    
+    // Botão refresh report manual
+    refreshReportBtn.addEventListener('click', () => updateReport());
+    
+    // Configurar status ativo pelos botões
+    function setupStatusButtons() {
+        const btns = document.querySelectorAll('.status-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const status = btn.getAttribute('data-status');
+                if (status) {
+                    activeStatus = status;
+                    // destaque visual: remover classe de todos e adicionar no clicado
+                    btns.forEach(b => b.classList.remove('active-status'));
+                    btn.classList.add('active-status');
+                }
+            });
+            // set default active no validada
+            if (btn.getAttribute('data-status') === 'validada') {
+                btn.classList.add('active-status');
             }
         });
-        // destacar o padrão validada
-        if (btn.getAttribute('data-status') === 'validada') {
-            btn.style.border = '3px solid white';
-            btn.style.boxShadow = '0 0 0 2px #1e466e';
-        }
-    });
+    }
     
-    resetAllBtn.addEventListener('click', () => {
-        if (confirm("Resetar TODAS as salas para status 'Validada'? Essa ação não poderá ser desfeita.")) {
-            resetAllToValidada();
-        }
-    });
-    
-    generateReportBtn.addEventListener('click', () => {
-        generateFullReport();
-    });
-    
-    // monitorar mudança do nome do auditor: atualizar relatório rápido
-    auditorInput.addEventListener('input', () => {
-        updateReportQuick();
-    });
-    
-    // inicialização
+    // Inicializar interface completa
     function init() {
-        renderBuilding();
-        updateReportQuick();
-        // garantir que relatório tenha endereço correto
-        generateFullReport(); // exibe um bom relatório inicial completo
+        renderFloorsList();
+        renderRoomsForCurrentFloor();
+        setupStatusButtons();
+        updateReport();
+        // garantir endereço correto
+        updateAddressAndReport();
     }
     
     init();
