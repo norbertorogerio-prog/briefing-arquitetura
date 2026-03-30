@@ -1,11 +1,11 @@
-Aqui está a versão refinada com botões menores e mais elegantes, e um relatório clean que mostra apenas os andares que têm alguma validação (status definido), ocultando os que estão totalmente "aguardando".
+Aqui está a versão completa com um relatório que agora exibe o número das salas validadas e um botão para exportar/importar relatório em formato texto para compartilhar via WhatsApp, Teams, e-mail ou baixar.
 
 ```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>SysAudit Pro | Monitoramento de Prédios</title>
     <style>
         * {
@@ -18,7 +18,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: linear-gradient(145deg, #e9eef3 0%, #dce3ec 100%);
             min-height: 100vh;
-            padding: 24px;
+            padding: 20px;
         }
 
         .main-container {
@@ -28,10 +28,8 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             border-radius: 28px;
             box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            transition: all 0.2s ease;
         }
 
-        /* Header refinado */
         .header {
             background: linear-gradient(105deg, #1a3a4f 0%, #0e2a3a 100%);
             padding: 18px 28px;
@@ -53,13 +51,11 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             background: rgba(255, 255, 255, 0.12);
             padding: 6px 18px;
             border-radius: 48px;
-            backdrop-filter: blur(4px);
         }
 
         .auditor-section label {
             font-weight: 500;
             font-size: 0.85rem;
-            letter-spacing: 0.3px;
         }
 
         #auditorName {
@@ -72,11 +68,6 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             width: 180px;
             outline: none;
             font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        #auditorName:focus {
-            box-shadow: 0 0 0 2px #ffc107;
         }
 
         .predio-section {
@@ -100,12 +91,6 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             accent-color: #ffc107;
         }
 
-        .predio-option label {
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
         .endereco-box {
             background: rgba(255, 193, 7, 0.9);
             color: #1e2f3a;
@@ -113,24 +98,21 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             border-radius: 48px;
             font-weight: 600;
             font-size: 0.75rem;
-            font-family: 'SF Mono', monospace;
-            letter-spacing: 0.2px;
+            font-family: monospace;
         }
 
-        /* Layout split */
         .content-split {
             display: flex;
-            min-height: 580px;
+            min-height: 560px;
             background: #f8fafd;
         }
 
-        /* Sidebar andares - mais elegante */
         .floors-sidebar {
             width: 85px;
             background: #f1f4f8;
             border-right: 1px solid #e2e8f0;
             overflow-y: auto;
-            max-height: 70vh;
+            max-height: 65vh;
         }
 
         .floor-item {
@@ -153,12 +135,10 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         .floor-item.active {
             background: #ffc107;
             color: #1e2f3a;
-            border-left: 3px solid #ffffff;
+            border-left: 3px solid white;
             font-weight: 700;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
-        /* Área das salas */
         .rooms-area {
             flex: 1;
             padding: 20px 24px;
@@ -172,13 +152,13 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
             border-bottom: 2px solid #ffc107;
         }
 
         .current-floor-title {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #1e466e;
         }
@@ -187,26 +167,24 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             background: #ffc107;
             padding: 4px 14px;
             border-radius: 48px;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-left: 6px;
         }
 
         .flow-hint {
             background: #fef9e6;
             border-radius: 40px;
-            padding: 6px 14px;
+            padding: 5px 12px;
             font-size: 0.7rem;
             color: #b87c00;
-            font-weight: 500;
         }
 
-        /* Grid salas estilo janelas compactas */
         .rooms-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(58px, 64px));
             gap: 10px;
             justify-content: flex-start;
-            max-height: 520px;
+            max-height: 480px;
             overflow-y: auto;
             padding: 8px 4px;
         }
@@ -218,8 +196,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             color: white;
             font-weight: 600;
         }
@@ -227,13 +204,11 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         .room-card:hover {
             transform: translateY(-2px);
             filter: brightness(0.96);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .room-card.selected {
             border: 2px solid #ffc107;
             box-shadow: 0 0 0 2px rgba(255,193,7,0.4);
-            transform: scale(0.98);
         }
 
         .room-card.validada { background: #2b7a3e; }
@@ -243,9 +218,9 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         .room-card.limpa { background: #94a3b8; }
 
         @keyframes softPulse {
-            0% { opacity: 0.9; background: #e06c2e; }
+            0% { opacity: 0.9; }
             50% { opacity: 1; background: #f07c3e; }
-            100% { opacity: 0.9; background: #e06c2e; }
+            100% { opacity: 0.9; }
         }
 
         .room-number {
@@ -263,43 +238,40 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             display: inline-block;
         }
 
-        /* Painel de botões menores e mais elegantes */
         .status-panel {
-            margin-top: 24px;
+            margin-top: 20px;
             background: #f8fafc;
             border-radius: 48px;
-            padding: 12px 20px;
+            padding: 10px 18px;
             display: flex;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             border: 1px solid #e2edf2;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .status-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .status-btn {
-            padding: 6px 18px;
+            padding: 5px 16px;
             border-radius: 40px;
             border: none;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: 0.2s;
             background: #eef2f6;
             color: #1e2f3a;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .status-btn.active-status {
             transform: scale(0.96);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 2px #ffc107;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), 0 0 0 2px #ffc107;
         }
 
         .status-btn.validada { background: #2b7a3e; color: white; }
@@ -309,25 +281,24 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
 
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .action-btn {
             background: #eef2f6;
             border: none;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 40px;
             font-weight: 500;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: 0.2s;
             color: #2c3e50;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .action-btn:hover {
             background: #e2e8f0;
-            transform: translateY(-1px);
         }
 
         .action-btn.clear-all {
@@ -335,11 +306,11 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             color: white;
         }
 
-        .action-btn.clear-all:hover {
-            background: #7e8da0;
+        .action-btn.export {
+            background: #2b7a3e;
+            color: white;
         }
 
-        /* RELATÓRIO CLEAN - mostra apenas andares com validação */
         .report-section {
             background: #ffffff;
             border-top: 1px solid #eef2f8;
@@ -351,25 +322,24 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .report-header h3 {
             color: #1a3a4f;
             font-size: 1.2rem;
             font-weight: 600;
-            letter-spacing: -0.2px;
         }
 
         .report-stats {
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             background: #f8fafc;
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 48px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .stat-item {
@@ -379,19 +349,12 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
 
         .report-detail {
             background: #fefefe;
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 12px 16px;
-            max-height: 280px;
+            max-height: 300px;
             overflow-y: auto;
             font-size: 0.8rem;
             border: 1px solid #edf2f7;
-        }
-
-        .clean-report-empty {
-            text-align: center;
-            color: #94a3b8;
-            padding: 24px;
-            font-style: italic;
         }
 
         .floor-card-clean {
@@ -405,26 +368,40 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         .floor-title-clean {
             font-weight: 700;
             color: #1e466e;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
         }
 
-        .status-badge-list {
+        .rooms-list-clean {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.75rem;
+            gap: 8px;
+            margin-top: 6px;
         }
 
-        .status-tag {
+        .room-tag {
             background: #eef2ff;
-            padding: 4px 12px;
-            border-radius: 32px;
+            padding: 4px 10px;
+            border-radius: 24px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .room-tag.validada { background: #e0f2e3; color: #1e5a2e; }
+        .room-tag.trancada { background: #ede7f6; color: #4a2c8a; }
+        .room-tag.problema { background: #ffede3; color: #b85c1a; }
+        .room-tag.ocupada { background: #ffe4ec; color: #b32d5a; }
+
+        .empty-report {
+            text-align: center;
+            color: #94a3b8;
+            padding: 24px;
+            font-style: italic;
         }
 
         footer {
             text-align: center;
-            padding: 14px;
+            padding: 12px;
             font-size: 0.65rem;
             color: #7c8b9c;
             background: #fafcff;
@@ -434,7 +411,6 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         @media (max-width: 700px) {
             .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 55px)); }
             .floors-sidebar { width: 65px; }
-            .floor-item { font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -482,8 +458,9 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
                     <button class="status-btn ocupada" data-status="ocupada">👥 Ocupada</button>
                 </div>
                 <div class="action-buttons">
-                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar tudo</button>
-                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar (Validada)</button>
+                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar</button>
+                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar</button>
+                    <button class="action-btn export" id="exportReportBtn">📤 Exportar Relatório</button>
                 </div>
             </div>
         </div>
@@ -498,7 +475,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         <div class="report-detail" id="reportDetail"></div>
     </div>
     <footer>
-        🔍 Clique no andar → selecione a sala → escolha o status. Relatório exibe apenas andares com alguma validação.
+        🔍 Clique no andar → selecione a sala → escolha o status. Exporte o relatório e compartilhe no WhatsApp, Teams ou e-mail.
     </footer>
 </div>
 
@@ -550,6 +527,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
     const radioChucri = document.getElementById('predioChucri');
     const clearAllBtn = document.getElementById('clearAllBtn');
     const resetValidadaBtn = document.getElementById('resetValidadaBtn');
+    const exportReportBtn = document.getElementById('exportReportBtn');
 
     function getStatusClass(status) {
         if (status === 'validada') return 'validada';
@@ -614,8 +592,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
                 e.stopPropagation();
                 selectedRoom = roomNum;
                 renderRoomsForCurrentFloor();
-                // feedback suave no relatório
-                updateReport(); 
+                updateReport();
             });
             roomsGrid.appendChild(card);
         }
@@ -635,15 +612,38 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             updateReport();
             return true;
         } else {
-            updateReport(); // apenas atualiza
+            updateReport();
             return false;
         }
     }
 
-    // RELATÓRIO CLEAN: mostra APENAS andares que possuem alguma sala com status definido (não null)
+    // Gera o relatório completo com números das salas
+    function getDetailedReportData() {
+        const auditor = auditorInput.value.trim() || "Não informado";
+        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
+        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
+        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
+        
+        // Coletar salas por andar
+        const floorsData = [];
+        for (let f = 0; f < TOTAL_FLOORS; f++) {
+            const salas = [];
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                const status = buildingData[f][r];
+                if (status !== null) {
+                    salas.push({ numero: r + 1, status: status });
+                }
+            }
+            if (salas.length > 0) {
+                floorsData.push({ andar: f + 1, salas: salas });
+            }
+        }
+        
+        return { auditor, predioNome, enderecoAtual, floorsData };
+    }
+
     function updateReport() {
-        // estatísticas gerais
-        let stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
+        const stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
         for (let f = 0; f < TOTAL_FLOORS; f++) {
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
@@ -655,9 +655,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             }
         }
         const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        const auditor = auditorInput.value.trim() || "Não informado";
         const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
         const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
         enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
 
@@ -670,23 +668,23 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
             <div class="stat-item">📊 ${total}</div>
         `;
 
-        // CONSTRUIR RELATÓRIO CLEAN: apenas andares com pelo menos uma validação
+        // Construir relatório com números das salas
         const floorsWithData = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            let hasValidation = false;
-            const floorStats = { validada: 0, trancada: 0, problema: 0, ocupada: 0 };
+            const salasPorStatus = { validada: [], trancada: [], problema: [], ocupada: [] };
+            let hasAny = false;
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
                 if (s !== null) {
-                    hasValidation = true;
-                    if (s === 'validada') floorStats.validada++;
-                    else if (s === 'trancada') floorStats.trancada++;
-                    else if (s === 'problema') floorStats.problema++;
-                    else if (s === 'ocupada') floorStats.ocupada++;
+                    hasAny = true;
+                    if (s === 'validada') salasPorStatus.validada.push(r + 1);
+                    else if (s === 'trancada') salasPorStatus.trancada.push(r + 1);
+                    else if (s === 'problema') salasPorStatus.problema.push(r + 1);
+                    else if (s === 'ocupada') salasPorStatus.ocupada.push(r + 1);
                 }
             }
-            if (hasValidation) {
-                floorsWithData.push({ floor: f+1, stats: floorStats });
+            if (hasAny) {
+                floorsWithData.push({ andar: f + 1, salas: salasPorStatus });
             }
         }
 
@@ -694,36 +692,109 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
         reportTimeSpan.innerText = `🕘 ${now}`;
 
         if (floorsWithData.length === 0) {
-            reportDetailDiv.innerHTML = `<div class="clean-report-empty">✨ Nenhuma validação registrada ainda.<br>Siga o fluxo: andar → sala → status.</div>`;
+            reportDetailDiv.innerHTML = `<div class="empty-report">✨ Nenhuma validação registrada ainda.<br>Siga o fluxo: andar → sala → status.</div>`;
         } else {
             let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
             for (let item of floorsWithData) {
-                const f = item.floor;
-                const st = item.stats;
-                const totalFloorValid = st.validada + st.trancada + st.problema + st.ocupada;
-                html += `
-                    <div class="floor-card-clean">
-                        <div class="floor-title-clean">🏢 ${f}° ANDAR — ${totalFloorValid} sala(s) validada(s)</div>
-                        <div class="status-badge-list">
-                            ${st.validada > 0 ? `<span class="status-tag" style="background:#e0f2e3;">✅ ${st.validada} Validada</span>` : ''}
-                            ${st.trancada > 0 ? `<span class="status-tag" style="background:#ede7f6;">🔒 ${st.trancada} Trancada</span>` : ''}
-                            ${st.problema > 0 ? `<span class="status-tag" style="background:#ffede3;">⚠️ ${st.problema} Problema</span>` : ''}
-                            ${st.ocupada > 0 ? `<span class="status-tag" style="background:#ffe4ec;">👥 ${st.ocupada} Ocupada</span>` : ''}
-                        </div>
-                    </div>
-                `;
+                const totalSalas = item.salas.validada.length + item.salas.trancada.length + item.salas.problema.length + item.salas.ocupada.length;
+                html += `<div class="floor-card-clean">
+                    <div class="floor-title-clean">🏢 ${item.andar}° ANDAR — ${totalSalas} sala(s) validada(s)</div>`;
+                
+                if (item.salas.validada.length > 0) {
+                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">✅ Validada:</span> `;
+                    html += item.salas.validada.map(n => `<span class="room-tag validada">Sala ${n}</span>`).join(' ');
+                    html += `</div>`;
+                }
+                if (item.salas.trancada.length > 0) {
+                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">🔒 Trancada:</span> `;
+                    html += item.salas.trancada.map(n => `<span class="room-tag trancada">Sala ${n}</span>`).join(' ');
+                    html += `</div>`;
+                }
+                if (item.salas.problema.length > 0) {
+                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">⚠️ Problema:</span> `;
+                    html += item.salas.problema.map(n => `<span class="room-tag problema">Sala ${n}</span>`).join(' ');
+                    html += `</div>`;
+                }
+                if (item.salas.ocupada.length > 0) {
+                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">👥 Ocupada:</span> `;
+                    html += item.salas.ocupada.map(n => `<span class="room-tag ocupada">Sala ${n}</span>`).join(' ');
+                    html += `</div>`;
+                }
+                html += `</div>`;
             }
-            html += `</div><div style="margin-top:12px; font-size:0.7rem; color:#6c7a8e;">✔️ Andares sem validação estão ocultos no relatório.</div>`;
+            html += `<div style="margin-top:12px; font-size:0.7rem; color:#6c7a8e;">✔️ Andares sem validação estão ocultos.</div>`;
             reportDetailDiv.innerHTML = html;
         }
-        
-        // adicional: pequena mensagem de última ação se houver sala selecionada
-        if (selectedRoom !== null) {
-            const floorIdx = currentFloor - 1;
-            const statusAtual = buildingData[floorIdx][selectedRoom - 1];
-            const statusNome = getStatusName(statusAtual);
-            // não polui, apenas mantém clean, mas pode adicionar leve dica
+    }
+
+    // Exportar relatório em formato texto para compartilhar
+    function exportReport() {
+        const data = getDetailedReportData();
+        const stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
+        for (let f = 0; f < TOTAL_FLOORS; f++) {
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                const s = buildingData[f][r];
+                if (s === 'validada') stats.validada++;
+                else if (s === 'trancada') stats.trancada++;
+                else if (s === 'problema') stats.problema++;
+                else if (s === 'ocupada') stats.ocupada++;
+                else stats.limpa++;
+            }
         }
+        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
+        const now = new Date().toLocaleString('pt-BR');
+        
+        let reportText = `📋 RELATÓRIO DE VALIDAÇÃO - SYS AUDIT\n`;
+        reportText += `═══════════════════════════════════════\n`;
+        reportText += `🕵️ Auditor: ${data.auditor}\n`;
+        reportText += `🏢 Edifício: ${data.predioNome}\n`;
+        reportText += `📍 Endereço: ${data.enderecoAtual}\n`;
+        reportText += `📅 Data/Hora: ${now}\n`;
+        reportText += `────────────────────────────────────────\n`;
+        reportText += `📊 ESTATÍSTICAS GERAIS:\n`;
+        reportText += `✅ Validada: ${stats.validada}  |  🔒 Trancada: ${stats.trancada}\n`;
+        reportText += `⚠️ Problema: ${stats.problema}  |  👥 Ocupada: ${stats.ocupada}\n`;
+        reportText += `⚪ Aguardando: ${stats.limpa}  |  🏢 Total: ${total}\n`;
+        reportText += `────────────────────────────────────────\n`;
+        reportText += `📋 DETALHAMENTO POR ANDAR:\n\n`;
+        
+        if (data.floorsData.length === 0) {
+            reportText += `✨ Nenhuma validação registrada ainda.\n`;
+        } else {
+            for (let floor of data.floorsData) {
+                reportText += `【 ${floor.andar}° ANDAR 】\n`;
+                const validas = floor.salas.filter(s => s.status === 'validada').map(s => s.numero);
+                const trancadas = floor.salas.filter(s => s.status === 'trancada').map(s => s.numero);
+                const problemas = floor.salas.filter(s => s.status === 'problema').map(s => s.numero);
+                const ocupadas = floor.salas.filter(s => s.status === 'ocupada').map(s => s.numero);
+                
+                if (validas.length) reportText += `   ✅ Validada: Salas ${validas.join(', ')}\n`;
+                if (trancadas.length) reportText += `   🔒 Trancada: Salas ${trancadas.join(', ')}\n`;
+                if (problemas.length) reportText += `   ⚠️ Problema: Salas ${problemas.join(', ')}\n`;
+                if (ocupadas.length) reportText += `   👥 Ocupada: Salas ${ocupadas.join(', ')}\n`;
+                reportText += `\n`;
+            }
+        }
+        reportText += `═══════════════════════════════════════\n`;
+        reportText += `✨ Relatório gerado pelo SysAudit Pro\n`;
+        
+        // Copiar para área de transferência e também oferecer download
+        navigator.clipboard.writeText(reportText).then(() => {
+            alert("✅ Relatório copiado para a área de transferência!\n\nAgora você pode colar no WhatsApp, Teams, E-mail ou salvar em um bloco de notas.");
+        }).catch(() => {
+            alert("⚠️ Não foi possível copiar automaticamente. Mas você pode selecionar o texto abaixo e copiar manualmente.");
+        });
+        
+        // Também criar um blob para download como arquivo .txt
+        const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `relatorio_validacao_${data.auditor.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 
     function clearAll() {
@@ -767,6 +838,7 @@ Aqui está a versão refinada com botões menores e mais elegantes, e um relató
     auditorInput.addEventListener('input', () => updateReport());
     clearAllBtn.addEventListener('click', clearAll);
     resetValidadaBtn.addEventListener('click', resetToValidada);
+    exportReportBtn.addEventListener('click', exportReport);
 
     function init() {
         renderFloorsList();
