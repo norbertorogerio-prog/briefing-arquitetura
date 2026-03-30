@@ -1,12 +1,9 @@
-Aqui está o código modificado com os ícones do relatório posicionados dentro do desenho do prédio:
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Relatório de Vistoria | Vivo (Mapa com Ícones)</title>
+  <title>Relatório de Vistoria | Vivo (32 andares)</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -23,8 +20,9 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       --warn:#FFD600;
       --bad:#FF3B3B;
       --other:#AA00FF;
-    }
 
+      --shadow:0 10px 26px rgba(0,0,0,.25);
+    }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
       background:linear-gradient(135deg,var(--bg2),var(--bg1));
@@ -33,21 +31,18 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       min-height:100vh;
       padding:18px;
     }
-
     .app{max-width:1500px;margin:0 auto;display:grid;gap:16px}
     @media(min-width:1040px){
       .app{grid-template-columns:380px 1fr;align-items:start}
     }
-
     .card{
       background:var(--card);
       border:1px solid var(--stroke);
       border-radius:18px;
       padding:18px;
-      box-shadow:0 10px 26px rgba(0,0,0,.25);
+      box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
     }
-
     h2{
       margin:0 0 14px 0;
       font-weight:800;
@@ -130,62 +125,33 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       font-weight:800;
     }
 
-    /* ===== MAPA ===== */
-    .map-wrap{
-      display:grid;
-      gap:14px;
+    /* ===== RELATÓRIO (prédio + lista 32 andares) ===== */
+    .report-wrap{display:grid;gap:14px}
+    .report-header{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap
     }
-    .map-header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+    .report-title{display:flex;flex-direction:column;gap:6px}
+    .report-title h3{
+      margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)
     }
-    .map-title{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    .map-title h3{
-      margin:0;
-      font-size:14px;
-      text-transform:uppercase;
-      letter-spacing:.3px;
-      color:var(--muted);
-    }
-    .map-title .meta{
-      font-size:12px;
-      color:#cfc3ff;
-      font-weight:700;
-    }
+    .report-title .meta{font-size:12px;color:#cfc3ff;font-weight:700;line-height:1.35}
 
-    .legend{
-      display:flex;gap:10px;flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-end;
-    }
+    .legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
     .leg{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      font-size:12px;
-      font-weight:800;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.06);
+      display:inline-flex;gap:8px;align-items:center;font-size:12px;font-weight:800;
+      padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.10);
     }
     .leg i{width:10px;height:10px;border-radius:3px;display:inline-block}
 
-    .map-body{
+    .report-body{
       display:grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 300px 1fr;
       gap:14px;
       align-items:stretch;
     }
     @media(max-width:1039px){
-      .map-body{grid-template-columns:1fr}
+      .report-body{grid-template-columns:1fr}
     }
 
     .building{
@@ -194,109 +160,70 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       border-radius:16px;
       padding:14px;
       position:relative;
-      overflow:visible;
-      min-height:560px;
+      min-height:720px;
+      overflow:hidden;
     }
 
-    /* Container do SVG com posicionamento relativo para os ícones */
-    .building-svg-container {
-      position: relative;
-      width: 100%;
-      height: auto;
+    /* silhueta do prédio */
+    .building .silhouette{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top:14px;
+      width:220px;
+      height:660px;
+      opacity:.95;
+      pointer-events:none;
+      z-index:1;
     }
-    
-    .building svg{
-      width:100%;
-      height:auto;
-      display: block;
+
+    /* grade interna (32 andares) para marcar “tem vistoria” */
+    .floors-overlay{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top:70px;
+      width:170px;
+      height:520px;
+      display:grid;
+      grid-template-rows:repeat(32, 1fr);
+      gap:2px;
+      z-index:2;
+      pointer-events:none;
     }
-    
-    /* Camada de ícones sobrepostos ao SVG */
-    .icons-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+    .floor-slot{
+      border-radius:4px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.06);
+      position:relative;
+      overflow:hidden;
     }
-    
-    .icon-marker {
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 900;
-      cursor: pointer;
-      pointer-events: auto;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      border: 2px solid rgba(255,255,255,0.3);
-      z-index: 10;
+    .floor-slot.has::before{
+      content:"";
+      position:absolute; inset:0;
+      background:rgba(102,0,204,.18);
     }
-    
-    .icon-marker:hover {
-      transform: scale(1.15);
-      z-index: 20;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    .floor-slot.has::after{
+      content:"";
+      position:absolute; right:6px; top:50%;
+      transform:translateY(-50%);
+      width:10px;height:10px;border-radius:50%;
+      background:rgba(255,255,255,.45);
+      box-shadow:0 0 10px rgba(255,255,255,.22);
     }
-    
-    .icon-valid {
-      background: var(--ok);
-      color: #000;
-    }
-    .icon-lock {
-      background: var(--warn);
-      color: #000;
-    }
-    .icon-prob {
-      background: var(--bad);
-      color: #fff;
-    }
-    .icon-other {
-      background: var(--other);
-      color: #fff;
-    }
-    
-    .icon-marker::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.9);
-      color: white;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 12px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.2s;
-      margin-bottom: 4px;
-    }
-    
-    .icon-marker:hover::after {
-      opacity: 1;
-    }
-    
+
     .zones{
       position:absolute;
-      left:10px;
+      left:14px;
       top:14px;
       bottom:14px;
-      width:100px;
+      width:120px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
       pointer-events:none;
-      opacity:.95;
-      z-index: 5;
+      z-index:3;
+      opacity:.96;
     }
     .zone{
       background:rgba(255,255,255,.06);
@@ -310,73 +237,77 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
     }
     .zone b{display:block;color:#cfc3ff;margin-top:4px;font-weight:900}
 
-    .gridbox{
+    .floors-list{
       background:rgba(0,0,0,.22);
       border:1px solid rgba(102,0,204,.25);
       border-radius:16px;
       padding:14px;
       overflow:auto;
+      max-height:720px;
     }
 
-    .floor-row{
-      display:grid;
-      grid-template-columns: 64px 1fr;
+    .floor-line{
+      display:flex;
+      align-items:flex-start;
       gap:10px;
-      align-items:center;
-      margin-bottom:7px;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.04);
+      margin-bottom:10px;
     }
-    .floor-tag{
-      font-size:12px;
-      font-weight:900;
-      color:#cfc3ff;
+    .floor-line:hover{border-color:rgba(102,0,204,.35);background:rgba(102,0,204,.10)}
+    .floor-badge{
+      min-width:92px;
       display:flex;
       align-items:center;
       justify-content:center;
-      padding:8px 6px;
+      padding:8px 10px;
       border-radius:12px;
       background:rgba(102,0,204,.14);
       border:1px solid rgba(102,0,204,.22);
+      color:#cfc3ff;
+      font-weight:900;
+      font-size:12px;
+      white-space:nowrap;
     }
-
-    .cells{
-      display:grid;
+    .chips{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+    .chip{
+      display:inline-flex;
+      align-items:center;
       gap:7px;
-      align-items:center;
-    }
-
-    .cell{
-      height:30px;
-      border-radius:6px;
-      border:1px solid rgba(255,255,255,.18);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
       font-weight:900;
       cursor:pointer;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:0 2px 10px rgba(0,0,0,.18);
       user-select:none;
-      box-shadow:0 2px 8px rgba(0,0,0,.18);
       transition:.12s;
       white-space:nowrap;
     }
-    .cell:hover{transform:translateY(-1px);filter:brightness(1.06)}
-    .cell.empty{
-      background:rgba(255,255,255,.04);
-      border:1px dashed rgba(255,255,255,.12);
-      color:rgba(255,255,255,.22);
-      box-shadow:none;
-      cursor:default;
-    }
+    .chip:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    .chip .mini{width:9px;height:9px;border-radius:3px;display:inline-block}
+    .chip.ok{background:rgba(0,200,83,.80)}
+    .chip.ok .mini{background:rgba(0,0,0,.35)}
+    .chip.warn{background:rgba(255,214,0,.88); color:#1A1A2E}
+    .chip.warn .mini{background:rgba(0,0,0,.35)}
+    .chip.bad{background:rgba(255,59,59,.82)}
+    .chip.bad .mini{background:rgba(255,255,255,.35)}
+    .chip.other{background:rgba(170,0,255,.75)}
+    .chip.other .mini{background:rgba(255,255,255,.35)}
 
-    /* cores por status */
-    .s-ok{background:rgba(0,200,83,.80)}
-    .s-warn{background:rgba(255,214,0,.85); color:#1A1A2E}
-    .s-bad{background:rgba(255,59,59,.82)}
-    .s-other{background:rgba(170,0,255,.75)}
-
-    .cell.active{
+    .chip.active{
       outline:3px solid rgba(255,255,255,.35);
       transform:translateY(-1px);
+    }
+
+    .empty-floor{
+      color:rgba(255,255,255,.35);
+      font-weight:800;
+      font-size:12px;
+      padding:4px 0;
     }
 
     .toast{
@@ -415,7 +346,7 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
     </select>
 
     <label>📍 Endereço</label>
-    <input id="endereco" class="field" placeholder="Automático" />
+    <input id="endereco" class="field" placeholder="Automático"/>
 
     <div class="row">
       <div>
@@ -436,20 +367,19 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       <div class="status" data-status="other"><span class="dot other"></span>Outros</div>
     </div>
 
-    <button id="btnPng" class="btn">📸 Salvar PNG do Mapa</button>
+    <button id="btnPng" class="btn">📸 Salvar PNG do Relatório</button>
     <button id="btnClear" class="btn ghost">🗑️ Limpar Tudo</button>
 
-    <p class="small">💡 Selecione andar/sala e clique no status → ícones aparecem no desenho do prédio</p>
+    <p class="small">💡 Vai ficar: <b>Andar 32º</b> → <b>SL-10</b> / <b>SL-13</b> / ...</p>
   </div>
 
-  <!-- MAPA -->
-  <div class="card map-wrap" id="mapCapture">
-    <div class="map-header">
-      <div class="map-title">
-        <h3>📋 Relatório – Mapa do Prédio</h3>
+  <!-- RELATÓRIO -->
+  <div class="card report-wrap" id="reportCapture">
+    <div class="report-header">
+      <div class="report-title">
+        <h3>📋 Relatório – Prédio (32 andares)</h3>
         <div class="meta" id="metaLine">Aguardando...</div>
       </div>
-
       <div class="legend">
         <span class="leg"><i style="background:rgba(0,200,83,.85)"></i>Validada</span>
         <span class="leg"><i style="background:rgba(255,214,0,.90)"></i>Trancada</span>
@@ -458,94 +388,40 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
       </div>
     </div>
 
-    <div class="map-body">
+    <div class="report-body">
+      <!-- DESENHO DO PRÉDIO -->
       <div class="building">
         <div class="zones">
-          <div class="zone">
-            Zona Alta
-            <b>(Pisos 16 a 32)</b>
-          </div>
-          <div class="zone">
-            Zona Baixa
-            <b>(Pisos 01 a 15)</b>
-          </div>
+          <div class="zone">Zona Alta<b>(Pisos 16 a 32)</b></div>
+          <div class="zone">Zona Baixa<b>(Pisos 01 a 15)</b></div>
         </div>
 
-        <!-- Desenho do prédio com container para ícones sobrepostos -->
-        <div class="building-svg-container" id="buildingSvgContainer">
-          <svg viewBox="0 0 280 520" aria-label="Prédio" style="width:100%; height:auto;">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="1">
-                <stop offset="0" stop-color="rgba(255,255,255,.18)"/>
-                <stop offset="1" stop-color="rgba(255,255,255,.05)"/>
-              </linearGradient>
-              <linearGradient id="windowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="rgba(100,100,150,.3)"/>
-                <stop offset="100%" stop-color="rgba(50,50,80,.2)"/>
-              </linearGradient>
-            </defs>
+        <!-- Silhueta -->
+        <svg class="silhouette" viewBox="0 0 220 660" aria-hidden="true">
+          <defs>
+            <linearGradient id="gg" x1="0" x2="1">
+              <stop offset="0" stop-color="rgba(255,255,255,.16)"/>
+              <stop offset="1" stop-color="rgba(255,255,255,.05)"/>
+            </linearGradient>
+          </defs>
+          <!-- base -->
+          <rect x="20" y="570" width="180" height="70" rx="12" fill="url(#gg)" stroke="rgba(255,255,255,.20)" stroke-width="2"/>
+          <rect x="38" y="590" width="42" height="36" rx="8" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.12)"/>
+          <rect x="140" y="590" width="42" height="36" rx="8" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.12)"/>
+          <!-- torre -->
+          <rect x="60" y="40" width="100" height="530" rx="14" fill="url(#gg)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
+          <!-- laterais -->
+          <path d="M60 70 L35 105 L35 570 L60 570" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+          <path d="M160 70 L185 105 L185 570 L160 570" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
+          <text x="110" y="650" fill="rgba(255,255,255,.55)" font-size="10" text-anchor="middle">VIVO</text>
+        </svg>
 
-            <!-- base do prédio -->
-            <rect x="40" y="420" width="200" height="70" rx="10" fill="url(#g1)" stroke="rgba(255,255,255,.22)" stroke-width="2"/>
-            <rect x="60" y="438" width="40" height="36" rx="6" fill="rgba(0,0,0,.20)" stroke="rgba(255,255,255,.18)" />
-            <rect x="180" y="438" width="40" height="36" rx="6" fill="rgba(0,0,0,.20)" stroke="rgba(255,255,255,.18)" />
-
-            <!-- torre principal -->
-            <rect x="90" y="60" width="100" height="360" rx="12" fill="url(#g1)" stroke="rgba(255,255,255,.24)" stroke-width="2"/>
-            
-            <!-- janelas decorativas - representando os andares -->
-            <g fill="rgba(80,80,120,.3)" stroke="rgba(255,255,255,.15)" stroke-width="0.5">
-              <rect x="100" y="85" width="20" height="22" rx="3"/>
-              <rect x="125" y="85" width="20" height="22" rx="3"/>
-              <rect x="150" y="85" width="20" height="22" rx="3"/>
-              <rect x="100" y="115" width="20" height="22" rx="3"/>
-              <rect x="125" y="115" width="20" height="22" rx="3"/>
-              <rect x="150" y="115" width="20" height="22" rx="3"/>
-              <rect x="100" y="145" width="20" height="22" rx="3"/>
-              <rect x="125" y="145" width="20" height="22" rx="3"/>
-              <rect x="150" y="145" width="20" height="22" rx="3"/>
-              <rect x="100" y="175" width="20" height="22" rx="3"/>
-              <rect x="125" y="175" width="20" height="22" rx="3"/>
-              <rect x="150" y="175" width="20" height="22" rx="3"/>
-              <rect x="100" y="205" width="20" height="22" rx="3"/>
-              <rect x="125" y="205" width="20" height="22" rx="3"/>
-              <rect x="150" y="205" width="20" height="22" rx="3"/>
-              <rect x="100" y="235" width="20" height="22" rx="3"/>
-              <rect x="125" y="235" width="20" height="22" rx="3"/>
-              <rect x="150" y="235" width="20" height="22" rx="3"/>
-              <rect x="100" y="265" width="20" height="22" rx="3"/>
-              <rect x="125" y="265" width="20" height="22" rx="3"/>
-              <rect x="150" y="265" width="20" height="22" rx="3"/>
-              <rect x="100" y="295" width="20" height="22" rx="3"/>
-              <rect x="125" y="295" width="20" height="22" rx="3"/>
-              <rect x="150" y="295" width="20" height="22" rx="3"/>
-              <rect x="100" y="325" width="20" height="22" rx="3"/>
-              <rect x="125" y="325" width="20" height="22" rx="3"/>
-              <rect x="150" y="325" width="20" height="22" rx="3"/>
-              <rect x="100" y="355" width="20" height="22" rx="3"/>
-              <rect x="125" y="355" width="20" height="22" rx="3"/>
-              <rect x="150" y="355" width="20" height="22" rx="3"/>
-              <rect x="100" y="385" width="20" height="22" rx="3"/>
-              <rect x="125" y="385" width="20" height="22" rx="3"/>
-              <rect x="150" y="385" width="20" height="22" rx="3"/>
-            </g>
-
-            <!-- contorno lateral decorativo -->
-            <path d="M90 80 L65 110 L65 420 L90 420" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
-            <path d="M190 80 L215 110 L215 420 L190 420" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="4"/>
-            
-            <!-- texto de identificação -->
-            <text x="120" y="470" fill="rgba(255,255,255,.6)" font-size="8" text-anchor="middle">ECO BERRINI</text>
-          </svg>
-          
-          <!-- Camada para os ícones do relatório sobre o desenho -->
-          <div id="iconsLayer" class="icons-layer"></div>
-        </div>
+        <!-- 32 slots (marca se tem vistoria naquele andar) -->
+        <div class="floors-overlay" id="floorsOverlay"></div>
       </div>
 
-      <div class="gridbox">
-        <div id="grid"></div>
-      </div>
+      <!-- LISTA ANDARES -->
+      <div class="floors-list" id="floorsList"></div>
     </div>
   </div>
 
@@ -554,38 +430,14 @@ Aqui está o código modificado com os ícones do relatório posicionados dentro
 <div class="toast" id="toast"></div>
 
 <script>
-/* ===== Modelo de dados ===== */
+/* ===== Modelo: 32 andares fixos + qtd salas por prédio ===== */
 const PREDIOS_MODEL = {
-  "Eco Berrini": {
-    endereco: "Av. Eng. Luís Carlos Berrini, 1376 - SP",
-    andares: {}
-  },
-  "Chucri Zaidan": {
-    endereco: "Av. Dr. Chucri Zaidan, 2460 - SP",
-    andares: {}
-  }
+  "Eco Berrini": { endereco:"Av. Eng. Luís Carlos Berrini, 1376 - SP", maxSalas: 15 },
+  "Chucri Zaidan": { endereco:"Av. Dr. Chucri Zaidan, 2460 - SP", maxSalas: 13 }
 };
 
-// Preenche os andares para Eco Berrini (01 a 32, cada um com 15 salas)
-for(let i = 1; i <= 32; i++) {
-  const andar = String(i).padStart(2, '0');
-  PREDIOS_MODEL["Eco Berrini"].andares[andar] = [];
-  for(let j = 1; j <= 15; j++) {
-    PREDIOS_MODEL["Eco Berrini"].andares[andar].push(String(j).padStart(2, '0'));
-  }
-}
-
-// Preenche os andares para Chucri Zaidan (01 a 32, cada um com 13 salas)
-for(let i = 1; i <= 32; i++) {
-  const andar = String(i).padStart(2, '0');
-  PREDIOS_MODEL["Chucri Zaidan"].andares[andar] = [];
-  for(let j = 1; j <= 13; j++) {
-    PREDIOS_MODEL["Chucri Zaidan"].andares[andar].push(String(j).padStart(2, '0'));
-  }
-}
-
 /* ===== Estado ===== */
-const STORAGE_KEY = "vistoria_map_v1";
+const STORAGE_KEY = "vistoria_predio_32_v1";
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 
 let currentFloor = "01";
@@ -597,10 +449,11 @@ const predioSel  = document.getElementById("predio");
 const endInp     = document.getElementById("endereco");
 const floorSel   = document.getElementById("floorInput");
 const roomSel    = document.getElementById("roomInput");
-const gridEl     = document.getElementById("grid");
 const metaLine   = document.getElementById("metaLine");
 const toastEl    = document.getElementById("toast");
-const iconsLayer = document.getElementById("iconsLayer");
+
+const floorsOverlay = document.getElementById("floorsOverlay");
+const floorsList    = document.getElementById("floorsList");
 
 /* ===== Helpers ===== */
 const pad2 = n => String(n).padStart(2,"0");
@@ -610,71 +463,60 @@ function showToast(msg){
   toastEl.classList.add("show");
   setTimeout(()=>toastEl.classList.remove("show"), 2000);
 }
-
 function persist(){
   localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
 }
 
-function statusToClass(s){
-  if(s==="valid") return "s-ok";
-  if(s==="lock")  return "s-warn";
-  if(s==="prob")  return "s-bad";
-  return "s-other";
+function statusToKey(s){
+  if(s==="valid") return "ok";
+  if(s==="lock") return "warn";
+  if(s==="prob") return "bad";
+  return "other";
 }
-
-function statusToIconClass(s){
-  if(s==="valid") return "icon-valid";
-  if(s==="lock")  return "icon-lock";
-  if(s==="prob")  return "icon-prob";
-  return "icon-other";
-}
-
-function statusToIconSymbol(s){
-  if(s==="valid") return "✓";
-  if(s==="lock")  return "🔒";
-  if(s==="prob")  return "⚠";
-  return "◉";
-}
-
 function statusToName(s){
   if(s==="valid") return "Validada";
-  if(s==="lock")  return "Trancada";
-  if(s==="prob")  return "Problemas";
+  if(s==="lock") return "Trancada";
+  if(s==="prob") return "Problemas";
   return "Outros";
 }
 
-function getModel(){
-  return PREDIOS_MODEL[predioSel.value] || null;
+/* retorna “Andar 32º” */
+function floorLabel(f2){
+  const n = parseInt(f2,10);
+  return `Andar ${n}º`;
 }
+
+/* lista de andares 01..32 */
+const FLOORS_32 = Array.from({length:32}, (_,i)=>pad2(i+1));
 
 function setOptions(selectEl, arr, keep){
   selectEl.innerHTML = "";
-  (arr||[]).forEach(v=>{
+  arr.forEach(v=>{
     const o=document.createElement("option");
     o.value=v; o.textContent=v;
     selectEl.appendChild(o);
   });
-  if(keep && arr.includes(keep)) selectEl.value = keep;
-  else selectEl.value = arr[0] || "01";
+  selectEl.value = (keep && arr.includes(keep)) ? keep : (arr[0] || "01");
 }
 
-function refreshSelectors(keepFloor, keepRoom){
-  const m = getModel();
-  if(!m){
-    endInp.value = "";
-    setOptions(floorSel, ["01"], "01");
-    setOptions(roomSel,  ["01"], "01");
+function refreshSelectors(){
+  const pred = predioSel.value;
+  if(!pred){
+    endInp.value="";
+    setOptions(floorSel, FLOORS_32, "01");
+    setOptions(roomSel, ["01"], "01");
     currentFloor="01"; currentRoom="01";
     render();
     return;
   }
 
-  endInp.value = m.endereco || "";
-  const floors = Object.keys(m.andares||{}).sort((a,b)=>parseInt(a)-parseInt(b));
-  setOptions(floorSel, floors.length?floors:["01"], keepFloor);
+  endInp.value = PREDIOS_MODEL[pred].endereco || "";
 
-  const rooms = (m.andares[floorSel.value] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
-  setOptions(roomSel, rooms, keepRoom);
+  setOptions(floorSel, FLOORS_32, currentFloor);
+
+  const max = PREDIOS_MODEL[pred].maxSalas || 15;
+  const rooms = Array.from({length:max},(_,i)=>pad2(i+1));
+  setOptions(roomSel, rooms, currentRoom);
 
   currentFloor = floorSel.value;
   currentRoom  = roomSel.value;
@@ -682,151 +524,104 @@ function refreshSelectors(keepFloor, keepRoom){
   render();
 }
 
-function entryIndex(floor, room){
-  return entries.findIndex(e => e.predio===predioSel.value && e.floor===floor && e.room===room);
+function entryIndex(pred, floor, room){
+  return entries.findIndex(e => e.predio===pred && e.floor===floor && e.room===room);
 }
 
-/* ===== Função para desenhar os ícones no SVG ===== */
-function renderIconsOnBuilding() {
-  if(!iconsLayer) return;
-  iconsLayer.innerHTML = "";
-  
-  const predioAtual = predioSel.value;
-  if(!predioAtual) return;
-  
-  const entriesDoPredio = entries.filter(e => e.predio === predioAtual);
-  if(entriesDoPredio.length === 0) return;
-  
-  // Posições baseadas no andar (mapeamento Y) e na sala (mapeamento X)
-  // Andar 32 (topo) -> Y ~ 85, Andar 01 (base) -> Y ~ 385
-  entriesDoPredio.forEach(entry => {
-    const andarNum = parseInt(entry.floor);
-    const salaNum = parseInt(entry.room);
-    
-    // Mapeia o andar para posição Y (invertido: andar maior fica mais alto)
-    const yPos = 385 - ((andarNum - 1) * (300 / 31)); // 385 a 85 aproximadamente
-    // Mapeia a sala para posição X (distribui entre 100 e 170)
-    const maxSalas = predioAtual === "Eco Berrini" ? 15 : 13;
-    const xPos = 100 + (salaNum - 1) * (70 / maxSalas);
-    
-    const icon = document.createElement("div");
-    icon.className = `icon-marker ${statusToIconClass(entry.status)}`;
-    icon.style.left = `${xPos}px`;
-    icon.style.top = `${yPos}px`;
-    icon.innerHTML = statusToIconSymbol(entry.status);
-    icon.setAttribute("data-tooltip", `${entry.floor}-S${entry.room}: ${statusToName(entry.status)}`);
-    
-    // Clique no ícone seleciona a sala correspondente
-    icon.addEventListener("click", (e) => {
-      e.stopPropagation();
-      currentFloor = entry.floor;
-      currentRoom = entry.room;
-      floorSel.value = currentFloor;
-      
-      const m = getModel();
-      if(m) {
-        const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
-        setOptions(roomSel, rooms, currentRoom);
-      }
-      render();
-      showToast(`📍 Selecionado: ${entry.floor}-S${entry.room}`);
-    });
-    
-    iconsLayer.appendChild(icon);
-  });
-}
-
-/* ===== Render do MAPA ===== */
+/* ===== Render principal ===== */
 function render(){
   const predio = predioSel.value || "Não selecionado";
   const auditor = auditorInp.value || "Não informado";
   const dataStr = new Date().toLocaleString("pt-BR");
-  metaLine.textContent = `🏢 ${predio}  •  👤 ${auditor}  •  🕒 ${dataStr}  •  📌 Registros: ${entries.filter(e=>e.predio===predioSel.value).length}`;
 
-  const m = getModel();
-  if(!m){
-    gridEl.innerHTML = `<div style="color:#9aa;font-weight:800">Selecione um prédio para carregar o mapa.</div>`;
-    renderIconsOnBuilding();
+  const predEntries = entries.filter(e=>e.predio===predioSel.value);
+  metaLine.innerHTML = `🏢 <b>${predio}</b> &nbsp;•&nbsp; 👤 <b>${auditor}</b> &nbsp;•&nbsp; 🕒 <b>${dataStr}</b><br>📌 Registros: <b>${predEntries.length}</b>`;
+
+  // overlay (32 slots)
+  floorsOverlay.innerHTML = "";
+  // slots são desenhados do topo (andar 32) ao fundo (andar 01)
+  const floorsDesc = [...FLOORS_32].sort((a,b)=>parseInt(b)-parseInt(a));
+  floorsDesc.forEach(f2=>{
+    const has = predEntries.some(e=>e.floor===f2);
+    const div = document.createElement("div");
+    div.className = "floor-slot" + (has ? " has" : "");
+    floorsOverlay.appendChild(div);
+  });
+
+  // lista de andares (Andar 32º -> SL-xx)
+  if(!predioSel.value){
+    floorsList.innerHTML = `<div style="color:#9aa;font-weight:800">Selecione um prédio para montar o relatório.</div>`;
     return;
   }
 
-  // Descobre maior quantidade de salas para padronizar a grade
-  const floors = Object.keys(m.andares).map(x=>parseInt(x)).sort((a,b)=>b-a);
-  let maxCols = 1;
-  floors.forEach(f=>{
-    const arr = m.andares[pad2(f)] || [];
-    if(arr.length > maxCols) maxCols = arr.length;
+  // agrupa por andar
+  const byFloor = {};
+  predEntries.forEach(e=>{
+    if(!byFloor[e.floor]) byFloor[e.floor]=[];
+    byFloor[e.floor].push(e);
   });
 
-  // Monta a grade de andares
   let html = "";
-  floors.forEach(f=>{
-    const f2 = pad2(f);
-    const rooms = (m.andares[f2] || []).slice().sort((a,b)=>parseInt(a)-parseInt(b));
+  floorsDesc.forEach(f2=>{
+    const items = (byFloor[f2] || []).slice().sort((a,b)=>parseInt(a.room)-parseInt(b.room));
+    html += `<div class="floor-line">
+      <div class="floor-badge">${floorLabel(f2)}</div>
+      <div class="chips">`;
 
-    html += `<div class="floor-row">
-      <div class="floor-tag">${f2}</div>
-      <div class="cells" style="grid-template-columns: repeat(${maxCols}, minmax(86px, 1fr));">`;
-
-    for(let i=0;i<maxCols;i++){
-      const r = rooms[i];
-      if(!r){
-        html += `<div class="cell empty">—</div>`;
-        continue;
-      }
-
-      const idx = entries.findIndex(e => e.predio===predioSel.value && e.floor===f2 && e.room===r);
-      const st = idx>=0 ? entries[idx].status : null;
-      const cls = st ? statusToClass(st) : "empty";
-      const active = (currentFloor===f2 && currentRoom===r) ? "active" : "";
-      const label = `${f2}-S${r}`;
-
-      html += `<div class="cell ${st?cls:"empty"} ${active}" data-floor="${f2}" data-room="${r}" title="${label}${st?(" — "+statusToName(st)):""}">${label}</div>`;
+    if(!items.length){
+      html += `<div class="empty-floor">— sem registro</div>`;
+    }else{
+      items.forEach(it=>{
+        const sKey = statusToKey(it.status);
+        const active = (currentFloor===it.floor && currentRoom===it.room) ? "active" : "";
+        html += `<div class="chip ${sKey} ${active}" data-floor="${it.floor}" data-room="${it.room}" data-status="${it.status}" title="${floorLabel(it.floor)} • SL-${it.room} • ${statusToName(it.status)}">
+          <span class="mini"></span> SL-${it.room}
+        </div>`;
+      });
     }
 
     html += `</div></div>`;
   });
 
-  gridEl.innerHTML = html;
+  floorsList.innerHTML = html;
 
-  // Clique nas células da grade
-  gridEl.querySelectorAll(".cell").forEach(c=>{
-    if(c.classList.contains("empty") && !c.dataset.floor) return;
-    c.addEventListener("click", ()=>{
-      if(!c.dataset.floor) return;
-      currentFloor = c.dataset.floor;
-      currentRoom  = c.dataset.room;
+  // clique no chip seleciona no formulário
+  floorsList.querySelectorAll(".chip").forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      currentFloor = ch.dataset.floor;
+      currentRoom  = ch.dataset.room;
       floorSel.value = currentFloor;
-
-      const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
-      setOptions(roomSel, rooms, currentRoom);
+      roomSel.value  = currentRoom;
       render();
+      showToast(`📍 Selecionado: ${floorLabel(currentFloor)} • SL-${currentRoom}`);
     });
   });
-  
-  // Renderiza os ícones sobre o desenho do prédio
-  renderIconsOnBuilding();
 }
 
-/* ===== Ações ===== */
-predioSel.addEventListener("change", ()=> refreshSelectors(currentFloor, currentRoom));
+/* ===== Eventos ===== */
+predioSel.addEventListener("change", ()=>{
+  // reset básico ao trocar prédio
+  currentFloor = "01";
+  currentRoom  = "01";
+  refreshSelectors();
+});
+
 floorSel.addEventListener("change", ()=>{
-  const m=getModel(); if(!m) return;
   currentFloor = floorSel.value;
-  const rooms = (m.andares[currentFloor] || ["01"]).slice().sort((a,b)=>parseInt(a)-parseInt(b));
-  setOptions(roomSel, rooms, rooms[0] || "01");
+  render();
+});
+roomSel.addEventListener("change", ()=>{
   currentRoom = roomSel.value;
   render();
 });
-roomSel.addEventListener("change", ()=>{ currentRoom = roomSel.value; render(); });
 
 document.querySelectorAll(".status").forEach(btn=>{
   btn.addEventListener("click", ()=>{
-    const st = btn.dataset.status;
     const pred = predioSel.value;
     if(!pred) return showToast("Selecione o prédio primeiro.");
 
-    const idx = entryIndex(currentFloor, currentRoom);
+    const st = btn.dataset.status;
+    const idx = entryIndex(pred, currentFloor, currentRoom);
     const obj = { predio: pred, floor: currentFloor, room: currentRoom, status: st };
 
     if(idx>=0) entries[idx] = obj;
@@ -834,7 +629,7 @@ document.querySelectorAll(".status").forEach(btn=>{
 
     persist();
     render();
-    showToast(`✓ ${currentFloor}-S${currentRoom}: ${statusToName(st)}`);
+    showToast(`✓ ${floorLabel(currentFloor)} • SL-${currentRoom}: ${statusToName(st)}`);
   });
 });
 
@@ -847,7 +642,7 @@ document.getElementById("btnClear").addEventListener("click", ()=>{
 });
 
 document.getElementById("btnPng").addEventListener("click", async ()=>{
-  const el = document.getElementById("mapCapture");
+  const el = document.getElementById("reportCapture");
   showToast("📸 Gerando PNG...");
   try{
     const canvas = await html2canvas(el, {scale:2, backgroundColor:null, useCORS:true});
@@ -855,7 +650,7 @@ document.getElementById("btnPng").addEventListener("click", async ()=>{
     const a = document.createElement("a");
     const pred = predioSel.value || "predio";
     const ts = new Date().toISOString().slice(0,19).replace(/:/g,"-");
-    a.download = `mapa_vistoria_${pred}_${ts}.png`;
+    a.download = `relatorio_predio_32_${pred}_${ts}.png`;
     a.href = data;
     a.click();
     showToast("✅ PNG salvo!");
@@ -866,7 +661,10 @@ document.getElementById("btnPng").addEventListener("click", async ()=>{
 
 /* ===== Boot ===== */
 (function init(){
-  refreshSelectors("01","01");
+  // inicia com selects padrão (sem prédio selecionado)
+  setOptions(floorSel, FLOORS_32, "01");
+  setOptions(roomSel, ["01"], "01");
+  render();
 })();
 </script>
 </body>
