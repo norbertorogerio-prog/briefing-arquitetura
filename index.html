@@ -1,4 +1,9 @@
-Aqui está a versão completa com um relatório que agora exibe o número das salas validadas e um botão para exportar/importar relatório em formato texto para compartilhar via WhatsApp, Teams, e-mail ou baixar.
+Perfeito! Entendi o estilo de relatório que você prefere - um formato mais executivo, com resumo visual, lista de salas por status e uma apresentação limpa e profissional. Vou adaptar o sistema para gerar relatórios exatamente nesse modelo, com:
+
+· Resumo com cards visuais
+· Listagem detalhada das salas por status
+· Formato clean e profissional
+· Mantendo toda a funcionalidade de monitoramento
 
 ```html
 <!DOCTYPE html>
@@ -6,7 +11,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SysAudit Pro | Monitoramento de Prédios</title>
+    <title>SysAudit Pro | Ronda de Validação de Salas</title>
     <style>
         * {
             margin: 0;
@@ -16,7 +21,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
 
         body {
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #e9eef3 0%, #dce3ec 100%);
+            background: linear-gradient(145deg, #eef2f7 0%, #e2e8f0 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -26,14 +31,26 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             margin: 0 auto;
             background: #ffffff;
             border-radius: 28px;
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
             overflow: hidden;
         }
 
+        /* Header */
         .header {
             background: linear-gradient(105deg, #1a3a4f 0%, #0e2a3a 100%);
-            padding: 18px 28px;
+            padding: 20px 32px;
             color: white;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-sub {
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
 
         .header-top {
@@ -42,6 +59,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             justify-content: space-between;
             align-items: center;
             gap: 16px;
+            margin-top: 12px;
         }
 
         .auditor-section {
@@ -98,12 +116,12 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             border-radius: 48px;
             font-weight: 600;
             font-size: 0.75rem;
-            font-family: monospace;
         }
 
+        /* Layout principal */
         .content-split {
             display: flex;
-            min-height: 560px;
+            min-height: 540px;
             background: #f8fafd;
         }
 
@@ -112,7 +130,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             background: #f1f4f8;
             border-right: 1px solid #e2e8f0;
             overflow-y: auto;
-            max-height: 65vh;
+            max-height: 60vh;
         }
 
         .floor-item {
@@ -129,13 +147,11 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
 
         .floor-item:hover {
             background: #e6edf4;
-            transform: translateX(2px);
         }
 
         .floor-item.active {
             background: #ffc107;
             color: #1e2f3a;
-            border-left: 3px solid white;
             font-weight: 700;
         }
 
@@ -158,7 +174,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         }
 
         .current-floor-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #1e466e;
         }
@@ -167,7 +183,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             background: #ffc107;
             padding: 4px 14px;
             border-radius: 48px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-left: 6px;
         }
 
@@ -184,7 +200,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             grid-template-columns: repeat(auto-fill, minmax(58px, 64px));
             gap: 10px;
             justify-content: flex-start;
-            max-height: 480px;
+            max-height: 460px;
             overflow-y: auto;
             padding: 8px 4px;
         }
@@ -196,7 +212,6 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             color: white;
             font-weight: 600;
         }
@@ -238,7 +253,8 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             display: inline-block;
         }
 
-        .status-panel {
+        /* Painel de controle */
+        .control-panel {
             margin-top: 20px;
             background: #f8fafc;
             border-radius: 48px;
@@ -311,97 +327,130 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
             color: white;
         }
 
+        /* RELATÓRIO ESTILO EXECUTIVO */
         .report-section {
             background: #ffffff;
             border-top: 1px solid #eef2f8;
-            padding: 18px 28px 24px;
+            padding: 24px 32px;
         }
 
         .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 14px;
+            margin-bottom: 20px;
         }
 
-        .report-header h3 {
+        .report-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
             color: #1a3a4f;
-            font-size: 1.2rem;
-            font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        .report-stats {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-            background: #f8fafc;
-            padding: 8px 18px;
-            border-radius: 48px;
-            font-size: 0.75rem;
-        }
-
-        .stat-item {
-            font-weight: 600;
-            color: #2d3e50;
-        }
-
-        .report-detail {
-            background: #fefefe;
-            border-radius: 20px;
-            padding: 12px 16px;
-            max-height: 300px;
-            overflow-y: auto;
+        .report-header p {
+            color: #6c7a8e;
             font-size: 0.8rem;
-            border: 1px solid #edf2f7;
         }
 
-        .floor-card-clean {
+        /* Cards de resumo */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .card {
             background: #f8fafc;
-            border-radius: 18px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            border-left: 4px solid #ffc107;
+            border-radius: 20px;
+            padding: 16px 20px;
+            border-left: 4px solid;
+            transition: all 0.2s;
         }
 
-        .floor-title-clean {
-            font-weight: 700;
-            color: #1e466e;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
+        .card.validada { border-left-color: #2b7a3e; }
+        .card.trancada { border-left-color: #5e3c9e; }
+        .card.problema { border-left-color: #e06c2e; }
+        .card.ocupada { border-left-color: #c9386e; }
+        .card.total { border-left-color: #1a3a4f; }
+
+        .card-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e2f3a;
+            line-height: 1;
         }
 
-        .rooms-list-clean {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+        .card-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6c7a8e;
             margin-top: 6px;
         }
 
-        .room-tag {
-            background: #eef2ff;
-            padding: 4px 10px;
-            border-radius: 24px;
+        .card-desc {
             font-size: 0.7rem;
-            font-weight: 500;
+            color: #8b9ab0;
+            margin-top: 4px;
         }
 
-        .room-tag.validada { background: #e0f2e3; color: #1e5a2e; }
-        .room-tag.trancada { background: #ede7f6; color: #4a2c8a; }
-        .room-tag.problema { background: #ffede3; color: #b85c1a; }
-        .room-tag.ocupada { background: #ffe4ec; color: #b32d5a; }
+        /* Listagem de salas */
+        .rooms-listing {
+            margin-top: 20px;
+        }
 
-        .empty-report {
-            text-align: center;
+        .status-group {
+            margin-bottom: 24px;
+        }
+
+        .status-group-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rooms-badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .room-badge {
+            background: #f1f5f9;
+            padding: 6px 14px;
+            border-radius: 32px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            font-family: monospace;
+        }
+
+        .room-badge.validada { background: #e0f2e3; color: #1e5a2e; }
+        .room-badge.trancada { background: #ede7f6; color: #4a2c8a; }
+        .room-badge.problema { background: #ffede3; color: #b85c1a; }
+        .room-badge.ocupada { background: #ffe4ec; color: #b32d5a; }
+
+        .empty-state {
             color: #94a3b8;
-            padding: 24px;
             font-style: italic;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .report-footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.7rem;
+            color: #8b9ab0;
+            text-align: center;
         }
 
         footer {
             text-align: center;
-            padding: 12px;
+            padding: 14px;
             font-size: 0.65rem;
             color: #7c8b9c;
             background: #fafcff;
@@ -411,16 +460,19 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         @media (max-width: 700px) {
             .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 55px)); }
             .floors-sidebar { width: 65px; }
+            .summary-cards { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 <div class="main-container">
     <div class="header">
+        <h1>🏢 Painel de Controlo da Ronda</h1>
+        <div class="header-sub">Triagem de Salas | Monitoramento de status e acessibilidade</div>
         <div class="header-top">
             <div class="auditor-section">
                 <label>🕵️ Auditor</label>
-                <input type="text" id="auditorName" placeholder="Seu nome" value="Roberto Almeida">
+                <input type="text" id="auditorName" placeholder="Nome do responsável" value="Roberto Almeida">
             </div>
             <div class="predio-section">
                 <div class="predio-option">
@@ -450,32 +502,32 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
                 </div>
             </div>
             <div class="rooms-grid" id="roomsGrid"></div>
-            <div class="status-panel">
+            <div class="control-panel">
                 <div class="status-buttons" id="statusButtons">
-                    <button class="status-btn validada" data-status="validada">✅ Validada</button>
+                    <button class="status-btn validada" data-status="validada">✅ Validada (Livre)</button>
                     <button class="status-btn trancada" data-status="trancada">🔒 Trancada</button>
                     <button class="status-btn problema" data-status="problema">⚠️ Problema</button>
                     <button class="status-btn ocupada" data-status="ocupada">👥 Ocupada</button>
                 </div>
                 <div class="action-buttons">
-                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar</button>
-                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar</button>
+                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar Tudo</button>
+                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar (Validada)</button>
                     <button class="action-btn export" id="exportReportBtn">📤 Exportar Relatório</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="report-section">
+    <!-- RELATÓRIO ESTILO EXECUTIVO -->
+    <div class="report-section" id="reportSection">
         <div class="report-header">
-            <h3>📋 Relatório de validação</h3>
-            <span id="reportTime" style="font-size:0.7rem; color:#7f8c8d;"></span>
+            <h2>📋 Relatório de Validação</h2>
+            <p>Resumo do estado de utilização e acessibilidade das salas</p>
         </div>
-        <div class="report-stats" id="reportStats"></div>
-        <div class="report-detail" id="reportDetail"></div>
+        <div id="reportContent"></div>
     </div>
     <footer>
-        🔍 Clique no andar → selecione a sala → escolha o status. Exporte o relatório e compartilhe no WhatsApp, Teams ou e-mail.
+        🔍 Clique no andar → selecione a sala → escolha o status. O relatório é atualizado automaticamente no formato executivo.
     </footer>
 </div>
 
@@ -502,26 +554,13 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         return data;
     }
 
-    function initDataValidada() {
-        const data = [];
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floor = [];
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) floor.push('validada');
-            data.push(floor);
-        }
-        return data;
-    }
-
     buildingData = initDataCleared();
 
-    // DOM
     const floorsSidebar = document.getElementById('floorsSidebar');
     const roomsGrid = document.getElementById('roomsGrid');
     const currentFloorNumberSpan = document.getElementById('currentFloorNumber');
     const auditorInput = document.getElementById('auditorName');
-    const reportStatsDiv = document.getElementById('reportStats');
-    const reportDetailDiv = document.getElementById('reportDetail');
-    const reportTimeSpan = document.getElementById('reportTime');
+    const reportContent = document.getElementById('reportContent');
     const enderecoDisplay = document.getElementById('enderecoDisplay');
     const radioBerrini = document.getElementById('predioBerrini');
     const radioChucri = document.getElementById('predioChucri');
@@ -543,14 +582,6 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         if (status === 'problema') return '!';
         if (status === 'ocupada') return '👥';
         return '○';
-    }
-
-    function getStatusName(status) {
-        if (status === 'validada') return 'Validada';
-        if (status === 'trancada') return 'Trancada';
-        if (status === 'problema') return 'Problema';
-        if (status === 'ocupada') return 'Ocupada';
-        return 'Aguardando';
     }
 
     function renderFloorsList() {
@@ -592,7 +623,7 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
                 e.stopPropagation();
                 selectedRoom = roomNum;
                 renderRoomsForCurrentFloor();
-                updateReport();
+                updateExecutiveReport();
             });
             roomsGrid.appendChild(card);
         }
@@ -609,214 +640,264 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         if (old !== activeStatus) {
             buildingData[floorIdx][roomIdx] = activeStatus;
             renderRoomsForCurrentFloor();
-            updateReport();
+            updateExecutiveReport();
             return true;
-        } else {
-            updateReport();
-            return false;
         }
+        return false;
     }
 
-    // Gera o relatório completo com números das salas
-    function getDetailedReportData() {
+    // Relatório estilo executivo
+    function updateExecutiveReport() {
+        // Coletar todas as salas validadas
+        const salasPorStatus = {
+            validada: [],
+            trancada: [],
+            problema: [],
+            ocupada: []
+        };
+        
+        let totalValidadas = 0;
+        
+        for (let f = 0; f < TOTAL_FLOORS; f++) {
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                const status = buildingData[f][r];
+                if (status !== null) {
+                    const salaId = `${f+1.toString().padStart(2,'0')}-${(r+1).toString().padStart(2,'0')}`;
+                    salasPorStatus[status].push(salaId);
+                    totalValidadas++;
+                }
+            }
+        }
+        
+        const stats = {
+            validada: salasPorStatus.validada.length,
+            trancada: salasPorStatus.trancada.length,
+            problema: salasPorStatus.problema.length,
+            ocupada: salasPorStatus.ocupada.length
+        };
+        
+        const totalInspecionadas = totalValidadas;
         const auditor = auditorInput.value.trim() || "Não informado";
         const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
         const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
         const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
+        enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
         
-        // Coletar salas por andar
-        const floorsData = [];
+        const now = new Date().toLocaleString('pt-BR');
+        
+        let html = `
+            <div class="summary-cards">
+                <div class="card total">
+                    <div class="card-number">${totalInspecionadas}</div>
+                    <div class="card-label">Salas Inspecionadas</div>
+                    <div class="card-desc">Total de salas validadas</div>
+                </div>
+                <div class="card validada">
+                    <div class="card-number">${stats.validada}</div>
+                    <div class="card-label">Salas Validadas (Livres)</div>
+                    <div class="card-desc">Em conformidade e acessíveis</div>
+                </div>
+                <div class="card ocupada">
+                    <div class="card-number">${stats.ocupada}</div>
+                    <div class="card-label">Salas Ocupadas</div>
+                    <div class="card-desc">Em utilização durante a ronda</div>
+                </div>
+                <div class="card trancada">
+                    <div class="card-number">${stats.trancada}</div>
+                    <div class="card-label">Salas Trancadas</div>
+                    <div class="card-desc">Inacessíveis, requerem verificação</div>
+                </div>
+                <div class="card problema">
+                    <div class="card-number">${stats.problema}</div>
+                    <div class="card-label">Salas com Problema</div>
+                    <div class="card-desc">Alterações ou não conformidades</div>
+                </div>
+            </div>
+            
+            <div class="rooms-listing">
+        `;
+        
+        // Listagem por status
+        if (stats.validada > 0) {
+            html += `
+                <div class="status-group">
+                    <div class="status-group-title">
+                        <span style="background:#2b7a3e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
+                        ✅ ${stats.validada} Salas Validadas (Livres)
+                    </div>
+                    <div class="rooms-badge-list">
+                        ${salasPorStatus.validada.map(sala => `<span class="room-badge validada">${sala}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        if (stats.ocupada > 0) {
+            html += `
+                <div class="status-group">
+                    <div class="status-group-title">
+                        <span style="background:#c9386e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
+                        👥 ${stats.ocupada} Salas Ocupadas
+                    </div>
+                    <div class="rooms-badge-list">
+                        ${salasPorStatus.ocupada.map(sala => `<span class="room-badge ocupada">${sala}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        if (stats.trancada > 0) {
+            html += `
+                <div class="status-group">
+                    <div class="status-group-title">
+                        <span style="background:#5e3c9e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
+                        🔒 ${stats.trancada} Salas Trancadas
+                    </div>
+                    <div class="rooms-badge-list">
+                        ${salasPorStatus.trancada.map(sala => `<span class="room-badge trancada">${sala}</span>`).join('')}
+                    </div>
+                    <div class="card-desc" style="margin-top:8px;">Inacessíveis, requerem verificação de chaves/acessos.</div>
+                </div>
+            `;
+        }
+        
+        if (stats.problema > 0) {
+            html += `
+                <div class="status-group">
+                    <div class="status-group-title">
+                        <span style="background:#e06c2e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
+                        ⚠️ ${stats.problema} Salas com Problema
+                    </div>
+                    <div class="rooms-badge-list">
+                        ${salasPorStatus.problema.map(sala => `<span class="room-badge problema">${sala}</span>`).join('')}
+                    </div>
+                    <div class="card-desc" style="margin-top:8px;">Atualização de layout ou não conformidade identificada.</div>
+                </div>
+            `;
+        }
+        
+        if (totalInspecionadas === 0) {
+            html += `<div class="empty-state">✨ Nenhuma validação registrada ainda. Selecione um andar, clique em uma sala e escolha o status.</div>`;
+        }
+        
+        html += `
+            </div>
+            <div class="report-footer">
+                <div>🕵️ Auditor: ${auditor} | 🏢 Edifício: ${predioNome}</div>
+                <div>📍 ${enderecoAtual}</div>
+                <div>📅 Relatório gerado em: ${now}</div>
+                <div style="margin-top:8px;">✅ Legenda: Formato "Andar-Sala" (ex: 17-05 = 17° andar, sala 5)</div>
+            </div>
+        `;
+        
+        reportContent.innerHTML = html;
+    }
+    
+    function generateTextReport() {
+        const salasPorStatus = { validada: [], trancada: [], problema: [], ocupada: [] };
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const salas = [];
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const status = buildingData[f][r];
                 if (status !== null) {
-                    salas.push({ numero: r + 1, status: status });
+                    const salaId = `${f+1}-${r+1}`;
+                    salasPorStatus[status].push(salaId);
                 }
-            }
-            if (salas.length > 0) {
-                floorsData.push({ andar: f + 1, salas: salas });
             }
         }
         
-        return { auditor, predioNome, enderecoAtual, floorsData };
-    }
-
-    function updateReport() {
-        const stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const s = buildingData[f][r];
-                if (s === 'validada') stats.validada++;
-                else if (s === 'trancada') stats.trancada++;
-                else if (s === 'problema') stats.problema++;
-                else if (s === 'ocupada') stats.ocupada++;
-                else stats.limpa++;
-            }
-        }
-        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
+        const stats = {
+            validada: salasPorStatus.validada.length,
+            trancada: salasPorStatus.trancada.length,
+            problema: salasPorStatus.problema.length,
+            ocupada: salasPorStatus.ocupada.length
+        };
+        const total = stats.validada + stats.trancada + stats.problema + stats.ocupada;
+        
+        const auditor = auditorInput.value.trim() || "Não informado";
         const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
+        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
         const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
-
-        reportStatsDiv.innerHTML = `
-            <div class="stat-item">✅ ${stats.validada}</div>
-            <div class="stat-item">🔒 ${stats.trancada}</div>
-            <div class="stat-item">⚠️ ${stats.problema}</div>
-            <div class="stat-item">👥 ${stats.ocupada}</div>
-            <div class="stat-item">⚪ ${stats.limpa}</div>
-            <div class="stat-item">📊 ${total}</div>
-        `;
-
-        // Construir relatório com números das salas
-        const floorsWithData = [];
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const salasPorStatus = { validada: [], trancada: [], problema: [], ocupada: [] };
-            let hasAny = false;
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const s = buildingData[f][r];
-                if (s !== null) {
-                    hasAny = true;
-                    if (s === 'validada') salasPorStatus.validada.push(r + 1);
-                    else if (s === 'trancada') salasPorStatus.trancada.push(r + 1);
-                    else if (s === 'problema') salasPorStatus.problema.push(r + 1);
-                    else if (s === 'ocupada') salasPorStatus.ocupada.push(r + 1);
-                }
-            }
-            if (hasAny) {
-                floorsWithData.push({ andar: f + 1, salas: salasPorStatus });
-            }
-        }
-
         const now = new Date().toLocaleString('pt-BR');
-        reportTimeSpan.innerText = `🕘 ${now}`;
-
-        if (floorsWithData.length === 0) {
-            reportDetailDiv.innerHTML = `<div class="empty-report">✨ Nenhuma validação registrada ainda.<br>Siga o fluxo: andar → sala → status.</div>`;
-        } else {
-            let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
-            for (let item of floorsWithData) {
-                const totalSalas = item.salas.validada.length + item.salas.trancada.length + item.salas.problema.length + item.salas.ocupada.length;
-                html += `<div class="floor-card-clean">
-                    <div class="floor-title-clean">🏢 ${item.andar}° ANDAR — ${totalSalas} sala(s) validada(s)</div>`;
-                
-                if (item.salas.validada.length > 0) {
-                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">✅ Validada:</span> `;
-                    html += item.salas.validada.map(n => `<span class="room-tag validada">Sala ${n}</span>`).join(' ');
-                    html += `</div>`;
-                }
-                if (item.salas.trancada.length > 0) {
-                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">🔒 Trancada:</span> `;
-                    html += item.salas.trancada.map(n => `<span class="room-tag trancada">Sala ${n}</span>`).join(' ');
-                    html += `</div>`;
-                }
-                if (item.salas.problema.length > 0) {
-                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">⚠️ Problema:</span> `;
-                    html += item.salas.problema.map(n => `<span class="room-tag problema">Sala ${n}</span>`).join(' ');
-                    html += `</div>`;
-                }
-                if (item.salas.ocupada.length > 0) {
-                    html += `<div class="rooms-list-clean"><span style="font-weight:600;">👥 Ocupada:</span> `;
-                    html += item.salas.ocupada.map(n => `<span class="room-tag ocupada">Sala ${n}</span>`).join(' ');
-                    html += `</div>`;
-                }
-                html += `</div>`;
-            }
-            html += `<div style="margin-top:12px; font-size:0.7rem; color:#6c7a8e;">✔️ Andares sem validação estão ocultos.</div>`;
-            reportDetailDiv.innerHTML = html;
+        
+        let text = `📋 RELATÓRIO DE VALIDAÇÃO - SYS AUDIT\n`;
+        text += `══════════════════════════════════════════════════\n\n`;
+        text += `🕵️ Auditor: ${auditor}\n`;
+        text += `🏢 Edifício: ${predioNome}\n`;
+        text += `📍 Endereço: ${enderecoAtual}\n`;
+        text += `📅 Data/Hora: ${now}\n\n`;
+        text += `📊 RESUMO DO ESTADO DAS SALAS\n`;
+        text += `────────────────────────────────────────\n`;
+        text += `✅ ${stats.validada} Salas Validadas (Livres) - Em conformidade e acessíveis\n`;
+        text += `👥 ${stats.ocupada} Salas Ocupadas - Em utilização durante a ronda\n`;
+        text += `🔒 ${stats.trancada} Salas Trancadas - Inacessíveis, requerem verificação\n`;
+        text += `⚠️ ${stats.problema} Salas com Problema - Alterações ou não conformidades\n`;
+        text += `📊 Total de salas inspecionadas: ${total}\n\n`;
+        
+        if (stats.ocupada > 0) {
+            text += `SALAS OCUPADAS:\n`;
+            text += `${salasPorStatus.ocupada.join(', ')}\n\n`;
         }
+        
+        if (stats.trancada > 0) {
+            text += `SALAS TRANCADAS:\n`;
+            text += `${salasPorStatus.trancada.join(', ')}\n\n`;
+        }
+        
+        if (stats.problema > 0) {
+            text += `SALAS COM PROBLEMA:\n`;
+            text += `${salasPorStatus.problema.join(', ')}\n\n`;
+        }
+        
+        text += `══════════════════════════════════════════════════\n`;
+        text += `✨ Relatório gerado pelo SysAudit Pro\n`;
+        
+        return text;
     }
-
-    // Exportar relatório em formato texto para compartilhar
+    
     function exportReport() {
-        const data = getDetailedReportData();
-        const stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const s = buildingData[f][r];
-                if (s === 'validada') stats.validada++;
-                else if (s === 'trancada') stats.trancada++;
-                else if (s === 'problema') stats.problema++;
-                else if (s === 'ocupada') stats.ocupada++;
-                else stats.limpa++;
-            }
-        }
-        const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        const now = new Date().toLocaleString('pt-BR');
-        
-        let reportText = `📋 RELATÓRIO DE VALIDAÇÃO - SYS AUDIT\n`;
-        reportText += `═══════════════════════════════════════\n`;
-        reportText += `🕵️ Auditor: ${data.auditor}\n`;
-        reportText += `🏢 Edifício: ${data.predioNome}\n`;
-        reportText += `📍 Endereço: ${data.enderecoAtual}\n`;
-        reportText += `📅 Data/Hora: ${now}\n`;
-        reportText += `────────────────────────────────────────\n`;
-        reportText += `📊 ESTATÍSTICAS GERAIS:\n`;
-        reportText += `✅ Validada: ${stats.validada}  |  🔒 Trancada: ${stats.trancada}\n`;
-        reportText += `⚠️ Problema: ${stats.problema}  |  👥 Ocupada: ${stats.ocupada}\n`;
-        reportText += `⚪ Aguardando: ${stats.limpa}  |  🏢 Total: ${total}\n`;
-        reportText += `────────────────────────────────────────\n`;
-        reportText += `📋 DETALHAMENTO POR ANDAR:\n\n`;
-        
-        if (data.floorsData.length === 0) {
-            reportText += `✨ Nenhuma validação registrada ainda.\n`;
-        } else {
-            for (let floor of data.floorsData) {
-                reportText += `【 ${floor.andar}° ANDAR 】\n`;
-                const validas = floor.salas.filter(s => s.status === 'validada').map(s => s.numero);
-                const trancadas = floor.salas.filter(s => s.status === 'trancada').map(s => s.numero);
-                const problemas = floor.salas.filter(s => s.status === 'problema').map(s => s.numero);
-                const ocupadas = floor.salas.filter(s => s.status === 'ocupada').map(s => s.numero);
-                
-                if (validas.length) reportText += `   ✅ Validada: Salas ${validas.join(', ')}\n`;
-                if (trancadas.length) reportText += `   🔒 Trancada: Salas ${trancadas.join(', ')}\n`;
-                if (problemas.length) reportText += `   ⚠️ Problema: Salas ${problemas.join(', ')}\n`;
-                if (ocupadas.length) reportText += `   👥 Ocupada: Salas ${ocupadas.join(', ')}\n`;
-                reportText += `\n`;
-            }
-        }
-        reportText += `═══════════════════════════════════════\n`;
-        reportText += `✨ Relatório gerado pelo SysAudit Pro\n`;
-        
-        // Copiar para área de transferência e também oferecer download
-        navigator.clipboard.writeText(reportText).then(() => {
-            alert("✅ Relatório copiado para a área de transferência!\n\nAgora você pode colar no WhatsApp, Teams, E-mail ou salvar em um bloco de notas.");
+        const text = generateTextReport();
+        navigator.clipboard.writeText(text).then(() => {
+            alert("✅ Relatório copiado para a área de transferência!\n\nAgora você pode colar no WhatsApp, Teams, E-mail ou em qualquer aplicativo.");
         }).catch(() => {
-            alert("⚠️ Não foi possível copiar automaticamente. Mas você pode selecionar o texto abaixo e copiar manualmente.");
+            alert("⚠️ Relatório gerado! Você pode copiar manualmente ou baixar o arquivo.");
         });
         
-        // Também criar um blob para download como arquivo .txt
-        const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
         link.href = url;
-        link.download = `relatorio_validacao_${data.auditor.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
+        const auditorNome = auditorInput.value.trim().replace(/\s/g, '_') || "relatorio";
+        link.download = `ronda_validacao_${auditorNome}_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     }
-
+    
     function clearAll() {
         if (confirm("Limpar tudo? Todas as salas ficarão cinza (aguardando) e o relatório será zerado.")) {
             buildingData = initDataCleared();
             selectedRoom = null;
             renderFloorsList();
             renderRoomsForCurrentFloor();
-            updateReport();
+            updateExecutiveReport();
         }
     }
-
+    
     function resetToValidada() {
-        if (confirm("Resetar todas as salas para status VALIDADA? O relatório será atualizado.")) {
-            buildingData = initDataValidada();
+        if (confirm("Resetar todas as salas para status VALIDADA (Livre)? O relatório será atualizado.")) {
+            for (let f = 0; f < TOTAL_FLOORS; f++) {
+                for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
+                    buildingData[f][r] = 'validada';
+                }
+            }
             selectedRoom = null;
             renderFloorsList();
             renderRoomsForCurrentFloor();
-            updateReport();
+            updateExecutiveReport();
         }
     }
-
+    
     function setupStatusButtons() {
         const btns = document.querySelectorAll('.status-btn');
         btns.forEach(btn => {
@@ -832,19 +913,19 @@ Aqui está a versão completa com um relatório que agora exibe o número das sa
         });
         document.querySelector('.status-btn.validada')?.classList.add('active-status');
     }
-
-    radioBerrini.addEventListener('change', () => updateReport());
-    radioChucri.addEventListener('change', () => updateReport());
-    auditorInput.addEventListener('input', () => updateReport());
+    
+    radioBerrini.addEventListener('change', () => updateExecutiveReport());
+    radioChucri.addEventListener('change', () => updateExecutiveReport());
+    auditorInput.addEventListener('input', () => updateExecutiveReport());
     clearAllBtn.addEventListener('click', clearAll);
     resetValidadaBtn.addEventListener('click', resetToValidada);
     exportReportBtn.addEventListener('click', exportReport);
-
+    
     function init() {
         renderFloorsList();
         renderRoomsForCurrentFloor();
         setupStatusButtons();
-        updateReport();
+        updateExecutiveReport();
     }
     init();
 </script>
