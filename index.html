@@ -48,7 +48,7 @@ label{display:block;margin:12px 0 6px 0;font-size:11px;font-weight:600;text-tran
 textarea.form-field{min-height:60px;resize:vertical}
 
 .number-input-group{display:flex;gap:12px;margin-bottom:8px}
-.number-input-group input{flex:1}
+.number-input-group input, .number-input-group select{flex:1}
 
 /* STATUS */
 .status-strip{display:flex;gap:10px;margin:16px 0 20px;flex-wrap:wrap}
@@ -180,6 +180,7 @@ textarea.form-field{min-height:60px;resize:vertical}
 .fullscreen-modal img{max-width:95%;max-height:95%;border-radius:16px;box-shadow:0 0 50px rgba(102,0,204,.5)}
 </style>
 </head>
+
 <body>
 <div class="app">
 
@@ -200,14 +201,15 @@ textarea.form-field{min-height:60px;resize:vertical}
     <label>📍 Endereço</label>
     <input id="endereco" class="form-field" placeholder="Endereço automático"/>
 
+    <!-- Andar/Sala conforme MODELO (anexo) -->
     <div class="number-input-group">
       <div style="flex:1">
         <label>🏬 Andar</label>
-        <input type="number" id="floorInput" class="form-field" min="1" max="32" value="1" placeholder="1-32"/>
+        <select id="floorInput" class="form-field"></select>
       </div>
       <div style="flex:1">
         <label>🚪 Sala</label>
-        <input type="number" id="roomInput" class="form-field" min="1" max="50" value="1" placeholder="1-50"/>
+        <select id="roomInput" class="form-field"></select>
       </div>
     </div>
 
@@ -231,7 +233,7 @@ textarea.form-field{min-height:60px;resize:vertical}
       <button id="btnClear" class="btn">🗑️ Limpar Tudo</button>
     </div>
 
-    <p class="small">💡 Digite o andar e sala → clique no status para registrar</p>
+    <p class="small">💡 Selecione prédio/andar/sala → clique no status para registrar</p>
   </div>
 
   <!-- DIREITA -->
@@ -307,11 +309,90 @@ const STORAGE_KEY = "vistoria_simple_v2";
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let currentFloor = 1, currentRoom = 1, currentImageData = null;
 
+/* ===== Modelo de Prédio -> Andares -> Salas (EDITE CONFORME ANEXO) =====
+   - Andares e salas devem estar com 2 dígitos: "01", "02"... */
+const PREDIOS_MODEL = {
+  "Eco Berrini": {
+    endereco: "Av. Eng. Luís Carlos Berrini, 1376 - SP",
+    andares: {
+      "01": ["01","02","03","04","05","06","07","08","09","10"],
+      "02": ["01","02","03","04","05","06","07","08","09","10"],
+      "03": ["01","02","03","04","05","06","07","08","09","10"]
+      // >>> COLE AQUI O RESTO DO ANEXO <<<
+    }
+  },
+  "Chucri Zaidan": {
+    endereco: "Av. Dr. Chucri Zaidan, 2460 - SP",
+    andares: {
+      "01": ["01","02","03","04","05"],
+      "02": ["01","02","03","04","05"],
+      "03": ["01","02","03","04","05"]
+      // >>> COLE AQUI O RESTO DO ANEXO <<<
+    }
+  }
+};
+
 /* ===== Helpers ===== */
 const pad2 = n => String(n).padStart(2,"0");
 const statusName  = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Outros";
 const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"other";
 const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"◻️";
+
+function setSelectOptions(selectEl, values, fallbackValue){
+  selectEl.innerHTML = "";
+  values.forEach(v => {
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    selectEl.appendChild(opt);
+  });
+  if(values.length === 0){
+    const opt = document.createElement("option");
+    opt.value = "01"; opt.textContent = "01";
+    selectEl.appendChild(opt);
+    selectEl.value = "01";
+    return;
+  }
+  if(fallbackValue && values.includes(fallbackValue)) selectEl.value = fallbackValue;
+  else selectEl.value = values[0];
+}
+
+function getCurrentModel(){
+  const predio = predioSel.value;
+  return PREDIOS_MODEL[predio] || null;
+}
+
+function refreshFloorRoomByModel(keepFloor, keepRoom){
+  const model = getCurrentModel();
+
+  // Se não selecionou prédio (ou sem modelo), cria fallback mínimo
+  if(!model){
+    enderecoInp.value = "";
+    setSelectOptions(floorInput, ["01"], "01");
+    setSelectOptions(roomInput, ["01"], "01");
+    updateCurrentDisplay();
+    renderCurrentPhotos();
+    renderCreated();
+    renderReportWithPhotos();
+    return;
+  }
+
+  // Endereço automático do modelo
+  enderecoInp.value = model.endereco || "";
+
+  // Preenche andares
+  const floors = Object.keys(model.andares || {}).sort();
+  setSelectOptions(floorInput, floors, keepFloor);
+
+  // Preenche salas do andar escolhido
+  const rooms = (model.andares[floorInput.value] || []).slice().sort();
+  setSelectOptions(roomInput, rooms, keepRoom);
+
+  updateCurrentDisplay();
+  renderCurrentPhotos();
+  renderCreated();
+  renderReportWithPhotos();
+}
 
 /* ===== DOM ===== */
 const floorInput   = document.getElementById("floorInput");
@@ -329,18 +410,35 @@ const shareModal   = document.getElementById("shareModal");
 
 /* ===== Sala atual ===== */
 function updateCurrentDisplay(){
-  currentFloor = Math.min(32, Math.max(1, parseInt(floorInput.value)||1));
-  currentRoom  = Math.min(50, Math.max(1, parseInt(roomInput.value)||1));
-  floorInput.value = currentFloor; roomInput.value = currentRoom;
-  dispFloor.textContent = pad2(currentFloor); dispRoom.textContent = pad2(currentRoom);
+  // Agora são SELECTs com valores "01","02",...
+  const fStr = floorInput.value || "01";
+  const rStr = roomInput.value  || "01";
+  currentFloor = parseInt(fStr,10) || 1;
+  currentRoom  = parseInt(rStr,10) || 1;
+  dispFloor.textContent = pad2(currentFloor);
+  dispRoom.textContent  = pad2(currentRoom);
 }
-floorInput.addEventListener("input", ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
-roomInput.addEventListener("input",  ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
+
+floorInput.addEventListener("change", () => {
+  // ao mudar andar, recarrega salas conforme modelo
+  const model = getCurrentModel();
+  if(model){
+    const rooms = (model.andares[floorInput.value] || []).slice().sort();
+    setSelectOptions(roomInput, rooms, roomInput.value);
+  }
+  updateCurrentDisplay();
+  renderCurrentPhotos();
+});
+roomInput.addEventListener("change", () => {
+  updateCurrentDisplay();
+  renderCurrentPhotos();
+});
 
 /* ===== Fotos por sala ===== */
 const roomKey = (f,r)=>`A${pad2(f)}-S${pad2(r)}`;
 const getRoomPhotos = (f,r)=> JSON.parse(localStorage.getItem(`photos_${roomKey(f,r)}`)||"[]");
 const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`, JSON.stringify(arr));
+
 function addPhotoToRoom(f,r,photo){
   const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
@@ -390,7 +488,27 @@ function renderCreated(){
   sorted.forEach(it=>{
     const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
     const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
-    card.onclick=()=>{ floorInput.value=it.f; roomInput.value=it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
+    card.onclick=()=>{
+      // ao clicar na card, posiciona selects
+      const model = getCurrentModel();
+      const fStr = pad2(it.f), rStr = pad2(it.r);
+      if(model){
+        // garantir que andar existe no modelo; se não existir, força fallback
+        if(model.andares && model.andares[fStr]){
+          floorInput.value = fStr;
+          const rooms = (model.andares[fStr]||[]).slice().sort();
+          setSelectOptions(roomInput, rooms, rStr);
+        }else{
+          // se o item salvo não existe mais no modelo, ainda assim mostra
+          floorInput.value = fStr;
+          roomInput.value  = rStr;
+        }
+      }else{
+        floorInput.value = fStr;
+        roomInput.value  = rStr;
+      }
+      updateCurrentDisplay(); renderCurrentPhotos();
+    };
     const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • S${pad2(it.r)}${has?' 📸':''}`;
     const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
     card.appendChild(badge); card.appendChild(pill);
@@ -463,7 +581,10 @@ function renderReportWithPhotos(){
   let totalFotos = 0; const roomsWithPhotos = [];
   entries.forEach(item=>{
     const photos = getRoomPhotos(item.f,item.r);
-    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-S${pad2(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
+    if(photos.length){
+      totalFotos += photos.length;
+      roomsWithPhotos.push({room:`A${pad2(item.f)}-S${pad2(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos});
+    }
   });
 
   let mainHtml;
@@ -571,14 +692,21 @@ function exportCsv(){
 
 /* ===== Persistência & util ===== */
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
-function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
-  t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000); }
+function showToast(msg){
+  let t=document.querySelector(".toast");
+  if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
+  t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000);
+}
 
 /* ===== Listeners ===== */
 photoBtn.addEventListener("click", ()=> photoInput.click());
 photoInput.addEventListener("change",(e)=>{
   const files=[...e.target.files];
-  files.forEach(file=>{ const rd=new FileReader(); rd.onload=ev=> addPhotoToRoom(currentFloor,currentRoom,ev.target.result); rd.readAsDataURL(file); });
+  files.forEach(file=>{
+    const rd=new FileReader();
+    rd.onload=ev=> addPhotoToRoom(currentFloor,currentRoom,ev.target.result);
+    rd.readAsDataURL(file);
+  });
   photoInput.value="";
 });
 
@@ -606,19 +734,20 @@ document.getElementById("btnClear").addEventListener("click", ()=>{
   persist(); renderCreated(); renderReportWithPhotos(); renderCurrentPhotos(); showToast("✓ Todos os dados removidos");
 });
 
-/* Endereço automático por prédio */
-predioSel.addEventListener("change", ()=>{
-  const v=predioSel.value;
-  if(v==="Eco Berrini") enderecoInp.value="Av. Eng. Luís Carlos Berrini, 1376 - SP";
-  else if(v==="Chucri Zaidan") enderecoInp.value="Av. Dr. Chucri Zaidan, 2460 - SP";
-  else enderecoInp.value="";
+/* Prédio -> aplica modelo (andares/salas + endereço) */
+predioSel.addEventListener("change", ()=> {
+  // tenta manter o que já estava selecionado, se existir no modelo
+  refreshFloorRoomByModel(floorInput.value, roomInput.value);
   renderReportWithPhotos();
 });
 
 /* ===== Boot ===== */
 (function init(){
-  updateCurrentDisplay();
-  renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
+  // inicia com selects preenchidos conforme modelo (ou fallback)
+  refreshFloorRoomByModel("01","01");
+  renderCreated();
+  renderReportWithPhotos();
+  renderCurrentPhotos();
 })();
 </script>
 </body>
