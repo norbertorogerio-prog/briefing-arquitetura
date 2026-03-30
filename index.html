@@ -1,625 +1,821 @@
+Aqui está o relatório de vistoria completamente reformulado, usando um prédio como metáfora para uma experiência de usuário funcional e visualmente impactante.
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover"/>
-<title>Relatório de Vistoria | Vivo</title>
+<title>Vistoria Estrutural | Vivo</title>
 
-<!-- Fonte + html2canvas para gerar PNG -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- Fonte + html2canvas -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
-:root{
-  --vivo-purple:#6600CC; --vivo-purple-dark:#4C0099; --vivo-purple-light:#8833FF;
-  --vivo-purple-glow:rgba(102,0,204,.2); --black:#1A1A2E; --gray:#4A4A5A;
-  --gray-light:#6A6A7A; --white:#FFF; --green:#00C853; --yellow:#FFD600;
-  --red:#FF3B3B; --purple-status:#AA00FF; --shadow-md:0 4px 12px rgba(0,0,0,.15);
-  --grad-primary:linear-gradient(135deg,#6600CC 0%,#4C0099 100%);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:linear-gradient(135deg,#1A1A2E 0%,#0F0F1A 100%);
-  color:var(--white);
-  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
-  min-height:100vh; padding:20px;
-}
-.app{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
-@media(min-width:980px){
-  body{padding:24px}
-  .app{flex-direction:row;gap:24px;align-items:flex-start}
-  .app> :first-child{width:380px;flex-shrink:0}
-  .app> :last-child{flex:1;min-width:0}
-}
-.card{
-  background:rgba(26,26,46,.8); backdrop-filter:blur(10px);
-  border:1px solid rgba(102,0,204,.3); border-radius:20px; padding:20px; box-shadow:var(--shadow-md);
-}
-h2{margin:0 0 20px 0;font-weight:700;font-size:18px;background:var(--grad-primary);
-  -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
-h3{margin:0 0 12px 0;font-size:14px;color:#B7B7C8;font-weight:600;text-transform:uppercase}
-label{display:block;margin:12px 0 6px 0;font-size:11px;font-weight:600;text-transform:uppercase;color:#B7B7C8}
-
-.form-field{
-  width:100%; border:1.5px solid rgba(102,0,204,.2); border-radius:12px;
-  background:rgba(255,255,255,.05); color:var(--white); padding:10px 14px; font-size:13px; outline:none; transition:.2s;
-}
-.form-field:focus{border-color:var(--vivo-purple); background:rgba(102,0,204,.1); box-shadow:0 0 0 3px var(--vivo-purple-glow)}
-textarea.form-field{min-height:60px;resize:vertical}
-
-.number-input-group{display:flex;gap:12px;margin-bottom:8px}
-.number-input-group input{flex:1}
-
-/* STATUS */
-.status-strip{display:flex;gap:10px;margin:16px 0 20px;flex-wrap:wrap}
-.status{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:40px;
-  color:var(--white); background:rgba(102,0,204,.15); border:1.5px solid rgba(102,0,204,.3);
-  cursor:pointer;font-size:13px;font-weight:600;transition:.2s; flex:1; min-width:90px;
-}
-.status:hover{background:rgba(102,0,204,.3); transform:translateY(-2px)}
-.status:active{transform:translateY(0)}
-.dot{width:10px;height:10px;border-radius:50%}
-.dot.valid{background:var(--green); box-shadow:0 0 8px rgba(0,200,83,.5)}
-.dot.lock{background:var(--yellow);box-shadow:0 0 8px rgba(255,214,0,.5)}
-.dot.prob{background:var(--red);   box-shadow:0 0 8px rgba(255,59,59,.5)}
-.dot.other{background:var(--purple-status);box-shadow:0 0 8px rgba(170,0,255,.5)}
-
-/* FOTOS */
-.photo-section{margin-top:20px;padding-top:16px;border-top:1px solid rgba(102,0,204,.3)}
-.photo-label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin-bottom:10px}
-.photo-upload-btn{
-  background:rgba(102,0,204,.2); border:1.5px dashed rgba(102,0,204,.5);
-  border-radius:12px; padding:12px; text-align:center; cursor:pointer; transition:.2s; font-size:13px; font-weight:500;
-}
-.photo-upload-btn:hover{background:rgba(102,0,204,.3); border-color:var(--vivo-purple)}
-.photo-gallery{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.photo-item{position:relative;width:80px;height:80px;border-radius:12px;overflow:hidden;border:2px solid rgba(102,0,204,.3);background:rgba(0,0,0,.3)}
-.photo-item img{width:100%;height:100%;object-fit:cover;cursor:pointer}
-.photo-delete{
-  position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border-radius:50%;width:22px;height:22px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:var(--red);transition:.2s
-}
-.photo-delete:hover{background:var(--red);color:#fff;transform:scale(1.1)}
-
-/* BOTÃO */
-.btn{
-  width:100%; border:none; border-radius:12px; background:var(--grad-primary);
-  color:var(--white); font-weight:700; padding:10px; cursor:pointer; font-size:12px; transition:.2s;
-}
-.btn:hover{transform:translateY(-2px); box-shadow:0 4px 12px rgba(102,0,204,.4)}
-.row{display:flex;gap:10px;margin-top:16px} .row button{flex:1}
-
-/* VISOR DIREITO */
-.viewer{display:grid;gap:16px}
-.section{background:rgba(26,26,46,.6); backdrop-filter:blur(10px); border:1px solid rgba(102,0,204,.2); border-radius:20px; padding:20px}
-.small{font-size:11px;color:#9aa; margin-top:12px; text-align:center}
-
-/* GRADE DE ITENS */
-.created-grid{display:flex;flex-wrap:wrap;gap:10px;max-height:400px;overflow-y:auto;padding:4px}
-.room-card{
-  display:inline-flex;flex-direction:column;gap:6px;padding:10px;border-radius:14px;border:1px solid rgba(102,0,204,.2);
-  background:rgba(102,0,204,.1); min-width:110px; transition:.2s;
-}
-.room-card:hover{border-color:var(--vivo-purple); transform:translateY(-2px)}
-.room-card.has-photo{border-color:var(--green)}
-.photo-indicator{font-size:10px;color:var(--green)}
-.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;background:rgba(102,0,204,.3);border-radius:10px;padding:5px 10px}
-.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;border-radius:40px;padding:4px 10px}
-.pill.valid{background:var(--green)} .pill.lock{background:var(--yellow);color:#1A1A2E}
-.pill.prob{background:var(--red)} .pill.other{background:var(--purple-status)}
-
-/* RELATÓRIO (mock de celular) */
-.report-box{border-radius:16px;background:rgba(0,0,0,.3);overflow:hidden;border:1px solid rgba(102,0,204,.3)}
-.report-title{background:linear-gradient(135deg,rgba(102,0,204,.2) 0%,rgba(76,0,153,.2) 100%);
-  padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid rgba(102,0,204,.3)}
-.report-title span{font-size:14px;font-weight:700;background:var(--grad-primary);-webkit-background-clip:text;background-clip:text;color:transparent}
-.report-actions{display:flex;gap:10px;flex-wrap:wrap}
-.btn-action{
-  border:1.5px solid rgba(102,0,204,.3); background:rgba(102,0,204,.15); color:var(--white);
-  font-weight:600; font-size:12px; padding:8px 16px; border-radius:10px; cursor:pointer; transition:.2s
-}
-.btn-action:hover{background:rgba(102,0,204,.3); transform:translateY(-1px)}
-.btn-share{background:linear-gradient(135deg,#6600CC 0%,#8833FF 100%); border:none}
-.btn-png{background:linear-gradient(135deg,#4C0099 0%,#6600CC 100%); border:none}
-
-/* Phone mock */
-.phone-wrap{
-  margin:10px auto; width:360px; border-radius:40px; padding:14px 12px 18px;
-  background:linear-gradient(180deg,#5d05c7 0%, #4C0099 100%); box-shadow:0 20px 50px rgba(102,0,204,.35);
-  border:2px solid rgba(255,255,255,.08); position:relative;
-}
-.phone-notch{width:180px;height:22px;background:rgba(0,0,0,.35);border-radius:0 0 14px 14px;margin:0 auto 10px}
-.phone-screen{
-  background:#0f0f1a; border-radius:28px; border:1px solid rgba(255,255,255,.06); overflow:hidden; position:relative;
-}
-.phone-footer{
-  display:flex; align-items:center; justify-content:center; padding:14px 10px 18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.04)); border-top:1px solid rgba(255,255,255,.08)
-}
-.vivo-logo{
-  font-weight:900; letter-spacing:2px; font-size:13px;
-  background:linear-gradient(135deg,#fff 0%,#d9c9ff 100%); -webkit-background-clip:text;background-clip:text;color:transparent;
-  border:1px solid rgba(255,255,255,.25); padding:6px 12px; border-radius:999px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Conteúdo na “tela” */
-.phone-screen .report-content{background:transparent;padding:18px 16px 6px;max-height:550px;overflow-y:auto;font-size:13px;line-height:1.55}
-.report-content .h-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);margin:10px 0}
-.report-content .title{font-weight:800;font-size:14px;letter-spacing:.3px;color:#eae6ff}
-.report-content .kvs{margin:8px 0 0}
-.report-content .kv{display:flex;gap:10px;font-size:12px;margin:3px 0}
-.report-content .kv b{color:#cfc3ff;min-width:92px;text-transform:uppercase;font-size:11px;letter-spacing:.4px}
-.report-content .bullet{margin:4px 0 0 14px}
+body {
+  background: linear-gradient(145deg, #0A0A14 0%, #11111F 100%);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  padding: 2rem;
+  min-height: 100vh;
+  color: #EDEDF5;
+}
 
-/* Fotos dentro do relatório */
-.report-room-photos{margin:16px 0;padding:16px;background:rgba(102,0,204,.1);border-radius:16px}
-.report-room-title{font-weight:700;color:var(--vivo-purple-light);margin-bottom:12px;font-size:14px}
-.report-photo-thumbnails{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
-.report-thumb{width:100px;height:100px;border-radius:12px;object-fit:cover;border:2px solid var(--vivo-purple);cursor:pointer;transition:.2s}
-.report-thumb:hover{transform:scale(1.05)}
+/* --- ESTRUTURA PRINCIPAL: O PRÉDIO METAFÓRICO --- */
+.building-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: stretch;
+}
 
-/* Toast + Modais */
-.toast{position:fixed;right:20px;bottom:20px;background:rgba(102,0,204,.95);backdrop-filter:blur(10px);
-  padding:12px 20px;border-radius:40px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none}
-.toast.show{opacity:1;transform:translateY(0)}
-.share-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:10000;align-items:center;justify-content:center}
-.share-modal.show{display:flex}
-.share-card{background:rgba(26,26,46,.95);backdrop-filter:blur(20px);border:1px solid rgba(102,0,204,.4);border-radius:24px;padding:24px;max-width:340px;width:90%}
-.share-card h4{margin-bottom:20px;font-size:18px;text-align:center}
-.share-buttons{display:flex;flex-direction:column;gap:12px}
-.share-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;border:none;border-radius:16px;font-weight:700;cursor:pointer}
-.share-btn.whatsapp{background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:#fff}
-.share-btn.teams{background:linear-gradient(135deg,#6264A7 0%,#464775 100%);color:#fff}
-.share-btn.email{background:linear-gradient(135deg,#EA4335 0%,#C5221F 100%);color:#fff}
-.share-btn.download{background:var(--grad-primary);color:#fff}
-.close-modal{background:rgba(102,0,204,.2);border:1px solid rgba(102,0,204,.3);border-radius:14px;padding:10px;margin-top:12px;color:#fff;cursor:pointer;width:100%}
+/* TORRE ESQUERDA - Painel de Controle (Andar/Sala/Status/Fotos) */
+.tower-wing {
+  flex: 0 0 380px;
+  background: rgba(18, 18, 32, 0.75);
+  backdrop-filter: blur(16px);
+  border-radius: 2rem;
+  border: 1px solid rgba(102, 0, 204, 0.35);
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 1.6rem;
+  transition: all 0.2s ease;
+}
 
-.fullscreen-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:20000;align-items:center;justify-content:center;cursor:pointer}
-.fullscreen-modal.show{display:flex}
-.fullscreen-modal img{max-width:95%;max-height:95%;border-radius:16px;box-shadow:0 0 50px rgba(102,0,204,.5)}
+/* TORRE DIREITA - Fachada de Vidro (Relatório + Mockup Celular) */
+.glass-facade {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+/* Elementos arquitetônicos */
+.floorplate {
+  margin-bottom: 1.5rem;
+}
+
+.section-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #8833FF, #6600CC);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.input-pillar {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(102, 0, 204, 0.4);
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input-pillar:focus {
+  border-color: #8833FF;
+  box-shadow: 0 0 0 3px rgba(136, 51, 255, 0.2);
+  background: rgba(102, 0, 204, 0.1);
+}
+
+/* Duplex de andar/sala */
+.duplex-group {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.duplex-group > div {
+  flex: 1;
+}
+
+/* Status: como se fossem sinalizações de planta */
+.status-pavement {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.2rem 0 1rem;
+  flex-wrap: wrap;
+}
+.status-pilar {
+  flex: 1;
+  background: rgba(102, 0, 204, 0.12);
+  border: 1.2px solid rgba(102, 0, 204, 0.35);
+  border-radius: 2rem;
+  padding: 0.6rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  color: #e2e2ff;
+}
+.status-pilar:hover {
+  transform: translateY(-3px);
+  background: rgba(102, 0, 204, 0.3);
+  border-color: #8833FF;
+}
+.dot-struct {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+}
+.dot-valid { background: #00E676; box-shadow: 0 0 8px #00E676; }
+.dot-lock  { background: #FFD966; box-shadow: 0 0 8px #FFD966; }
+.dot-prob  { background: #FF5E5E; box-shadow: 0 0 8px #FF5E5E; }
+.dot-other { background: #C084FC; box-shadow: 0 0 8px #C084FC; }
+
+/* Galeria de fotos como janelas */
+.window-gallery {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(102, 0, 204, 0.4);
+}
+.gallery-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+.add-window-btn {
+  background: rgba(102, 0, 204, 0.2);
+  border: 1.5px dashed #8833FF;
+  border-radius: 1rem;
+  padding: 0.75rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-window-btn:hover {
+  background: rgba(102, 0, 204, 0.4);
+  border-style: solid;
+}
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+.photo-frame {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 2px solid rgba(136, 51, 255, 0.6);
+  background: #00000055;
+  cursor: pointer;
+}
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.delete-window {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ff7b7b;
+  cursor: pointer;
+  transition: 0.1s;
+}
+.delete-window:hover {
+  background: #ff3b3b;
+  color: white;
+}
+
+/* Inventário de salas vistoriadas (como plantas baixas) */
+.inventory-slab {
+  background: rgba(10, 10, 20, 0.6);
+  border-radius: 1.5rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(102, 0, 204, 0.25);
+  backdrop-filter: blur(8px);
+}
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 0.2rem;
+}
+.room-unit {
+  background: linear-gradient(145deg, #1A1A2E, #131325);
+  border-radius: 1.2rem;
+  padding: 0.6rem 1rem;
+  min-width: 110px;
+  border-left: 4px solid #6600CC;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.room-unit:hover {
+  transform: translateY(-2px);
+  background: #23233b;
+  border-left-color: #AA66FF;
+}
+.room-badge {
+  font-weight: 800;
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.status-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  width: fit-content;
+}
+.status-chip.valid { background: #00C85320; color: #69F0AE; border: 1px solid #00C853; }
+.status-chip.lock  { background: #FFC10720; color: #FFE082; border: 1px solid #FFD966; }
+.status-chip.prob  { background: #FF525220; color: #FF9E80; border: 1px solid #FF5E5E; }
+.status-chip.other { background: #AA00FF20; color: #D9B4FF; border: 1px solid #C084FC; }
+
+/* MOCKUP DO CELULAR - O "smart building view" */
+.phone-masterpiece {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(165deg, #2E1B4A, #1A0F2E);
+  border-radius: 3rem;
+  padding: 1rem 0.8rem 1rem 0.8rem;
+  box-shadow: 0 30px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(136, 51, 255, 0.4);
+}
+.phone-notch {
+  width: 140px;
+  height: 24px;
+  background: #0b0b12;
+  margin: 0 auto 0.8rem auto;
+  border-radius: 20px;
+}
+.phone-screen-inner {
+  background: #0C0C16;
+  border-radius: 2rem;
+  overflow-y: auto;
+  max-height: 560px;
+  border: 1px solid rgba(255,255,255,0.05);
+  scrollbar-width: thin;
+}
+.report-content-panel {
+  padding: 1.5rem 1.2rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #eaeef5;
+}
+.phone-footer-brand {
+  text-align: center;
+  margin-top: 0.8rem;
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  background: linear-gradient(120deg, #FFFFFF, #BB99FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Componentes do relatório arquitetônico */
+.report-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.report-actions-group {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.btn-arch {
+  background: rgba(102, 0, 204, 0.2);
+  border: 1px solid #6600CC80;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-arch:hover {
+  background: #6600CC;
+  border-color: #AA66FF;
+  transform: scale(0.97);
+}
+.btn-primary-grad {
+  background: linear-gradient(105deg, #6600CC, #8A2BE2);
+  border: none;
+}
+.divider-light {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8833FF, transparent);
+  margin: 0.8rem 0;
+}
+.kv-row {
+  display: flex;
+  gap: 0.8rem;
+  margin: 0.4rem 0;
+  flex-wrap: wrap;
+}
+.kv-row b {
+  min-width: 80px;
+  color: #B9A6FF;
+  font-weight: 600;
+}
+.evidence-wall {
+  margin: 1rem 0;
+  background: #00000030;
+  border-radius: 1.2rem;
+  padding: 0.8rem;
+}
+.thumb-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+.thumb-img {
+  width: 75px;
+  height: 75px;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  border: 1px solid #AA66FF;
+  cursor: pointer;
+  transition: 0.1s;
+}
+.thumb-img:hover {
+  transform: scale(1.02);
+}
+
+/* Modais e toasts */
+.toast-msg {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2a1a44dd;
+  backdrop-filter: blur(12px);
+  padding: 0.8rem 1.4rem;
+  border-radius: 3rem;
+  font-weight: 500;
+  z-index: 3000;
+  opacity: 0;
+  transition: 0.2s;
+  pointer-events: none;
+}
+.toast-msg.show {
+  opacity: 1;
+  transform: translateY(-5px);
+}
+.modal-glass {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(16px);
+  z-index: 5000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-glass.show {
+  display: flex;
+}
+.modal-card {
+  background: #18182a;
+  border: 1px solid #8833FF;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  max-width: 320px;
+  width: 85%;
+}
+.fullscreen-img {
+  max-width: 92%;
+  max-height: 92%;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 860px) {
+  body { padding: 1rem; }
+  .building-container { flex-direction: column; }
+  .tower-wing { flex: auto; }
+}
 </style>
 </head>
 <body>
-<div class="app">
 
-  <!-- ESQUERDA -->
-  <div class="card">
-    <h2>✨ Vistoria Técnica</h2>
-
-    <label>👤 Auditor</label>
-    <input id="auditor" class="form-field" placeholder="Nome completo"/>
-
-    <label>🏢 Prédio</label>
-    <select id="predio" class="form-field">
-      <option value="">Selecione o prédio</option>
-      <option value="Eco Berrini">Eco Berrini</option>
-      <option value="Chucri Zaidan">Chucri Zaidan</option>
-    </select>
-
-    <label>📍 Endereço</label>
-    <input id="endereco" class="form-field" placeholder="Endereço automático"/>
-
-    <div class="number-input-group">
-      <div style="flex:1">
-        <label>🏬 Andar</label>
-        <input type="number" id="floorInput" class="form-field" min="1" max="32" value="1" placeholder="1-32"/>
+<div class="building-container">
+  <!-- TORRE DE CONTROLE (formulário + fotos) -->
+  <div class="tower-wing">
+    <div class="floorplate">
+      <div class="section-badge">🔧 PAINEL DO ENGENHEIRO</div>
+      <input type="text" id="auditorInput" class="input-pillar" placeholder="Nome do auditor / responsável" />
+      
+      <select id="predioSelect" class="input-pillar" style="margin-top: 1rem;">
+        <option value="">Selecionar edifício</option>
+        <option value="Eco Berrini">Eco Berrini</option>
+        <option value="Chucri Zaidan">Chucri Zaidan</option>
+      </select>
+      <input type="text" id="enderecoAuto" class="input-pillar" placeholder="Endereço (automático)" style="margin-top: 0.8rem;" />
+      
+      <div class="duplex-group">
+        <div>
+          <div class="section-badge" style="margin-bottom: 0.2rem;">🏢 ANDAR</div>
+          <input type="number" id="floorNum" class="input-pillar" min="1" max="32" value="1" />
+        </div>
+        <div>
+          <div class="section-badge" style="margin-bottom: 0.2rem;">🚪 SALA/UNIDADE</div>
+          <input type="number" id="roomNum" class="input-pillar" min="1" max="50" value="1" />
+        </div>
       </div>
-      <div style="flex:1">
-        <label>🚪 Sala</label>
-        <input type="number" id="roomInput" class="form-field" min="1" max="50" value="1" placeholder="1-50"/>
+      
+      <div class="section-badge">📌 STATUS ESTRUTURAL</div>
+      <div class="status-pavement">
+        <button class="status-pilar" data-status="valid"><span class="dot-struct dot-valid"></span>Validado</button>
+        <button class="status-pilar" data-status="lock"><span class="dot-struct dot-lock"></span>Trancado</button>
+        <button class="status-pilar" data-status="prob"><span class="dot-struct dot-prob"></span>Problemas</button>
+        <button class="status-pilar" data-status="other"><span class="dot-struct dot-other"></span>Outros</button>
       </div>
+      
+      <div class="window-gallery">
+        <div class="gallery-title"><span>📸 JANELAS DE EVIDÊNCIA</span> <span id="currentRoomLabel">A01-S01</span></div>
+        <div id="photoUploadTrigger" class="add-window-btn">➕ Adicionar foto (câmera / galeria)</div>
+        <input type="file" id="photoFileInput" accept="image/*" capture="environment" multiple style="display:none" />
+        <div id="photoGalleryContainer" class="photo-grid"></div>
+      </div>
+      <button id="clearAllBtn" class="status-pilar" style="margin-top: 1.5rem; background:#6600CC40;">🗑️ LIMPAR TODOS OS REGISTROS</button>
     </div>
-
-    <label>📌 Status</label>
-    <div class="status-strip">
-      <button class="status" data-status="valid"><span class="dot valid"></span>Validada</button>
-      <button class="status" data-status="lock"><span class="dot lock"></span>Trancada</button>
-      <button class="status" data-status="prob"><span class="dot prob"></span>Problemas</button>
-      <button class="status" data-status="other"><span class="dot other"></span>Outros</button>
-    </div>
-
-    <!-- FOTOS DA SALA ATUAL -->
-    <div class="photo-section">
-      <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">01</span></div>
-      <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto (câmera ou galeria)</div>
-      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" multiple>
-      <div id="photoGallery" class="photo-gallery"></div>
-    </div>
-
-    <div class="row">
-      <button id="btnClear" class="btn">🗑️ Limpar Tudo</button>
-    </div>
-
-    <p class="small">💡 Digite o andar e sala → clique no status para registrar</p>
   </div>
 
-  <!-- DIREITA -->
-  <div class="viewer">
-    <div class="section">
-      <h3>📦 Salas vistoriadas</h3>
-      <div id="createdGrid" class="created-grid">
-        <p class="small" style="text-align:center;width:100%">Nenhuma sala registrada</p>
+  <!-- FACHADA DE VIDRO: inventário + relatório com mockup premium -->
+  <div class="glass-facade">
+    <div class="inventory-slab">
+      <div class="section-badge">🏛️ PLANTAS VISTORIADAS</div>
+      <div id="inventoryList" class="inventory-grid">
+        <div style="text-align:center; width:100%; opacity:0.6;">Nenhuma sala registrada</div>
       </div>
     </div>
-
-    <div class="section">
-      <div class="report-box">
-        <div class="report-title">
-          <span>📋 Relatório de Vistoria</span>
-          <div class="report-actions">
-            <label style="display:inline-flex;align-items:center;gap:6px;font-size:12px;">
-              <input id="useAI" type="checkbox" checked style="accent-color:#6600CC"> IA ligada
-            </label>
-            <button id="btnShare" class="btn-action btn-share">📱 Compartilhar</button>
-            <button id="btnPNG" class="btn-action btn-png">📸 Salvar PNG</button>
-            <button id="btnCopy" class="btn-action">📋 Copiar</button>
-            <button id="btnDownload" class="btn-action">⬇️ Baixar .txt</button>
-            <button id="btnCsv" class="btn-action">🧾 Exportar CSV</button>
+    
+    <div style="background: rgba(0,0,0,0.3); border-radius: 1.5rem; padding: 1rem;">
+      <div class="report-title-bar">
+        <div class="section-badge" style="font-size: 1rem;">📄 LAUDO TÉCNICO</div>
+        <div class="report-actions-group">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 0.7rem; background: #2a1a44; padding: 0.3rem 0.8rem; border-radius: 2rem;"><input type="checkbox" id="toggleAI" checked> IA Arquitetônica</label>
+          <button id="shareReportBtn" class="btn-arch btn-primary-grad">📤 Compartilhar</button>
+          <button id="pngExportBtn" class="btn-arch">📸 PNG</button>
+          <button id="copyReportBtn" class="btn-arch">📋 Copiar</button>
+          <button id="csvExportBtn" class="btn-arch">📊 CSV</button>
+        </div>
+      </div>
+      
+      <!-- MOCKUP CELULAR (alvo para captura e estética) -->
+      <div id="phoneMockBuilding" class="phone-masterpiece">
+        <div class="phone-notch"></div>
+        <div id="reportCaptureTarget" class="phone-screen-inner">
+          <div id="dynamicReport" class="report-content-panel">
+            <div style="font-weight: 700;">🏗️ Relatório Estrutural</div>
+            <div class="divider-light"></div>
+            <div>Aguardando registros de vistoria...</div>
           </div>
         </div>
-
-        <!-- MOCK do celular (alvo do PNG) -->
-        <div id="phoneMock" class="phone-wrap">
-          <div class="phone-notch"></div>
-          <div id="reportCaptureArea" class="phone-screen">
-            <div id="relatorio" class="report-content">
-              <div class="title">Relatório</div>
-              <div class="h-line"></div>
-              <div class="bullet">Aguardando registros...</div>
-            </div>
-            <div class="phone-footer">
-              <div class="vivo-logo">VIVO</div>
-            </div>
-          </div>
-        </div>
-
+        <div class="phone-footer-brand">VIVO INFRAESTRUTURA</div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- Modal de Compartilhamento -->
-<div id="shareModal" class="share-modal">
-  <div class="share-card">
-    <h4>✨ Compartilhar Relatório</h4>
-    <div class="share-buttons">
-      <button id="shareWhatsApp" class="share-btn whatsapp">💬 WhatsApp</button>
-      <button id="shareTeams" class="share-btn teams">💼 Microsoft Teams</button>
-      <button id="shareEmail" class="share-btn email">📧 E-mail</button>
-      <button id="shareSave" class="share-btn download">📸 Salvar imagem</button>
+<!-- MODAL COMPARTILHAR -->
+<div id="shareModalGlobal" class="modal-glass">
+  <div class="modal-card">
+    <h4 style="margin-bottom: 1rem;">✨ Compartilhar Laudo</h4>
+    <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+      <button id="whatsappShareBtn" class="btn-arch" style="background:#25D366;">WhatsApp</button>
+      <button id="teamsShareBtn" class="btn-arch" style="background:#464775;">Teams</button>
+      <button id="emailShareBtn" class="btn-arch" style="background:#EA4335;">E-mail</button>
+      <button id="saveImageShareBtn" class="btn-arch">Salvar Imagem</button>
     </div>
-    <button id="closeModal" class="close-modal">Fechar</button>
+    <button id="closeModalShare" class="btn-arch" style="margin-top: 1rem; width:100%;">Fechar</button>
   </div>
 </div>
-
-<!-- Modal foto em tela cheia -->
-<div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
-  <img id="fullscreenImage" src="">
-</div>
-
-<div class="toast"></div>
+<div id="fullscreenModal" class="modal-glass" onclick="closeFullscreenImg()"><img id="fullscreenImg" style="max-width: 90%; max-height: 90%; border-radius: 2rem;" /></div>
+<div id="toastRoot" class="toast-msg"></div>
 
 <script>
-/* ===== Estado ===== */
-const STORAGE_KEY = "vistoria_simple_v2";
-let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-let currentFloor = 1, currentRoom = 1, currentImageData = null;
-
-/* ===== Helpers ===== */
-const pad2 = n => String(n).padStart(2,"0");
-const statusName  = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Outros";
-const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"other";
-const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"◻️";
-
-/* ===== DOM ===== */
-const floorInput   = document.getElementById("floorInput");
-const roomInput    = document.getElementById("roomInput");
-const dispFloor    = document.getElementById("currentDisplayFloor");
-const dispRoom     = document.getElementById("currentDisplayRoom");
-const createdGrid  = document.getElementById("createdGrid");
-const predioSel    = document.getElementById("predio");
-const enderecoInp  = document.getElementById("endereco");
-const auditorInp   = document.getElementById("auditor");
-const obsInp       = document.createElement("textarea"); // Observações globais (interno, IA compõe sem campo extra visual)
-const photoInput   = document.getElementById("photoInput");
-const photoBtn     = document.getElementById("photoUploadBtn");
-const shareModal   = document.getElementById("shareModal");
-
-/* ===== Sala atual ===== */
-function updateCurrentDisplay(){
-  currentFloor = Math.min(32, Math.max(1, parseInt(floorInput.value)||1));
-  currentRoom  = Math.min(50, Math.max(1, parseInt(roomInput.value)||1));
-  floorInput.value = currentFloor; roomInput.value = currentRoom;
-  dispFloor.textContent = pad2(currentFloor); dispRoom.textContent = pad2(currentRoom);
-}
-floorInput.addEventListener("input", ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
-roomInput.addEventListener("input",  ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
-
-/* ===== Fotos por sala ===== */
-const roomKey = (f,r)=>`A${pad2(f)}-S${pad2(r)}`;
-const getRoomPhotos = (f,r)=> JSON.parse(localStorage.getItem(`photos_${roomKey(f,r)}`)||"[]");
-const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`, JSON.stringify(arr));
-function addPhotoToRoom(f,r,photo){
-  const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
-  if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
-  renderCreated(); renderReportWithPhotos();
-}
-function deletePhotoFromRoom(f,r,idx){
-  const arr = getRoomPhotos(f,r); arr.splice(idx,1); saveRoomPhotos(f,r,arr);
-  if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
-  renderCreated(); renderReportWithPhotos(); showToast("📸 Foto removida");
-}
-function renderCurrentPhotos(){
-  const gal = document.getElementById("photoGallery");
-  const photos = getRoomPhotos(currentFloor,currentRoom);
-  if(!photos.length){ gal.innerHTML = '<p class="small" style="text-align:center;width:100%">Nenhuma foto adicionada</p>'; return; }
-  gal.innerHTML = "";
-  photos.forEach((p,i)=>{
-    const div = document.createElement("div");
-    div.className="photo-item";
-    div.innerHTML = `
-      <img src="${p}" alt="Foto" onclick="showFullscreenImage('${p}')">
-      <div class="photo-delete" onclick="event.stopPropagation(); deletePhotoFromRoom(${currentFloor},${currentRoom},${i})">✕</div>`;
-    gal.appendChild(div);
-  });
-}
-function showFullscreenImage(src){ const m=document.getElementById("fullscreenModal"),i=document.getElementById("fullscreenImage"); i.src=src; m.classList.add("show"); }
-function closeFullscreen(){ document.getElementById("fullscreenModal").classList.remove("show"); }
-window.deletePhotoFromRoom=deletePhotoFromRoom; window.showFullscreenImage=showFullscreenImage; window.closeFullscreen=closeFullscreen;
-
-/* ===== Registrar sala ao clicar status ===== */
-document.querySelectorAll(".status").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const status = btn.dataset.status, f=currentFloor, r=currentRoom;
-    const idx = entries.findIndex(e=> e.f===f && e.r===r);
-    if(idx>=0) entries[idx].status = status; else entries.push({f,r,status});
-    persist(); renderCreated(); renderReportWithPhotos();
-    showToast(`✅ A${pad2(f)}-S${pad2(r)}: ${statusName(status)}`);
-  });
-});
-
-/* ===== Grade de itens criados ===== */
-function renderCreated(){
-  const sorted = [...entries].sort((a,b)=> a.f-b.f || a.r-b.r);
-  const title = document.querySelector('.section h3');
-  title.innerHTML = `📦 Salas vistoriadas (${entries.length})`;
-  if(!sorted.length){ createdGrid.innerHTML='<p class="small" style="text-align:center;width:100%">Nenhuma sala registrada</p>'; return; }
-  createdGrid.innerHTML="";
-  sorted.forEach(it=>{
-    const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
-    const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
-    card.onclick=()=>{ floorInput.value=it.f; roomInput.value=it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
-    const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • S${pad2(it.r)}${has?' 📸':''}`;
-    const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
-    card.appendChild(badge); card.appendChild(pill);
-    if(has){ const pi=document.createElement("div"); pi.className="photo-indicator"; pi.textContent=`📸 ${photos.length} foto(s)`; card.appendChild(pi); }
-    createdGrid.appendChild(card);
-  });
-}
-
-/* ===== IA de narrativa (clean & pro) ===== */
-function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
-  const stats={valid:0,lock:0,prob:0,other:0}, floors={};
-  entries.forEach(e=>{
-    stats[e.status]=(stats[e.status]||0)+1;
-    if(!floors[e.f]) floors[e.f]={valid:[],lock:[],prob:[],other:[]};
-    floors[e.f][e.status].push(e.r);
-  });
-  const total=entries.length, dataStr=new Date().toLocaleString("pt-BR");
-  const headline = total===0
-    ? "Nenhuma sala foi registrada nesta vistoria."
-    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"} e ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios relevantes"}.`;
-
-  const meta =
-`<div class="kv"><b>Prédio</b><span>${predio||"—"}</span></div>
-<div class="kv"><b>Endereço</b><span>${endereco||"—"}</span></div>
-<div class="kv"><b>Data</b><span>${dataStr}</span></div>
-<div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
-
-  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • ◻️ Outros: ${stats.other}`;
-
-  let detalhe = "";
-  if(total>0){
-    detalhe += `<div class="bullet"><b>Detalhe por andar</b></div>`;
-    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f=>{
-      const a=floors[f], parts=[];
-      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.other.length) parts.push(`◻️ ${a.other.length} (${a.other.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      detalhe += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")||"—"}</div>`;
+  // ===================== ESTADO CENTRAL ==================
+  let inspectionEntries = JSON.parse(localStorage.getItem("vistoria_pro_db") || "[]");
+  let currentFloor = 1, currentRoom = 1;
+  let generatedImageData = null;
+  
+  const pad = n => String(n).padStart(2,'0');
+  const roomKey = (f,r) => `foto_${pad(f)}_${pad(r)}`;
+  const getRoomPhotos = (f,r) => JSON.parse(localStorage.getItem(roomKey(f,r)) || "[]");
+  const saveRoomPhotos = (f,r,arr) => localStorage.setItem(roomKey(f,r), JSON.stringify(arr));
+  
+  // helpers
+  const statusNameMap = {valid:"Validada", lock:"Trancada", prob:"Problemas", other:"Outros"};
+  const statusEmoji = s => s==="valid"?"✅": s==="lock"?"🔒": s==="prob"?"⚠️":"📌";
+  
+  function showToast(msg){
+    const toast = document.getElementById("toastRoot");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(()=> toast.classList.remove("show"), 2200);
+  }
+  
+  function persistEntries(){
+    localStorage.setItem("vistoria_pro_db", JSON.stringify(inspectionEntries));
+    renderInventory();
+    renderFullReport();
+  }
+  
+  // atualizar UI do andar/sala
+  function updateFloorRoomUI(){
+    currentFloor = Math.min(32, Math.max(1, parseInt(document.getElementById("floorNum").value) || 1));
+    currentRoom = Math.min(50, Math.max(1, parseInt(document.getElementById("roomNum").value) || 1));
+    document.getElementById("floorNum").value = currentFloor;
+    document.getElementById("roomNum").value = currentRoom;
+    document.getElementById("currentRoomLabel").innerHTML = `A${pad(currentFloor)}-S${pad(currentRoom)}`;
+    renderCurrentPhotos();
+  }
+  
+  // Fotos atuais
+  function renderCurrentPhotos(){
+    const photos = getRoomPhotos(currentFloor, currentRoom);
+    const container = document.getElementById("photoGalleryContainer");
+    if(photos.length === 0){
+      container.innerHTML = '<div style="font-size:11px; text-align:center; width:100%;">Nenhuma evidência anexada</div>';
+      return;
+    }
+    container.innerHTML = "";
+    photos.forEach((src, idx) => {
+      const frame = document.createElement("div");
+      frame.className = "photo-frame";
+      frame.innerHTML = `<img src="${src}" onclick="openFullscreenImage('${src}')"><div class="delete-window" onclick="event.stopPropagation(); deletePhotoFromCurrent(${idx})">✕</div>`;
+      container.appendChild(frame);
     });
   }
-  const fotos = totalFotos?`📸 Evidências registradas: ${totalFotos} foto(s).`:"";
-
-  return (
-`<div class="title">Resumo IA</div>
-<div class="h-line"></div>
-<div class="kvs">${meta}</div>
-<div class="h-line"></div>
-<div class="bullet">${headline}</div>
-<div class="h-line"></div>
-<div class="title">Indicadores</div>
-<div class="h-line"></div>
-<div class="bullet">${global}</div>
-<div class="h-line"></div>
-<div class="title">Detalhamento</div>
-<div class="h-line"></div>
-${detalhe || "<div class='bullet'>Sem entradas.</div>"}
-${fotos?`<div class="h-line"></div><div class="bullet">${fotos}</div>`:""}`
-  );
-}
-
-/* ===== Relatório (IA + fotos no mock de celular) ===== */
-function renderReportWithPhotos(){
-  const predio = predioSel.value || "Não selecionado";
-  const endereco = enderecoInp.value || "Não informado";
-  const auditor = auditorInp.value || "Não informado";
-  const useAI = !!document.getElementById("useAI")?.checked;
-
-  // fotos agregadas
-  let totalFotos = 0; const roomsWithPhotos = [];
-  entries.forEach(item=>{
-    const photos = getRoomPhotos(item.f,item.r);
-    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-S${pad2(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
-  });
-
-  let mainHtml;
-  if(useAI){
-    mainHtml = aiComposeReportText({predio,endereco,auditor,entries,totalFotos});
-  }else{
+  
+  window.deletePhotoFromCurrent = (idx) => {
+    let arr = getRoomPhotos(currentFloor, currentRoom);
+    arr.splice(idx,1);
+    saveRoomPhotos(currentFloor, currentRoom, arr);
+    renderCurrentPhotos();
+    renderInventory();
+    renderFullReport();
+    showToast("📷 Foto removida");
+  };
+  
+  function addPhotoToCurrent(dataURL){
+    let arr = getRoomPhotos(currentFloor, currentRoom);
+    arr.push(dataURL);
+    saveRoomPhotos(currentFloor, currentRoom, arr);
+    renderCurrentPhotos();
+    renderInventory();
+    renderFullReport();
+  }
+  
+  // Registrar status
+  function registerStatus(status){
+    const existsIdx = inspectionEntries.findIndex(e => e.floor === currentFloor && e.room === currentRoom);
+    if(existsIdx >= 0) inspectionEntries[existsIdx].status = status;
+    else inspectionEntries.push({ floor: currentFloor, room: currentRoom, status });
+    persistEntries();
+    showToast(`✅ A${pad(currentFloor)}-S${pad(currentRoom)}: ${statusNameMap[status]}`);
+  }
+  
+  // Inventário com cards
+  function renderInventory(){
+    const container = document.getElementById("inventoryList");
+    if(!inspectionEntries.length){
+      container.innerHTML = '<div style="text-align:center; width:100%; opacity:0.6;">Nenhuma sala registrada</div>';
+      return;
+    }
+    const sorted = [...inspectionEntries].sort((a,b)=> a.floor - b.floor || a.room - b.room);
+    container.innerHTML = "";
+    sorted.forEach(entry => {
+      const photosLen = getRoomPhotos(entry.floor, entry.room).length;
+      const div = document.createElement("div");
+      div.className = "room-unit";
+      div.onclick = () => {
+        document.getElementById("floorNum").value = entry.floor;
+        document.getElementById("roomNum").value = entry.room;
+        updateFloorRoomUI();
+      };
+      div.innerHTML = `
+        <div class="room-badge"><span>🏢 A${pad(entry.floor)}-S${pad(entry.room)}</span> ${photosLen>0?`📸${photosLen}`:""}</div>
+        <div class="status-chip ${entry.status}">${statusEmoji(entry.status)} ${statusNameMap[entry.status]}</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+  
+  // IA narrativa + relatório completo com fotos
+  function renderFullReport(){
+    const useAI = document.getElementById("toggleAI").checked;
+    const predio = document.getElementById("predioSelect").value || "Não especificado";
+    const endereco = document.getElementById("enderecoAuto").value || "Endereço não informado";
+    const auditor = document.getElementById("auditorInput").value || "Anônimo";
     const dataStr = new Date().toLocaleString("pt-BR");
-    mainHtml =
-`<div class="title">Relatório</div>
-<div class="h-line"></div>
-<div class="kvs">
-  <div class="kv"><b>Prédio</b><span>${predio}</span></div>
-  <div class="kv"><b>Endereço</b><span>${endereco}</span></div>
-  <div class="kv"><b>Data</b><span>${dataStr}</span></div>
-  <div class="kv"><b>Auditor</b><span>${auditor}</span></div>
-</div>`;
-  }
-
-  let photosHtml = "";
-  if(roomsWithPhotos.length){
-    photosHtml = `<div class="h-line"></div><div class="title">Evidências</div><div class="h-line"></div>`;
-    roomsWithPhotos.forEach(r=>{
-      photosHtml += `<div class="report-room-photos">
-        <div class="report-room-title">${r.statusEmoji} ${r.room} — ${r.status} (${r.photos.length} foto${r.photos.length>1?"s":""})</div>
-        <div class="report-photo-thumbnails">` + r.photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')" loading="lazy">`).join("") + `</div>
-      </div>`;
+    let totalFotos = 0;
+    const roomsWithMedia = [];
+    inspectionEntries.forEach(entry => {
+      const photos = getRoomPhotos(entry.floor, entry.room);
+      if(photos.length) {
+        totalFotos += photos.length;
+        roomsWithMedia.push({ floor: entry.floor, room: entry.room, status: entry.status, photos });
+      }
     });
+    
+    let html = "";
+    if(useAI){
+      const stats = { valid:0, lock:0, prob:0, other:0 };
+      inspectionEntries.forEach(e => stats[e.status]++);
+      const total = inspectionEntries.length;
+      const summary = total === 0 ? "Nenhuma unidade vistoriada." : `Foram vistoriadas ${total} unidade(s). ✅ ${stats.valid} validadas, 🔒 ${stats.lock} trancadas, ❌ ${stats.prob} com problemas, ◻️ ${stats.other} outros.`;
+      html = `<div style="font-weight:800;">🏗️ DIAGNÓSTICO IA</div><div class="divider-light"></div>
+      <div class="kv-row"><b>Prédio</b><span>${predio}</span></div>
+      <div class="kv-row"><b>Endereço</b><span>${endereco}</span></div>
+      <div class="kv-row"><b>Auditor</b><span>${auditor}</span></div>
+      <div class="kv-row"><b>Data</b><span>${dataStr}</span></div>
+      <div class="divider-light"></div>
+      <div>📊 ${summary}</div>`;
+      if(total>0){
+        html += `<div class="divider-light"></div><div><b>Detalhamento por pavimento:</b></div>`;
+        const floorMap = {};
+        inspectionEntries.forEach(e => { if(!floorMap[e.floor]) floorMap[e.floor] = []; floorMap[e.floor].push(`${statusEmoji(e.status)}S${pad(e.room)}`); });
+        for(let f in floorMap){
+          html += `<div style="margin-left:0.5rem;">• Andar ${pad(parseInt(f))}: ${floorMap[f].join(", ")}</div>`;
+        }
+      }
+      if(totalFotos) html += `<div class="divider-light"></div><div>📸 Total de evidências fotográficas: ${totalFotos}</div>`;
+    } else {
+      html = `<div style="font-weight:800;">LAUDO RESUMIDO</div><div class="divider-light"></div>
+      <div class="kv-row"><b>Prédio</b><span>${predio}</span></div>
+      <div class="kv-row"><b>Endereço</b><span>${endereco}</span></div>
+      <div class="kv-row"><b>Auditor</b><span>${auditor}</span></div>
+      <div class="kv-row"><b>Data</b><span>${dataStr}</span></div>
+      <div class="divider-light"></div><div>Salas vistoriadas: ${inspectionEntries.length}</div>`;
+    }
+    
+    if(roomsWithMedia.length){
+      html += `<div class="divider-light"></div><div style="font-weight:700;">📁 PACOTE DE EVIDÊNCIAS</div>`;
+      roomsWithMedia.forEach(r => {
+        html += `<div class="evidence-wall"><b>🏢 A${pad(r.floor)}-S${pad(r.room)} (${statusNameMap[r.status]})</b><div class="thumb-scroll">`;
+        r.photos.forEach(p => { html += `<img src="${p}" class="thumb-img" onclick="openFullscreenImage('${p}')" />`; });
+        html += `</div></div>`;
+      });
+    }
+    if(!html.trim()) html = "<div>Nenhum dado registrado</div>";
+    document.getElementById("dynamicReport").innerHTML = html;
   }
-
-  document.getElementById("relatorio").innerHTML = mainHtml + photosHtml;
-}
-
-/* ===== PNG (captura do mock de celular) ===== */
-async function generateImage(){
-  const phone = document.getElementById("phoneMock");
-  if(!phone){ showToast("Nada para gerar"); return null; }
-  showToast("📸 Gerando imagem...");
-  try{
-    const canvas = await html2canvas(phone,{scale:2,backgroundColor:null,logging:false,useCORS:true});
-    return canvas.toDataURL('image/png');
-  }catch(e){ showToast("❌ Erro ao gerar imagem"); return null; }
-}
-async function saveAsPNG(){
-  const data = await generateImage(); if(!data) return;
-  const link=document.createElement('a'); const pred=predioSel.value||"vistoria";
-  const ts=new Date().toISOString().slice(0,19).replace(/:/g,'-');
-  link.download=`vistoria_${pred}_${ts}.png`; link.href=data; link.click(); showToast("✅ Imagem salva!");
-}
-
-/* ===== Compartilhar (gera imagem e oferece ações) ===== */
-async function openShareModal(){ const d=await generateImage(); if(!d)return; currentImageData=d; shareModal.classList.add("show"); }
-function shareToWhatsApp(){
-  if(!currentImageData) return;
-  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
-  if(navigator.share){
-    fetch(currentImageData).then(r=>r.blob()).then(b=>{
-      navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
+  
+  // Captura PNG (mock do celular)
+  async function capturePhoneImage(){
+    const el = document.getElementById("phoneMockBuilding");
+    if(!el) return null;
+    try {
+      const canvas = await html2canvas(el, { scale: 2.5, backgroundColor: "#0C0C16", useCORS: true, logging: false });
+      return canvas.toDataURL("image/png");
+    } catch(e){ showToast("Erro captura"); return null; }
+  }
+  
+  // ações
+  async function exportPNG(){
+    const data = await capturePhoneImage();
+    if(data){
+      const a = document.createElement("a");
+      a.download = `vistoria_${new Date().toISOString().slice(0,19)}.png`;
+      a.href = data;
+      a.click();
+      showToast("Imagem salva");
+    }
+  }
+  
+  async function openShare(){
+    const data = await capturePhoneImage();
+    if(data){ generatedImageData = data; document.getElementById("shareModalGlobal").classList.add("show"); }
+  }
+  
+  function copyTextReport(){
+    const txt = document.getElementById("dynamicReport").innerText;
+    navigator.clipboard.writeText(txt).then(()=> showToast("Laudo copiado")).catch(()=> showToast("Erro copiar"));
+  }
+  
+  function exportCSV(){
+    const rows = [["Andar","Sala","Status","QtdFotos"]];
+    inspectionEntries.forEach(e => {
+      rows.push([pad(e.floor), pad(e.room), statusNameMap[e.status], getRoomPhotos(e.floor,e.room).length]);
     });
-  }else{
-    window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+    const csv = rows.map(r => r.join(";")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `vistoria_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
   }
-  shareModal.classList.remove("show");
-}
-function shareToTeams(){
-  if(!currentImageData) return;
-  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
-  navigator.clipboard.writeText(msg); showToast("✅ Mensagem copiada! Cole no Teams");
-  const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click();
-  shareModal.classList.remove("show");
-}
-function shareToEmail(){
-  if(!currentImageData) return;
-  const subject=`Relatório de Vistoria - ${predioSel.value||"Vistoria"}`;
-  const body=`Relatório gerado em ${new Date().toLocaleString("pt-BR")}\nAuditor: ${auditorInp.value||"Não informado"}\nTotal de salas: ${entries.length}\n\nImagem em anexo.`;
-  window.location.href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  setTimeout(()=>{ const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click(); },500);
-  shareModal.classList.remove("show");
-}
-function shareSaveImage(){ if(!currentImageData) return; const a=document.createElement('a'); a.download=`vistoria_${predioSel.value||"vistoria"}.png`; a.href=currentImageData; a.click(); shareModal.classList.remove("show"); showToast("✅ Imagem salva!"); }
-
-/* ===== Ações texto/CSV ===== */
-function getReportText(){ return document.getElementById("relatorio")?.textContent || ""; }
-function copyReportToClipboard(){
-  const t=getReportText(); if(!t.trim()) return showToast("Relatório vazio");
-  navigator.clipboard?.writeText(t).then(()=>showToast("Relatório copiado ✅"),
-    ()=>{try{const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showToast("Relatório copiado ✅")}catch{showToast("Não foi possível copiar")}})
-}
-function downloadReportTxt(){
-  const t=getReportText(); if(!t.trim()) return showToast("Relatório vazio");
-  const blob=new Blob([t],{type:"text/plain;charset=utf-8"}), url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); const pred=(predioSel.value||"Predio").replace(/\s+/g,'_'); const d=new Date();
-  const st=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-  a.href=url; a.download=`relatorio_vistoria_${pred}_${st}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast("Download iniciado ⬇️");
-}
-function exportCsv(){
-  const pred=predioSel.value||"Prédio", end=enderecoInp.value||"Endereço não informado", aud=auditorInp.value||"", dataStr=new Date().toLocaleString("pt-BR");
-  const header=["Auditor","Predio","Endereco","Data","Andar","Sala","Status","QtdFotos"];
-  const rows=entries.sort((a,b)=>a.f-b.f||a.r-b.r).map(e=>[aud,pred,end,dataStr,pad2(e.f),pad2(e.r),statusName(e.status),getRoomPhotos(e.f,e.r).length]);
-  const csv=[header,...rows].map(l=>l.join(";")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}), url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); const d=new Date();
-  const st=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-  a.href=url; a.download=`vistoria_${pred.replace(/\s+/g,'_')}_${st}.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast("CSV exportado 🧾");
-}
-
-/* ===== Persistência & util ===== */
-function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
-function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
-  t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2000); }
-
-/* ===== Listeners ===== */
-photoBtn.addEventListener("click", ()=> photoInput.click());
-photoInput.addEventListener("change",(e)=>{
-  const files=[...e.target.files];
-  files.forEach(file=>{ const rd=new FileReader(); rd.onload=ev=> addPhotoToRoom(currentFloor,currentRoom,ev.target.result); rd.readAsDataURL(file); });
-  photoInput.value="";
-});
-
-document.getElementById("btnPNG").addEventListener("click", saveAsPNG);
-document.getElementById("btnShare").addEventListener("click", openShareModal);
-document.getElementById("shareWhatsApp").addEventListener("click", shareToWhatsApp);
-document.getElementById("shareTeams").addEventListener("click", shareToTeams);
-document.getElementById("shareEmail").addEventListener("click", shareToEmail);
-document.getElementById("shareSave").addEventListener("click", shareSaveImage);
-document.getElementById("closeModal").addEventListener("click", ()=> shareModal.classList.remove("show"));
-shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.classList.remove("show"); });
-
-document.getElementById("btnCopy").addEventListener("click", copyReportToClipboard);
-document.getElementById("btnDownload").addEventListener("click", downloadReportTxt);
-document.getElementById("btnCsv").addEventListener("click", exportCsv);
-document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
-
-document.getElementById("btnClear").addEventListener("click", ()=>{
-  if(!confirm("⚠️ Limpar TODOS os registros e fotos?")) return;
-  entries=[];
-  // remover fotos com segurança (coleta as chaves antes)
-  const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) keys.push(k); }
-  keys.forEach(k=> localStorage.removeItem(k));
-  auditorInp.value=""; predioSel.value=""; enderecoInp.value="";
-  persist(); renderCreated(); renderReportWithPhotos(); renderCurrentPhotos(); showToast("✓ Todos os dados removidos");
-});
-
-/* Endereço automático por prédio */
-predioSel.addEventListener("change", ()=>{
-  const v=predioSel.value;
-  if(v==="Eco Berrini") enderecoInp.value="Av. Eng. Luís Carlos Berrini, 1376 - SP";
-  else if(v==="Chucri Zaidan") enderecoInp.value="Av. Dr. Chucri Zaidan, 2460 - SP";
-  else enderecoInp.value="";
-  renderReportWithPhotos();
-});
-
-/* ===== Boot ===== */
-(function init(){
-  updateCurrentDisplay();
-  renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
-})();
+  
+  function shareWhatsApp(){
+    if(generatedImageData){
+      const link = document.createElement('a');
+      link.download = "relatorio.png";
+      link.href = generatedImageData;
+      link.click();
+      window.open(`https://web.whatsapp.com/send?text=Relatório de vistoria Vivo.`);
+    }
+    document.getElementById("shareModalGlobal").classList.remove("show");
+  }
+  
+  function closeModals(){ document.getElementById("shareModalGlobal").classList.remove("show"); }
+  window.openFullscreenImage = (src) => { document.getElementById("fullscreenImg").src = src; document.getElementById("fullscreenModal").classList.add("show"); };
+  window.closeFullscreenImg = () => document.getElementById("fullscreenModal").classList.remove("show");
+  
+  // Eventos
+  document.getElementById("photoUploadTrigger").onclick = () => document.getElementById("photoFileInput").click();
+  document.getElementById("photoFileInput").onchange = (e) => {
+    Array.from(e.target.files).forEach(f => {
+      const reader = new FileReader();
+      reader.onload = ev => addPhotoToCurrent(ev.target.result);
+      reader.readAsDataURL(f);
+    });
+    e.target.value = "";
+  };
+  document.querySelectorAll(".status-pilar").forEach(btn => btn.onclick = () => registerStatus(btn.dataset.status));
+  document.getElementById("floorNum").addEventListener("input", updateFloorRoomUI);
+  document.getElementById("roomNum").addEventListener("input", updateFloorRoomUI);
+  document.getElementById("predioSelect").addEventListener("change", () => {
+    const val = document.getElementById("predioSelect").value;
+    if(val === "Eco Berrini") document.getElementById("enderecoAuto").value = "Av. Eng. Luís Carlos Berrini, 1376 - SP";
+    else if(val === "Chucri Zaidan") document.getElementById("enderecoAuto").value = "Av. Dr. Chucri Zaidan, 2460 - SP";
+    else document.getElementById("enderecoAuto").value = "";
+    renderFullReport();
+  });
+  document.getElementById("toggleAI").addEventListener("change", renderFullReport);
+  document.getElementById("pngExportBtn").addEventListener("click", exportPNG);
+  document.getElementById("shareReportBtn").addEventListener("click", openShare);
+  document.getElementById("copyReportBtn").addEventListener("click", copyTextReport);
+  document.getElementById("csvExportBtn").addEventListener("click", exportCSV);
+  document.getElementById("clearAllBtn").addEventListener("click", () => {
+    if(confirm("Apagar TODAS as salas e fotos?")){
+      inspectionEntries = [];
+      localStorage.removeItem("vistoria_pro_db");
+      for(let i=0; i<localStorage.length; i++){ const k = localStorage.key(i); if(k && k.startsWith("foto_")) localStorage.removeItem(k); i--; }
+      persistEntries();
+      renderCurrentPhotos();
+      showToast("Todos os dados resetados");
+    }
+  });
+  document.getElementById("whatsappShareBtn").onclick = shareWhatsApp;
+  document.getElementById("teamsShareBtn").onclick = () => { if(generatedImageData){ const a=document.createElement("a"); a.download="relatorio.png"; a.href=generatedImageData; a.click(); navigator.clipboard.writeText("Relatório Vivo - Vistoria"); } closeModals(); };
+  document.getElementById("emailShareBtn").onclick = () => { if(generatedImageData){ const a=document.createElement("a"); a.download="relatorio.png"; a.href=generatedImageData; a.click(); location.href="mailto:?subject=Relatório de Vistoria"; } closeModals(); };
+  document.getElementById("saveImageShareBtn").onclick = async () => { const data = await capturePhoneImage(); if(data){ const a=document.createElement("a"); a.download="vistoria.png"; a.href=data; a.click(); } closeModals(); };
+  document.getElementById("closeModalShare").onclick = closeModals;
+  
+  updateFloorRoomUI();
+  renderInventory();
+  renderFullReport();
 </script>
 </body>
 </html>
