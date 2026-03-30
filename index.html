@@ -1,17 +1,9 @@
-Perfeito! Entendi o estilo de relatório que você prefere - um formato mais executivo, com resumo visual, lista de salas por status e uma apresentação limpa e profissional. Vou adaptar o sistema para gerar relatórios exatamente nesse modelo, com:
-
-· Resumo com cards visuais
-· Listagem detalhada das salas por status
-· Formato clean e profissional
-· Mantendo toda a funcionalidade de monitoramento
-
-```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SysAudit Pro | Ronda de Validação de Salas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação de Salas - Prédio Comercial</title>
     <style>
         * {
             margin: 0;
@@ -20,914 +12,563 @@ Perfeito! Entendi o estilo de relatório que você prefere - um formato mais exe
         }
 
         body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #eef2f7 0%, #e2e8f0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
-        .main-container {
+        .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.12);
-            overflow: hidden;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(105deg, #1a3a4f 0%, #0e2a3a 100%);
-            padding: 20px 32px;
+            text-align: center;
             color: white;
+            margin-bottom: 30px;
         }
 
         .header h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 4px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .header-sub {
-            font-size: 0.8rem;
-            opacity: 0.8;
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
-        .header-top {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            margin-top: 12px;
-        }
-
-        .auditor-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 6px 18px;
-            border-radius: 48px;
-        }
-
-        .auditor-section label {
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
-
-        #auditorName {
-            background: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 32px;
-            font-weight: 500;
-            color: #1a3a4f;
-            width: 180px;
-            outline: none;
-            font-size: 0.85rem;
-        }
-
-        .predio-section {
-            display: flex;
-            gap: 20px;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 6px 20px;
-            border-radius: 48px;
-        }
-
-        .predio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .predio-option input {
-            transform: scale(1);
-            cursor: pointer;
-            accent-color: #ffc107;
-        }
-
-        .endereco-box {
-            background: rgba(255, 193, 7, 0.9);
-            color: #1e2f3a;
-            padding: 6px 18px;
-            border-radius: 48px;
-            font-weight: 600;
-            font-size: 0.75rem;
-        }
-
-        /* Layout principal */
-        .content-split {
-            display: flex;
-            min-height: 540px;
-            background: #f8fafd;
-        }
-
-        .floors-sidebar {
-            width: 85px;
-            background: #f1f4f8;
-            border-right: 1px solid #e2e8f0;
-            overflow-y: auto;
-            max-height: 60vh;
-        }
-
-        .floor-item {
-            padding: 10px 4px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #2c3e50;
-            border-bottom: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #f1f4f8;
-        }
-
-        .floor-item:hover {
-            background: #e6edf4;
-        }
-
-        .floor-item.active {
-            background: #ffc107;
-            color: #1e2f3a;
-            font-weight: 700;
-        }
-
-        .rooms-area {
-            flex: 1;
-            padding: 20px 24px;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .current-floor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 18px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #ffc107;
-        }
-
-        .current-floor-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1e466e;
-        }
-
-        .current-floor-title span {
-            background: #ffc107;
-            padding: 4px 14px;
-            border-radius: 48px;
-            font-size: 1.2rem;
-            margin-left: 6px;
-        }
-
-        .flow-hint {
-            background: #fef9e6;
-            border-radius: 40px;
-            padding: 5px 12px;
-            font-size: 0.7rem;
-            color: #b87c00;
-        }
-
-        .rooms-grid {
+        /* Grid principal */
+        .main-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(58px, 64px));
-            gap: 10px;
-            justify-content: flex-start;
-            max-height: 460px;
-            overflow-y: auto;
-            padding: 8px 4px;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
         }
 
-        .room-card {
-            background: #cbd5e1;
-            border-radius: 14px;
-            padding: 8px 4px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: white;
-            font-weight: 600;
-        }
-
-        .room-card:hover {
-            transform: translateY(-2px);
-            filter: brightness(0.96);
-        }
-
-        .room-card.selected {
-            border: 2px solid #ffc107;
-            box-shadow: 0 0 0 2px rgba(255,193,7,0.4);
-        }
-
-        .room-card.validada { background: #2b7a3e; }
-        .room-card.trancada { background: #5e3c9e; }
-        .room-card.problema { background: #e06c2e; animation: softPulse 1s infinite; }
-        .room-card.ocupada { background: #c9386e; }
-        .room-card.limpa { background: #94a3b8; }
-
-        @keyframes softPulse {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; background: #f07c3e; }
-            100% { opacity: 0.9; }
-        }
-
-        .room-number {
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: block;
-        }
-
-        .room-status-badge {
-            font-size: 0.65rem;
-            background: rgba(0,0,0,0.35);
+        /* Card do prédio */
+        .building-card {
+            background: white;
             border-radius: 20px;
-            padding: 2px 5px;
-            margin-top: 5px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .building-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .building-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
             display: inline-block;
         }
 
-        /* Painel de controle */
-        .control-panel {
-            margin-top: 20px;
-            background: #f8fafc;
-            border-radius: 48px;
-            padding: 10px 18px;
+        .building-image {
+            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            min-height: 500px;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            border: 1px solid #e2edf2;
         }
 
-        .status-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+        /* Representação visual do prédio */
+        .building-structure {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            position: relative;
         }
 
-        .status-btn {
-            padding: 5px 16px;
-            border-radius: 40px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: 0.2s;
-            background: #eef2f6;
-            color: #1e2f3a;
-        }
-
-        .status-btn.active-status {
-            transform: scale(0.96);
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1), 0 0 0 2px #ffc107;
-        }
-
-        .status-btn.validada { background: #2b7a3e; color: white; }
-        .status-btn.trancada { background: #5e3c9e; color: white; }
-        .status-btn.problema { background: #e06c2e; color: white; }
-        .status-btn.ocupada { background: #c9386e; color: white; }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            background: #eef2f6;
-            border: none;
-            padding: 5px 14px;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #2c3e50;
-        }
-
-        .action-btn:hover {
-            background: #e2e8f0;
-        }
-
-        .action-btn.clear-all {
-            background: #94a3b8;
+        .zone-alta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px 10px 0 0;
+            padding: 20px;
+            text-align: center;
             color: white;
+            font-weight: bold;
+            position: relative;
         }
 
-        .action-btn.export {
-            background: #2b7a3e;
-            color: white;
-        }
-
-        /* RELATÓRIO ESTILO EXECUTIVO */
-        .report-section {
-            background: #ffffff;
-            border-top: 1px solid #eef2f8;
-            padding: 24px 32px;
-        }
-
-        .report-header {
-            margin-bottom: 20px;
-        }
-
-        .report-header h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1a3a4f;
-            margin-bottom: 4px;
-        }
-
-        .report-header p {
-            color: #6c7a8e;
-            font-size: 0.8rem;
-        }
-
-        /* Cards de resumo */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .card {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 16px 20px;
-            border-left: 4px solid;
-            transition: all 0.2s;
-        }
-
-        .card.validada { border-left-color: #2b7a3e; }
-        .card.trancada { border-left-color: #5e3c9e; }
-        .card.problema { border-left-color: #e06c2e; }
-        .card.ocupada { border-left-color: #c9386e; }
-        .card.total { border-left-color: #1a3a4f; }
-
-        .card-number {
+        .zone-alta::before {
+            content: "🏢";
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
             font-size: 2rem;
-            font-weight: 800;
-            color: #1e2f3a;
-            line-height: 1;
         }
 
-        .card-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #6c7a8e;
-            margin-top: 6px;
+        .floors-alta {
+            background: rgba(255,255,255,0.1);
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
         }
 
-        .card-desc {
-            font-size: 0.7rem;
-            color: #8b9ab0;
+        .zone-baixa {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 0 0 10px 10px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            margin-top: 5px;
+            position: relative;
+        }
+
+        .zone-baixa::before {
+            content: "🏬";
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+        }
+
+        .floors-baixa {
+            background: rgba(255,255,255,0.1);
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .building-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .info-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 5px;
+        }
+
+        /* Lista de salas */
+        .rooms-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .rooms-card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .rooms-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 12px;
+        }
+
+        .room-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #ddd;
+        }
+
+        .room-item.validated {
+            border-left-color: #10b981;
+            background: linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%);
+        }
+
+        .room-item.pending {
+            border-left-color: #f59e0b;
+        }
+
+        .room-info {
+            flex: 1;
+        }
+
+        .room-code {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .room-location {
+            font-size: 0.85rem;
+            color: #666;
             margin-top: 4px;
         }
 
-        /* Listagem de salas */
-        .rooms-listing {
-            margin-top: 20px;
+        .room-location .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-right: 8px;
         }
 
-        .status-group {
-            margin-bottom: 24px;
+        .badge-alta {
+            background: #667eea;
+            color: white;
         }
 
-        .status-group-title {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #e2e8f0;
+        .badge-baixa {
+            background: #f5576c;
+            color: white;
+        }
+
+        .room-status {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .rooms-badge-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .room-badge {
-            background: #f1f5f9;
-            padding: 6px 14px;
-            border-radius: 32px;
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
-            font-family: monospace;
         }
 
-        .room-badge.validada { background: #e0f2e3; color: #1e5a2e; }
-        .room-badge.trancada { background: #ede7f6; color: #4a2c8a; }
-        .room-badge.problema { background: #ffede3; color: #b85c1a; }
-        .room-badge.ocupada { background: #ffe4ec; color: #b32d5a; }
-
-        .empty-state {
-            color: #94a3b8;
-            font-style: italic;
-            padding: 16px;
-            text-align: center;
+        .status-validated {
+            background: #10b981;
+            color: white;
         }
 
-        .report-footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 0.7rem;
-            color: #8b9ab0;
-            text-align: center;
+        .status-pending {
+            background: #f59e0b;
+            color: white;
         }
 
-        footer {
-            text-align: center;
-            padding: 14px;
-            font-size: 0.65rem;
-            color: #7c8b9c;
-            background: #fafcff;
-            border-top: 1px solid #eef2f8;
+        .btn-validate {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        @media (max-width: 700px) {
-            .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 55px)); }
-            .floors-sidebar { width: 65px; }
-            .summary-cards { grid-template-columns: repeat(2, 1fr); }
+        .btn-validate:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .btn-validate:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-reset {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: #dc2626;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="main-container">
-    <div class="header">
-        <h1>🏢 Painel de Controlo da Ronda</h1>
-        <div class="header-sub">Triagem de Salas | Monitoramento de status e acessibilidade</div>
-        <div class="header-top">
-            <div class="auditor-section">
-                <label>🕵️ Auditor</label>
-                <input type="text" id="auditorName" placeholder="Nome do responsável" value="Roberto Almeida">
-            </div>
-            <div class="predio-section">
-                <div class="predio-option">
-                    <input type="radio" name="predio" id="predioBerrini" value="berrini" checked>
-                    <label for="predioBerrini">Berrini</label>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Validação de Salas</h1>
+            <p>Prédio Comercial | Sistema de Validação e Controle</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Lado esquerdo: Prédio -->
+            <div class="building-card">
+                <h2>📍 Torre Comercial</h2>
+                <div class="building-image">
+                    <div class="building-structure">
+                        <div class="zone-alta">
+                            ZONA ALTA
+                            <div class="floors-alta">
+                                Pisos 16 a 32
+                            </div>
+                        </div>
+                        <div class="zone-baixa">
+                            ZONA BAIXA
+                            <div class="floors-baixa">
+                                Pisos 01 a 15
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="predio-option">
-                    <input type="radio" name="predio" id="predioChucri" value="chucri">
-                    <label for="predioChucri">Chucri</label>
+                <div class="building-info">
+                    <span class="info-tag">🏷️ Código: 32-SL13</span>
+                    <span class="info-tag">📐 Área total: 12.500m²</span>
+                    <span class="info-tag">🚪 32 andares</span>
+                    <span class="info-tag">✅ Sistema de validação ativo</span>
                 </div>
+                <p style="margin-top: 15px; color: #666; font-size: 0.85rem; text-align: center;">
+                    *Clique em "Validar Sala" ao lado para confirmar as ocupações
+                </p>
             </div>
-            <div class="endereco-box" id="enderecoDisplay">
-                📍 Av. Eng. Luís Carlos Berrini, 1295
+
+            <!-- Lado direito: Lista de salas -->
+            <div class="rooms-card">
+                <h2>📋 Salas Comerciais</h2>
+                
+                <div class="stats" id="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCount">0</div>
+                        <div class="stat-label">Total de Salas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="validatedCount">0</div>
+                        <div class="stat-label">Validadas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="pendingCount">0</div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                </div>
+
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Buscar sala por código...">
+                </div>
+
+                <div class="rooms-list" id="roomsList">
+                    <!-- Lista de salas será gerada via JavaScript -->
+                </div>
+
+                <button class="btn-reset" id="resetBtn">🔄 Resetar Todas as Validações</button>
             </div>
         </div>
     </div>
 
-    <div class="content-split">
-        <div class="floors-sidebar" id="floorsSidebar"></div>
-        <div class="rooms-area">
-            <div class="current-floor-header">
-                <div class="current-floor-title">
-                    🪟 ANDAR <span id="currentFloorNumber">1</span>°
-                </div>
-                <div class="flow-hint">
-                    ① andar ② sala ③ status
-                </div>
-            </div>
-            <div class="rooms-grid" id="roomsGrid"></div>
-            <div class="control-panel">
-                <div class="status-buttons" id="statusButtons">
-                    <button class="status-btn validada" data-status="validada">✅ Validada (Livre)</button>
-                    <button class="status-btn trancada" data-status="trancada">🔒 Trancada</button>
-                    <button class="status-btn problema" data-status="problema">⚠️ Problema</button>
-                    <button class="status-btn ocupada" data-status="ocupada">👥 Ocupada</button>
-                </div>
-                <div class="action-buttons">
-                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar Tudo</button>
-                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar (Validada)</button>
-                    <button class="action-btn export" id="exportReportBtn">📤 Exportar Relatório</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- RELATÓRIO ESTILO EXECUTIVO -->
-    <div class="report-section" id="reportSection">
-        <div class="report-header">
-            <h2>📋 Relatório de Validação</h2>
-            <p>Resumo do estado de utilização e acessibilidade das salas</p>
-        </div>
-        <div id="reportContent"></div>
-    </div>
-    <footer>
-        🔍 Clique no andar → selecione a sala → escolha o status. O relatório é atualizado automaticamente no formato executivo.
-    </footer>
-</div>
-
-<script>
-    const TOTAL_FLOORS = 32;
-    const ROOMS_PER_FLOOR = 50;
-    let buildingData = [];
-    let currentFloor = 1;
-    let selectedRoom = null;
-    let activeStatus = 'validada';
-
-    const addresses = {
-        berrini: "Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, São Paulo - SP",
-        chucri: "Av. Dr. Chucri Zaidan, 940 - Vila Cordeiro, São Paulo - SP"
-    };
-
-    function initDataCleared() {
-        const data = [];
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floor = [];
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) floor.push(null);
-            data.push(floor);
-        }
-        return data;
-    }
-
-    buildingData = initDataCleared();
-
-    const floorsSidebar = document.getElementById('floorsSidebar');
-    const roomsGrid = document.getElementById('roomsGrid');
-    const currentFloorNumberSpan = document.getElementById('currentFloorNumber');
-    const auditorInput = document.getElementById('auditorName');
-    const reportContent = document.getElementById('reportContent');
-    const enderecoDisplay = document.getElementById('enderecoDisplay');
-    const radioBerrini = document.getElementById('predioBerrini');
-    const radioChucri = document.getElementById('predioChucri');
-    const clearAllBtn = document.getElementById('clearAllBtn');
-    const resetValidadaBtn = document.getElementById('resetValidadaBtn');
-    const exportReportBtn = document.getElementById('exportReportBtn');
-
-    function getStatusClass(status) {
-        if (status === 'validada') return 'validada';
-        if (status === 'trancada') return 'trancada';
-        if (status === 'problema') return 'problema';
-        if (status === 'ocupada') return 'ocupada';
-        return 'limpa';
-    }
-
-    function getStatusBadge(status) {
-        if (status === 'validada') return '✓';
-        if (status === 'trancada') return '🔒';
-        if (status === 'problema') return '!';
-        if (status === 'ocupada') return '👥';
-        return '○';
-    }
-
-    function renderFloorsList() {
-        floorsSidebar.innerHTML = '';
-        for (let i = 1; i <= TOTAL_FLOORS; i++) {
-            const div = document.createElement('div');
-            div.className = 'floor-item';
-            if (i === currentFloor) div.classList.add('active');
-            div.innerText = `${i}°`;
-            div.addEventListener('click', () => {
-                currentFloor = i;
-                selectedRoom = null;
-                currentFloorNumberSpan.innerText = currentFloor;
-                document.querySelectorAll('.floor-item').forEach((el, idx) => {
-                    if (idx + 1 === currentFloor) el.classList.add('active');
-                    else el.classList.remove('active');
-                });
-                renderRoomsForCurrentFloor();
-            });
-            floorsSidebar.appendChild(div);
-        }
-    }
-
-    function renderRoomsForCurrentFloor() {
-        const floorIdx = currentFloor - 1;
-        const roomsStatus = buildingData[floorIdx];
-        roomsGrid.innerHTML = '';
-        for (let i = 0; i < ROOMS_PER_FLOOR; i++) {
-            const status = roomsStatus[i];
-            const roomNum = i + 1;
-            const card = document.createElement('div');
-            card.className = `room-card ${getStatusClass(status)}`;
-            if (selectedRoom === roomNum) card.classList.add('selected');
-            card.innerHTML = `
-                <span class="room-number">${roomNum}</span>
-                <span class="room-status-badge">${getStatusBadge(status)}</span>
-            `;
-            card.addEventListener('click', (e) => {
-                e.stopPropagation();
-                selectedRoom = roomNum;
-                renderRoomsForCurrentFloor();
-                updateExecutiveReport();
-            });
-            roomsGrid.appendChild(card);
-        }
-    }
-
-    function applyStatusToSelected() {
-        if (selectedRoom === null) {
-            alert("Primeiro clique em uma sala para selecioná-la.");
-            return false;
-        }
-        const floorIdx = currentFloor - 1;
-        const roomIdx = selectedRoom - 1;
-        const old = buildingData[floorIdx][roomIdx];
-        if (old !== activeStatus) {
-            buildingData[floorIdx][roomIdx] = activeStatus;
-            renderRoomsForCurrentFloor();
-            updateExecutiveReport();
-            return true;
-        }
-        return false;
-    }
-
-    // Relatório estilo executivo
-    function updateExecutiveReport() {
-        // Coletar todas as salas validadas
-        const salasPorStatus = {
-            validada: [],
-            trancada: [],
-            problema: [],
-            ocupada: []
-        };
-        
-        let totalValidadas = 0;
-        
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const status = buildingData[f][r];
-                if (status !== null) {
-                    const salaId = `${f+1.toString().padStart(2,'0')}-${(r+1).toString().padStart(2,'0')}`;
-                    salasPorStatus[status].push(salaId);
-                    totalValidadas++;
-                }
-            }
-        }
-        
-        const stats = {
-            validada: salasPorStatus.validada.length,
-            trancada: salasPorStatus.trancada.length,
-            problema: salasPorStatus.problema.length,
-            ocupada: salasPorStatus.ocupada.length
-        };
-        
-        const totalInspecionadas = totalValidadas;
-        const auditor = auditorInput.value.trim() || "Não informado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
-        
-        const now = new Date().toLocaleString('pt-BR');
-        
-        let html = `
-            <div class="summary-cards">
-                <div class="card total">
-                    <div class="card-number">${totalInspecionadas}</div>
-                    <div class="card-label">Salas Inspecionadas</div>
-                    <div class="card-desc">Total de salas validadas</div>
-                </div>
-                <div class="card validada">
-                    <div class="card-number">${stats.validada}</div>
-                    <div class="card-label">Salas Validadas (Livres)</div>
-                    <div class="card-desc">Em conformidade e acessíveis</div>
-                </div>
-                <div class="card ocupada">
-                    <div class="card-number">${stats.ocupada}</div>
-                    <div class="card-label">Salas Ocupadas</div>
-                    <div class="card-desc">Em utilização durante a ronda</div>
-                </div>
-                <div class="card trancada">
-                    <div class="card-number">${stats.trancada}</div>
-                    <div class="card-label">Salas Trancadas</div>
-                    <div class="card-desc">Inacessíveis, requerem verificação</div>
-                </div>
-                <div class="card problema">
-                    <div class="card-number">${stats.problema}</div>
-                    <div class="card-label">Salas com Problema</div>
-                    <div class="card-desc">Alterações ou não conformidades</div>
-                </div>
-            </div>
+    <script>
+        // Gerar lista de salas baseada na referência 32-SL13
+        const generateRooms = () => {
+            const rooms = [];
+            const prefixes = ['32-SL', '32-SB', '32-AP'];
             
-            <div class="rooms-listing">
-        `;
-        
-        // Listagem por status
-        if (stats.validada > 0) {
-            html += `
-                <div class="status-group">
-                    <div class="status-group-title">
-                        <span style="background:#2b7a3e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
-                        ✅ ${stats.validada} Salas Validadas (Livres)
-                    </div>
-                    <div class="rooms-badge-list">
-                        ${salasPorStatus.validada.map(sala => `<span class="room-badge validada">${sala}</span>`).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        if (stats.ocupada > 0) {
-            html += `
-                <div class="status-group">
-                    <div class="status-group-title">
-                        <span style="background:#c9386e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
-                        👥 ${stats.ocupada} Salas Ocupadas
-                    </div>
-                    <div class="rooms-badge-list">
-                        ${salasPorStatus.ocupada.map(sala => `<span class="room-badge ocupada">${sala}</span>`).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        if (stats.trancada > 0) {
-            html += `
-                <div class="status-group">
-                    <div class="status-group-title">
-                        <span style="background:#5e3c9e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
-                        🔒 ${stats.trancada} Salas Trancadas
-                    </div>
-                    <div class="rooms-badge-list">
-                        ${salasPorStatus.trancada.map(sala => `<span class="room-badge trancada">${sala}</span>`).join('')}
-                    </div>
-                    <div class="card-desc" style="margin-top:8px;">Inacessíveis, requerem verificação de chaves/acessos.</div>
-                </div>
-            `;
-        }
-        
-        if (stats.problema > 0) {
-            html += `
-                <div class="status-group">
-                    <div class="status-group-title">
-                        <span style="background:#e06c2e; width:12px; height:12px; border-radius:50%; display:inline-block;"></span>
-                        ⚠️ ${stats.problema} Salas com Problema
-                    </div>
-                    <div class="rooms-badge-list">
-                        ${salasPorStatus.problema.map(sala => `<span class="room-badge problema">${sala}</span>`).join('')}
-                    </div>
-                    <div class="card-desc" style="margin-top:8px;">Atualização de layout ou não conformidade identificada.</div>
-                </div>
-            `;
-        }
-        
-        if (totalInspecionadas === 0) {
-            html += `<div class="empty-state">✨ Nenhuma validação registrada ainda. Selecione um andar, clique em uma sala e escolha o status.</div>`;
-        }
-        
-        html += `
-            </div>
-            <div class="report-footer">
-                <div>🕵️ Auditor: ${auditor} | 🏢 Edifício: ${predioNome}</div>
-                <div>📍 ${enderecoAtual}</div>
-                <div>📅 Relatório gerado em: ${now}</div>
-                <div style="margin-top:8px;">✅ Legenda: Formato "Andar-Sala" (ex: 17-05 = 17° andar, sala 5)</div>
-            </div>
-        `;
-        
-        reportContent.innerHTML = html;
-    }
-    
-    function generateTextReport() {
-        const salasPorStatus = { validada: [], trancada: [], problema: [], ocupada: [] };
-        for (let f = 0; f < TOTAL_FLOORS; f++) {
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                const status = buildingData[f][r];
-                if (status !== null) {
-                    const salaId = `${f+1}-${r+1}`;
-                    salasPorStatus[status].push(salaId);
+            for (let i = 1; i <= 32; i++) {
+                // Para cada andar, criar 2-4 salas
+                const numRooms = Math.floor(Math.random() * 3) + 2; // 2 a 4 salas por andar
+                for (let j = 1; j <= numRooms; j++) {
+                    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                    const roomCode = `${prefix}${String(i).padStart(2, '0')}${String(j).padStart(2, '0')}`;
+                    const zone = i >= 16 ? 'Alta' : 'Baixa';
+                    const floor = i;
+                    
+                    rooms.push({
+                        id: `${roomCode}`,
+                        code: roomCode,
+                        floor: floor,
+                        zone: zone,
+                        validated: Math.random() > 0.6, // 40% já validados aleatoriamente
+                        validatedAt: null
+                    });
                 }
             }
-        }
-        
-        const stats = {
-            validada: salasPorStatus.validada.length,
-            trancada: salasPorStatus.trancada.length,
-            problema: salasPorStatus.problema.length,
-            ocupada: salasPorStatus.ocupada.length
+            
+            // Adicionar várias salas com o código 32-SL13 como referência
+            for (let i = 1; i <= 8; i++) {
+                rooms.push({
+                    id: `32-SL13-${i}`,
+                    code: `32-SL13${String(i).padStart(2, '0')}`,
+                    floor: 13,
+                    zone: 'Baixa',
+                    validated: false,
+                    validatedAt: null
+                });
+            }
+            
+            return rooms.sort((a, b) => a.code.localeCompare(b.code));
         };
-        const total = stats.validada + stats.trancada + stats.problema + stats.ocupada;
-        
-        const auditor = auditorInput.value.trim() || "Não informado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        const now = new Date().toLocaleString('pt-BR');
-        
-        let text = `📋 RELATÓRIO DE VALIDAÇÃO - SYS AUDIT\n`;
-        text += `══════════════════════════════════════════════════\n\n`;
-        text += `🕵️ Auditor: ${auditor}\n`;
-        text += `🏢 Edifício: ${predioNome}\n`;
-        text += `📍 Endereço: ${enderecoAtual}\n`;
-        text += `📅 Data/Hora: ${now}\n\n`;
-        text += `📊 RESUMO DO ESTADO DAS SALAS\n`;
-        text += `────────────────────────────────────────\n`;
-        text += `✅ ${stats.validada} Salas Validadas (Livres) - Em conformidade e acessíveis\n`;
-        text += `👥 ${stats.ocupada} Salas Ocupadas - Em utilização durante a ronda\n`;
-        text += `🔒 ${stats.trancada} Salas Trancadas - Inacessíveis, requerem verificação\n`;
-        text += `⚠️ ${stats.problema} Salas com Problema - Alterações ou não conformidades\n`;
-        text += `📊 Total de salas inspecionadas: ${total}\n\n`;
-        
-        if (stats.ocupada > 0) {
-            text += `SALAS OCUPADAS:\n`;
-            text += `${salasPorStatus.ocupada.join(', ')}\n\n`;
-        }
-        
-        if (stats.trancada > 0) {
-            text += `SALAS TRANCADAS:\n`;
-            text += `${salasPorStatus.trancada.join(', ')}\n\n`;
-        }
-        
-        if (stats.problema > 0) {
-            text += `SALAS COM PROBLEMA:\n`;
-            text += `${salasPorStatus.problema.join(', ')}\n\n`;
-        }
-        
-        text += `══════════════════════════════════════════════════\n`;
-        text += `✨ Relatório gerado pelo SysAudit Pro\n`;
-        
-        return text;
-    }
-    
-    function exportReport() {
-        const text = generateTextReport();
-        navigator.clipboard.writeText(text).then(() => {
-            alert("✅ Relatório copiado para a área de transferência!\n\nAgora você pode colar no WhatsApp, Teams, E-mail ou em qualquer aplicativo.");
-        }).catch(() => {
-            alert("⚠️ Relatório gerado! Você pode copiar manualmente ou baixar o arquivo.");
-        });
-        
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        const auditorNome = auditorInput.value.trim().replace(/\s/g, '_') || "relatorio";
-        link.download = `ronda_validacao_${auditorNome}_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-    
-    function clearAll() {
-        if (confirm("Limpar tudo? Todas as salas ficarão cinza (aguardando) e o relatório será zerado.")) {
-            buildingData = initDataCleared();
-            selectedRoom = null;
-            renderFloorsList();
-            renderRoomsForCurrentFloor();
-            updateExecutiveReport();
-        }
-    }
-    
-    function resetToValidada() {
-        if (confirm("Resetar todas as salas para status VALIDADA (Livre)? O relatório será atualizado.")) {
-            for (let f = 0; f < TOTAL_FLOORS; f++) {
-                for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                    buildingData[f][r] = 'validada';
+
+        let rooms = generateRooms();
+        let searchTerm = '';
+
+        // Atualizar estatísticas
+        const updateStats = () => {
+            const total = rooms.length;
+            const validated = rooms.filter(r => r.validated).length;
+            const pending = total - validated;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('validatedCount').textContent = validated;
+            document.getElementById('pendingCount').textContent = pending;
+        };
+
+        // Validar sala
+        const validateRoom = (roomId) => {
+            const room = rooms.find(r => r.id === roomId);
+            if (room && !room.validated) {
+                room.validated = true;
+                room.validatedAt = new Date().toLocaleString('pt-BR');
+                renderRoomsList();
+                updateStats();
+                
+                // Animação de feedback
+                const button = document.querySelector(`[data-room-id="${roomId}"]`);
+                if (button) {
+                    button.textContent = '✓ Validado';
+                    button.disabled = true;
+                    button.style.background = '#10b981';
                 }
             }
-            selectedRoom = null;
-            renderFloorsList();
-            renderRoomsForCurrentFloor();
-            updateExecutiveReport();
-        }
-    }
-    
-    function setupStatusButtons() {
-        const btns = document.querySelectorAll('.status-btn');
-        btns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const status = btn.getAttribute('data-status');
-                if (status) {
-                    activeStatus = status;
-                    btns.forEach(b => b.classList.remove('active-status'));
-                    btn.classList.add('active-status');
-                    applyStatusToSelected();
-                }
+        };
+
+        // Resetar todas as validações
+        const resetAllValidations = () => {
+            if (confirm('Tem certeza que deseja resetar todas as validações? Esta ação não pode ser desfeita.')) {
+                rooms.forEach(room => {
+                    room.validated = false;
+                    room.validatedAt = null;
+                });
+                renderRoomsList();
+                updateStats();
+            }
+        };
+
+        // Renderizar lista de salas
+        const renderRoomsList = () => {
+            const filteredRooms = rooms.filter(room => 
+                room.code.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            
+            const roomsListHtml = filteredRooms.map(room => `
+                <div class="room-item ${room.validated ? 'validated' : 'pending'}">
+                    <div class="room-info">
+                        <div class="room-code">${room.code}</div>
+                        <div class="room-location">
+                            <span class="badge ${room.zone === 'Alta' ? 'badge-alta' : 'badge-baixa'}">
+                                Zona ${room.zone}
+                            </span>
+                            Andar ${room.floor}
+                            ${room.validated && room.validatedAt ? `<span style="font-size: 0.7rem; color: #10b981;"> • Validado em ${room.validatedAt}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="room-status">
+                        <span class="status-badge ${room.validated ? 'status-validated' : 'status-pending'}">
+                            ${room.validated ? '✓ Validada' : '⏳ Pendente'}
+                        </span>
+                        ${!room.validated ? `
+                            <button class="btn-validate" data-room-id="${room.id}" onclick="validateRoom('${room.id}')">
+                                Validar Sala
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            const roomsContainer = document.getElementById('roomsList');
+            if (filteredRooms.length === 0) {
+                roomsContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">Nenhuma sala encontrada</div>';
+            } else {
+                roomsContainer.innerHTML = roomsListHtml;
+            }
+        };
+
+        // Configurar busca
+        const setupSearch = () => {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchTerm = e.target.value;
+                renderRoomsList();
             });
-        });
-        document.querySelector('.status-btn.validada')?.classList.add('active-status');
-    }
-    
-    radioBerrini.addEventListener('change', () => updateExecutiveReport());
-    radioChucri.addEventListener('change', () => updateExecutiveReport());
-    auditorInput.addEventListener('input', () => updateExecutiveReport());
-    clearAllBtn.addEventListener('click', clearAll);
-    resetValidadaBtn.addEventListener('click', resetToValidada);
-    exportReportBtn.addEventListener('click', exportReport);
-    
-    function init() {
-        renderFloorsList();
-        renderRoomsForCurrentFloor();
-        setupStatusButtons();
-        updateExecutiveReport();
-    }
-    init();
-</script>
+        };
+
+        // Inicializar
+        const init = () => {
+            setupSearch();
+            renderRoomsList();
+            updateStats();
+            
+            document.getElementById('resetBtn').addEventListener('click', resetAllValidations);
+        };
+
+        init();
+    </script>
 </body>
 </html>
