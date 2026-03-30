@@ -1,4 +1,4 @@
-Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as salas para um estado neutro (cinza) e limpa o relatório, além de garantir o fluxo correto: primeiro escolher o andar, depois a sala, e por último o status.
+Compreendo o problema! O relatório está mostrando um andar para cada sala, quando na verdade deveria mostrar apenas 32 andares. Vou corrigir o sistema para que o relatório mostre corretamente os 32 andares com 50 salas cada, e não uma lista extensa e incorreta.
 
 ```html
 <!DOCTYPE html>
@@ -114,7 +114,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             background: #eef2f7;
         }
 
-        /* SIDEBAR ESQUERDA - ANDARES */
         .floors-sidebar {
             width: 110px;
             background: #2c3e50;
@@ -148,7 +147,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
-        /* ÁREA DIREITA - SALAS */
         .rooms-area {
             flex: 1;
             padding: 20px 25px;
@@ -164,6 +162,8 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 3px solid #ffc107;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .current-floor-title {
@@ -177,6 +177,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             padding: 5px 15px;
             border-radius: 50px;
             font-size: 1.8rem;
+        }
+
+        .flow-hint {
+            background: #fff3cd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            color: #856404;
         }
 
         .rooms-grid {
@@ -213,10 +221,8 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             transform: scale(1.02);
         }
 
-        /* Cores de status */
         .room-card.validada {
             background: #2e7d32;
-            box-shadow: 0 2px 8px rgba(46,125,50,0.4);
         }
         .room-card.trancada {
             background: #5e35b1;
@@ -230,7 +236,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         }
         .room-card.limpa {
             background: #7f8c8d;
-            filter: grayscale(0.3);
         }
 
         @keyframes pulseWarning {
@@ -254,7 +259,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             display: inline-block;
         }
 
-        /* Painel de status e ações */
         .status-panel {
             margin-top: 25px;
             background: white;
@@ -312,24 +316,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             transition: 0.1s;
         }
 
-        .action-btn.reset {
-            background: #7f8c8d;
-        }
-
         .action-btn.clear-all {
             background: #6c5b7b;
         }
 
-        .action-btn.clear-all:hover {
-            background: #5a4a6e;
-        }
-
-        /* Relatório */
         .report-section {
             background: #fffef7;
             border-top: 4px solid #ffc107;
             padding: 20px 30px;
-            margin-top: 0;
         }
 
         .report-header {
@@ -363,17 +357,25 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             background: #f8f9fa;
             border-radius: 20px;
             padding: 15px;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             font-size: 0.85rem;
             font-family: 'Courier New', monospace;
             border-left: 5px solid #ffc107;
         }
 
-        .empty-report {
-            color: #7f8c8d;
-            text-align: center;
-            font-style: italic;
+        .floor-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .floor-summary-item {
+            background: #e9ecef;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
         }
 
         footer {
@@ -382,16 +384,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             font-size: 0.7rem;
             color: #7f8c8d;
             background: #eef2f7;
-        }
-
-        .flow-hint {
-            background: #fff3cd;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 0.8rem;
-            color: #856404;
-            margin-bottom: 15px;
-            display: inline-block;
         }
 
         @media (max-width: 800px) {
@@ -450,8 +442,7 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
                 </div>
                 <div class="action-buttons">
                     <button class="action-btn clear-all" id="clearAllBtn">🧹 LIMPAR TUDO</button>
-                    <button class="action-btn reset" id="resetAllBtn">🔄 Resetar (Validada)</button>
-                    <button class="action-btn" id="refreshReportBtn">📊 Atualizar Relatório</button>
+                    <button class="action-btn" id="resetValidadaBtn">🔄 RESETAR (VALIDADA)</button>
                 </div>
             </div>
         </div>
@@ -463,53 +454,42 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             <span id="reportTime" style="color:#5a6874; font-size:0.8rem;"></span>
         </div>
         <div class="report-stats" id="reportStats"></div>
-        <div class="report-detail" id="reportDetail">
-            <div class="empty-report">📌 Siga o fluxo: Andar → Sala → Status. Clique em "Limpar Tudo" para reiniciar.</div>
-        </div>
+        <div class="report-detail" id="reportDetail"></div>
     </div>
     <footer>
         ✅ Fluxo correto: 1) Selecione o andar à esquerda → 2) Clique em uma sala (ficará destacada) → 3) Escolha o status desejado → A sala será atualizada e o relatório gerado automaticamente.
-        🧹 "Limpar Tudo" = todas as salas ficam CINZA e o relatório é limpo.
+        🧹 "LIMPAR TUDO" = todas as salas ficam CINZA e o relatório é zerado.
     </footer>
 </div>
 
 <script>
-    // CONFIGURAÇÕES
     const TOTAL_FLOORS = 32;
     const ROOMS_PER_FLOOR = 50;
 
-    // Estado: null = "limpo" (cinza/sem status definido)
-    // Status possíveis: 'validada', 'trancada', 'problema', 'ocupada', ou null (limpo)
-    let buildingData = []; // armazena string ou null
+    // Dados: cada célula pode ser 'validada', 'trancada', 'problema', 'ocupada' ou null (limpo)
+    let buildingData = [];
 
-    // Estado atual da interface
     let currentFloor = 1;
-    let selectedRoom = null; // número da sala selecionada (1-index)
+    let selectedRoom = null;
     let activeStatus = 'validada';
 
-    // Flag para controle se o sistema está em modo "limpo"
-    let isClearedMode = false;
-
-    // Endereços
     const addresses = {
         berrini: "Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, São Paulo - SP, 04571-010",
         chucri: "Av. Dr. Chucri Zaidan, 940 - Vila Cordeiro, São Paulo - SP, 04583-906"
     };
 
-    // Inicializar dados: tudo como null (limpo/cinza)
     function initDataCleared() {
         const data = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
             const floorRooms = [];
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                floorRooms.push(null); // estado limpo
+                floorRooms.push(null);
             }
             data.push(floorRooms);
         }
         return data;
     }
 
-    // Reset para VALIDADA (mantém relatório)
     function initDataValidada() {
         const data = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
@@ -522,10 +502,8 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         return data;
     }
 
-    // Começar com dados limpos (cinza)
     buildingData = initDataCleared();
 
-    // DOM elements
     const floorsSidebar = document.getElementById('floorsSidebar');
     const roomsGrid = document.getElementById('roomsGrid');
     const currentFloorNumberSpan = document.getElementById('currentFloorNumber');
@@ -536,11 +514,9 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
     const enderecoDisplay = document.getElementById('enderecoDisplay');
     const radioBerrini = document.getElementById('predioBerrini');
     const radioChucri = document.getElementById('predioChucri');
-    const resetAllBtn = document.getElementById('resetAllBtn');
     const clearAllBtn = document.getElementById('clearAllBtn');
-    const refreshReportBtn = document.getElementById('refreshReportBtn');
+    const resetValidadaBtn = document.getElementById('resetValidadaBtn');
 
-    // Renderizar lista de andares
     function renderFloorsList() {
         floorsSidebar.innerHTML = '';
         for (let i = 1; i <= TOTAL_FLOORS; i++) {
@@ -549,10 +525,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             if (i === currentFloor) floorDiv.classList.add('active');
             floorDiv.innerText = `${i}°`;
             floorDiv.addEventListener('click', (function(floorNum) {
-                return function() { 
-                    selectFloor(floorNum);
-                    // Ao trocar de andar, mantém a sala selecionada? Melhor resetar seleção
+                return function() {
+                    currentFloor = floorNum;
                     selectedRoom = null;
+                    currentFloorNumberSpan.innerText = currentFloor;
+                    document.querySelectorAll('.floor-item').forEach((el, idx) => {
+                        if (idx + 1 === currentFloor) el.classList.add('active');
+                        else el.classList.remove('active');
+                    });
                     renderRoomsForCurrentFloor();
                 };
             })(i));
@@ -560,25 +540,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         }
     }
 
-    function selectFloor(floorNum) {
-        currentFloor = floorNum;
-        currentFloorNumberSpan.innerText = currentFloor;
-        document.querySelectorAll('.floor-item').forEach((el, idx) => {
-            if (idx + 1 === currentFloor) el.classList.add('active');
-            else el.classList.remove('active');
-        });
-    }
-
-    // Obter classe CSS para status
     function getStatusClass(status) {
         if (status === 'validada') return 'validada';
         if (status === 'trancada') return 'trancada';
         if (status === 'problema') return 'problema';
         if (status === 'ocupada') return 'ocupada';
-        return 'limpa'; // null ou undefined
+        return 'limpa';
     }
 
-    // Obter ícone/badge
     function getStatusBadge(status) {
         if (status === 'validada') return '✅';
         if (status === 'trancada') return '🔒';
@@ -595,7 +564,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         return 'AGUARDANDO';
     }
 
-    // Renderizar salas do andar atual
     function renderRoomsForCurrentFloor() {
         const floorIndex = currentFloor - 1;
         const roomsStatus = buildingData[floorIndex];
@@ -605,13 +573,12 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             const status = roomsStatus[i];
             const roomNum = i + 1;
             const roomDiv = document.createElement('div');
-            const statusClass = getStatusClass(status);
-            roomDiv.className = `room-card ${statusClass}`;
+            roomDiv.className = `room-card ${getStatusClass(status)}`;
             if (selectedRoom === roomNum) roomDiv.classList.add('selected');
             
             const roomNumberSpan = document.createElement('span');
             roomNumberSpan.className = 'room-number';
-            roomNumberSpan.innerText = `SALA ${roomNum}`;
+            roomNumberSpan.innerText = `${roomNum}`;
             const statusBadge = document.createElement('span');
             statusBadge.className = 'room-status-badge';
             statusBadge.innerText = getStatusBadge(status);
@@ -619,12 +586,12 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             roomDiv.appendChild(roomNumberSpan);
             roomDiv.appendChild(statusBadge);
             
-            // CLIQUE NA SALA: apenas seleciona, não aplica status ainda
             roomDiv.addEventListener('click', (function(roomIdx) {
                 return function(e) {
                     e.stopPropagation();
-                    // Selecionar a sala (sem aplicar status)
-                    selectRoom(roomIdx + 1);
+                    selectedRoom = roomIdx + 1;
+                    renderRoomsForCurrentFloor();
+                    updateQuickMessage(`Sala ${selectedRoom} selecionada. Escolha um status para aplicar.`);
                 };
             })(i));
             
@@ -632,16 +599,21 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         }
     }
 
-    // Função para selecionar uma sala (destacar visualmente)
-    function selectRoom(roomNumber) {
-        selectedRoom = roomNumber;
-        // Re-renderizar para mostrar destaque
-        renderRoomsForCurrentFloor();
-        // Feedback visual no relatório (opcional)
-        updateReportQuickMessage(`Sala ${roomNumber} selecionada. Escolha um status para aplicar.`);
+    function updateQuickMessage(msg) {
+        const auditor = auditorInput.value.trim() || "Não informado";
+        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
+        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
+        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
+        
+        reportStatsDiv.innerHTML = `<div class="stat-item">📊 Aguardando validações</div>`;
+        reportDetailDiv.innerHTML = `
+            <div><strong>👤 Auditor:</strong> ${auditor}</div>
+            <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
+            <div style="background:#fff3cd; padding:8px; border-radius:12px; margin:8px 0;">ℹ️ ${msg}</div>
+            <div>🖱️ Siga o fluxo: Andar → Sala → Status para registrar validações.</div>
+        `;
     }
 
-    // Aplicar o status ativo na sala atualmente selecionada
     function applyStatusToSelectedRoom() {
         if (selectedRoom === null) {
             alert("⚠️ Primeiro selecione uma sala clicando nela!");
@@ -655,40 +627,18 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         
         if (currentStatus !== newStatus) {
             buildingData[floorIndex][roomIndex] = newStatus;
-            // Re-renderizar para atualizar cor
             renderRoomsForCurrentFloor();
-            // Gerar relatório completo
             updateReport();
             return true;
         } else {
-            // Mesmo status, apenas notifica
-            updateReportQuickMessage(`Sala ${selectedRoom} já está com status ${getStatusText(newStatus)}.`);
+            updateQuickMessage(`Sala ${selectedRoom} já está com status ${getStatusText(newStatus)}.`);
             return false;
         }
     }
 
-    // Mensagem rápida sem gerar relatório pesado
-    function updateReportQuickMessage(msg) {
-        const auditor = auditorInput.value.trim() || "Não informado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        const dataHora = new Date().toLocaleString();
-        reportTimeSpan.innerText = `📅 ${dataHora}`;
-        reportDetailDiv.innerHTML = `
-            <div><strong>👤 Auditor:</strong> ${auditor}</div>
-            <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-            <div style="background:#fff3cd; padding:8px; border-radius:12px; margin:8px 0;">ℹ️ ${msg}</div>
-            <div class="empty-report">🖱️ Siga o fluxo: Andar → Sala → Status para registrar validações.</div>
-        `;
-        // Limpar estatísticas quando em modo de espera
-        reportStatsDiv.innerHTML = `<div class="stat-item">📊 Nenhuma validação registrada ainda. Use o fluxo correto.</div>`;
-    }
-
-    // Relatório completo com estatísticas
     function updateReport() {
-        // Contar apenas salas que não são null
         let stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
+        
         for (let f = 0; f < TOTAL_FLOORS; f++) {
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
@@ -699,8 +649,9 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
                 else stats.limpa++;
             }
         }
+        
         const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        const validadasCount = stats.validada + stats.trancada + stats.problema + stats.ocupada;
+        const validadasTotal = stats.validada + stats.trancada + stats.problema + stats.ocupada;
         
         const auditor = auditorInput.value.trim() || "Não informado";
         const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
@@ -709,7 +660,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         
         enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
         
-        // Atualizar estatísticas visuais
         reportStatsDiv.innerHTML = `
             <div class="stat-item">✅ Validada: ${stats.validada}</div>
             <div class="stat-item">🔒 Trancada: ${stats.trancada}</div>
@@ -719,12 +669,12 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
             <div class="stat-item">🏢 Total: ${total}</div>
         `;
         
-        // Relatório detalhado por andar
-        let porAndarHtml = `<strong>📋 Detalhamento por andar (32 andares):</strong><br>`;
+        // Gerar detalhamento por andar (SOMENTE 32 ANDARES)
+        let porAndarHtml = `<strong>📋 DETALHAMENTO POR ANDAR (32 andares x 50 salas):</strong><br><div class="floor-summary">`;
+        
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floorNum = f+1;
-            let andarStats = { validada:0, trancada:0, problema:0, ocupada:0, limpa:0 };
-            for (let r=0; r<ROOMS_PER_FLOOR; r++) {
+            let andarStats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
                 if (s === 'validada') andarStats.validada++;
                 else if (s === 'trancada') andarStats.trancada++;
@@ -732,56 +682,82 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
                 else if (s === 'ocupada') andarStats.ocupada++;
                 else andarStats.limpa++;
             }
-            porAndarHtml += `[${floorNum}°] ✅${andarStats.validada} 🔒${andarStats.trancada} ⚠️${andarStats.problema} 👥${andarStats.ocupada} ⚪${andarStats.limpa} | `;
-            if ((f+1) % 4 === 0) porAndarHtml += `<br>`;
+            
+            porAndarHtml += `
+                <div class="floor-summary-item">
+                    <strong>${f+1}° ANDAR</strong><br>
+                    ✅ ${andarStats.validada} | 🔒 ${andarStats.trancada}<br>
+                    ⚠️ ${andarStats.problema} | 👥 ${andarStats.ocupada}<br>
+                    ⚪ ${andarStats.limpa} aguardando
+                </div>
+            `;
         }
+        porAndarHtml += `</div>`;
         
-        const dataHora = new Date().toLocaleString();
+        const dataHora = new Date().toLocaleString('pt-BR');
         reportTimeSpan.innerText = `📅 ${dataHora}`;
         
         let lastActionMsg = '';
         if (selectedRoom !== null) {
-            const floorIdx = currentFloor;
-            const roomIdx = selectedRoom;
-            const statusAtualSala = buildingData[floorIdx-1][roomIdx-1];
-            lastActionMsg = `<div style="background:#e9ecef; padding:6px; border-radius:16px; margin-top:8px;">🎯 Última ação: Andar ${currentFloor}°, Sala ${selectedRoom} → status: <strong>${getStatusText(statusAtualSala)}</strong></div>`;
+            const statusAtualSala = buildingData[currentFloor-1][selectedRoom-1];
+            lastActionMsg = `<div style="background:#e9ecef; padding:8px; border-radius:12px; margin-top:8px;">
+                🎯 <strong>Última ação:</strong> Andar ${currentFloor}°, Sala ${selectedRoom} → <strong style="color:#1e466e;">${getStatusText(statusAtualSala)}</strong>
+            </div>`;
         }
         
         reportDetailDiv.innerHTML = `
             <div><strong>👤 Auditor:</strong> ${auditor}</div>
             <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-            <div><strong>📊 Consolidado:</strong> ${validadasCount} salas validadas | ${stats.limpa} aguardando validação</div>
-            <div style="margin-top:10px;">${porAndarHtml}</div>
+            <div><strong>📊 Consolidado:</strong> ${validadasTotal} salas validadas | ${stats.limpa} aguardando validação</div>
+            ${porAndarHtml}
             ${lastActionMsg}
-            <div style="margin-top:10px; font-style:italic;">✔️ Validação dinâmica: siga o fluxo Andar → Sala → Status.</div>
+            <div style="margin-top:12px; font-style:italic; color:#5a6874;">✔️ Fluxo: Andar → Sala → Status. Cada clique no status aplica à sala selecionada.</div>
         `;
     }
 
-    // LIMPAR TUDO: todas salas ficam cinza (null), relatório limpo, seleção resetada
     function clearAll() {
         if (confirm("🧹 LIMPAR TUDO: Todas as salas ficarão CINZA (aguardando validação) e o relatório será zerado. Continuar?")) {
             buildingData = initDataCleared();
             selectedRoom = null;
             renderFloorsList();
             renderRoomsForCurrentFloor();
-            // Limpar relatório visual
+            
             const auditor = auditorInput.value.trim() || "Não informado";
             const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
             const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
             const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-            reportStatsDiv.innerHTML = `<div class="stat-item">📊 Nenhuma validação registrada. Use o fluxo correto.</div>`;
+            
+            reportStatsDiv.innerHTML = `
+                <div class="stat-item">✅ Validada: 0</div>
+                <div class="stat-item">🔒 Trancada: 0</div>
+                <div class="stat-item">⚠️ Problema: 0</div>
+                <div class="stat-item">👥 Ocupada: 0</div>
+                <div class="stat-item">⚪ Aguardando: 1600</div>
+                <div class="stat-item">🏢 Total: 1600</div>
+            `;
+            
             reportDetailDiv.innerHTML = `
                 <div><strong>👤 Auditor:</strong> ${auditor}</div>
                 <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-                <div class="empty-report" style="margin-top:12px;">🧹 Sistema limpo! Todas as salas estão em estado neutro (cinza). Siga o fluxo: Andar → Sala → Status para iniciar as validações.</div>
+                <div class="floor-summary">
+                    ${Array.from({length: TOTAL_FLOORS}, (_, i) => `
+                        <div class="floor-summary-item">
+                            <strong>${i+1}° ANDAR</strong><br>
+                            ✅ 0 | 🔒 0 | ⚠️ 0 | 👥 0<br>
+                            ⚪ 50 aguardando
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top:12px; background:#e9ecef; padding:8px; border-radius:12px;">
+                    🧹 Sistema limpo! Todas as salas em estado neutro (cinza). Siga o fluxo: Andar → Sala → Status.
+                </div>
             `;
-            reportTimeSpan.innerText = `📅 ${new Date().toLocaleString()}`;
+            reportTimeSpan.innerText = `📅 ${new Date().toLocaleString('pt-BR')}`;
         }
     }
 
-    // Resetar para todas validada (mantém relatório)
     function resetToValidada() {
-        if (confirm("🔄 Resetar para VALIDADA: Todas as 1600 salas ficarão verdes (status Validada). O relatório será atualizado. Continuar?")) {
+        if (confirm("🔄 RESETAR PARA VALIDADA: Todas as 1600 salas ficarão verdes (status Validada). O relatório será atualizado. Continuar?")) {
             buildingData = initDataValidada();
             selectedRoom = null;
             renderFloorsList();
@@ -790,7 +766,6 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
         }
     }
 
-    // Eventos dos botões de status: aplicar na sala selecionada
     function setupStatusButtons() {
         const btns = document.querySelectorAll('.status-btn');
         btns.forEach(btn => {
@@ -800,17 +775,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
                     activeStatus = status;
                     btns.forEach(b => b.classList.remove('active-status'));
                     btn.classList.add('active-status');
-                    // APLICAR O STATUS NA SALA SELECIONADA (fluxo: sala já deve estar selecionada)
                     applyStatusToSelectedRoom();
                 }
             });
         });
-        // default active
         const defaultBtn = document.querySelector('.status-btn.validada');
         if (defaultBtn) defaultBtn.classList.add('active-status');
     }
 
-    // Eventos de prédio
     radioBerrini.addEventListener('change', () => {
         if (radioBerrini.checked) updateReport();
     });
@@ -819,16 +791,14 @@ Aqui está a versão aprimorada com um botão "Limpar Tudo" que redefine as sala
     });
     
     auditorInput.addEventListener('input', () => updateReport());
-    resetAllBtn.addEventListener('click', resetToValidada);
     clearAllBtn.addEventListener('click', clearAll);
-    refreshReportBtn.addEventListener('click', () => updateReport());
+    resetValidadaBtn.addEventListener('click', resetToValidada);
     
     function init() {
         renderFloorsList();
         renderRoomsForCurrentFloor();
         setupStatusButtons();
-        // Relatório inicial mostrando estado limpo
-        clearAll(); // inicia tudo limpo como pedido
+        clearAll();
     }
     
     init();
