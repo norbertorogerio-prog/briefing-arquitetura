@@ -1,4 +1,4 @@
-Compreendo o problema! O relatório está mostrando um andar para cada sala, quando na verdade deveria mostrar apenas 32 andares. Vou corrigir o sistema para que o relatório mostre corretamente os 32 andares com 50 salas cada, e não uma lista extensa e incorreta.
+Aqui está a versão refinada com botões menores e mais elegantes, e um relatório clean que mostra apenas os andares que têm alguma validação (status definido), ocultando os que estão totalmente "aguardando".
 
 ```html
 <!DOCTYPE html>
@@ -6,7 +6,7 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SysAudit Pro - Monitoramento de Prédios | Berrini / Chucri</title>
+    <title>SysAudit Pro | Monitoramento de Prédios</title>
     <style>
         * {
             margin: 0;
@@ -15,24 +15,26 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
         }
 
         body {
-            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(145deg, #e9eef3 0%, #dce3ec 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
 
         .main-container {
-            max-width: 1600px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: #f5f7fc;
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            transition: all 0.2s ease;
         }
 
+        /* Header refinado */
         .header {
-            background: linear-gradient(135deg, #1e3c5c 0%, #0a2a44 100%);
-            padding: 20px 30px;
+            background: linear-gradient(105deg, #1a3a4f 0%, #0e2a3a 100%);
+            padding: 18px 28px;
             color: white;
         }
 
@@ -41,43 +43,48 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 15px;
+            gap: 16px;
         }
 
         .auditor-section {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255,255,255,0.15);
-            padding: 8px 20px;
-            border-radius: 40px;
-            backdrop-filter: blur(5px);
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 6px 18px;
+            border-radius: 48px;
+            backdrop-filter: blur(4px);
         }
 
         .auditor-section label {
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
         }
 
         #auditorName {
             background: white;
             border: none;
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            color: #1e3c5c;
-            width: 200px;
+            padding: 6px 16px;
+            border-radius: 32px;
+            font-weight: 500;
+            color: #1a3a4f;
+            width: 180px;
             outline: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        #auditorName:focus {
+            box-shadow: 0 0 0 2px #ffc107;
         }
 
         .predio-section {
             display: flex;
-            gap: 25px;
-            background: rgba(255,255,255,0.15);
-            padding: 8px 25px;
-            border-radius: 40px;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 6px 20px;
+            border-radius: 48px;
         }
 
         .predio-option {
@@ -88,69 +95,74 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
         }
 
         .predio-option input {
-            transform: scale(1.2);
+            transform: scale(1);
             cursor: pointer;
+            accent-color: #ffc107;
         }
 
         .predio-option label {
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
         .endereco-box {
-            background: #ffd966;
-            color: #2c3e50;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            font-family: monospace;
+            background: rgba(255, 193, 7, 0.9);
+            color: #1e2f3a;
+            padding: 6px 18px;
+            border-radius: 48px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            font-family: 'SF Mono', monospace;
+            letter-spacing: 0.2px;
         }
 
+        /* Layout split */
         .content-split {
             display: flex;
-            min-height: 600px;
-            background: #eef2f7;
+            min-height: 580px;
+            background: #f8fafd;
         }
 
+        /* Sidebar andares - mais elegante */
         .floors-sidebar {
-            width: 110px;
-            background: #2c3e50;
-            border-right: 4px solid #ffc107;
+            width: 85px;
+            background: #f1f4f8;
+            border-right: 1px solid #e2e8f0;
             overflow-y: auto;
             max-height: 70vh;
         }
 
         .floor-item {
-            padding: 14px 8px;
+            padding: 10px 4px;
             text-align: center;
-            font-weight: bold;
-            font-size: 1rem;
-            color: #ecf0f1;
-            border-bottom: 1px solid #3e5a6b;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #2c3e50;
+            border-bottom: 1px solid #e2e8f0;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: #2c3e50;
+            transition: all 0.2s;
+            background: #f1f4f8;
         }
 
         .floor-item:hover {
-            background: #3e5a6b;
-            transform: translateX(3px);
+            background: #e6edf4;
+            transform: translateX(2px);
         }
 
         .floor-item.active {
             background: #ffc107;
-            color: #1e2f4e;
-            border-left: 4px solid white;
-            font-weight: 800;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            color: #1e2f3a;
+            border-left: 3px solid #ffffff;
+            font-weight: 700;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
+        /* Área das salas */
         .rooms-area {
             flex: 1;
-            padding: 20px 25px;
-            background: #f8fafd;
+            padding: 20px 24px;
+            background: #ffffff;
             display: flex;
             flex-direction: column;
         }
@@ -159,171 +171,179 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #ffc107;
             flex-wrap: wrap;
-            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ffc107;
         }
 
         .current-floor-title {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: 700;
             color: #1e466e;
         }
 
         .current-floor-title span {
             background: #ffc107;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 1.8rem;
+            padding: 4px 14px;
+            border-radius: 48px;
+            font-size: 1.4rem;
+            margin-left: 6px;
         }
 
         .flow-hint {
-            background: #fff3cd;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 0.8rem;
-            color: #856404;
+            background: #fef9e6;
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-size: 0.7rem;
+            color: #b87c00;
+            font-weight: 500;
         }
 
+        /* Grid salas estilo janelas compactas */
         .rooms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 80px));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(58px, 64px));
+            gap: 10px;
             justify-content: flex-start;
-            max-height: 550px;
+            max-height: 520px;
             overflow-y: auto;
-            padding: 10px 5px;
+            padding: 8px 4px;
         }
 
         .room-card {
-            background: #95a5a6;
-            border-radius: 12px 12px 10px 10px;
-            padding: 12px 5px;
+            background: #cbd5e1;
+            border-radius: 14px;
+            padding: 8px 4px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
             color: white;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .room-card:hover {
-            transform: scale(1.05);
-            filter: brightness(1.1);
+            transform: translateY(-2px);
+            filter: brightness(0.96);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .room-card.selected {
-            border: 3px solid #ffc107;
-            box-shadow: 0 0 0 3px rgba(255,193,7,0.5);
-            transform: scale(1.02);
+            border: 2px solid #ffc107;
+            box-shadow: 0 0 0 2px rgba(255,193,7,0.4);
+            transform: scale(0.98);
         }
 
-        .room-card.validada {
-            background: #2e7d32;
-        }
-        .room-card.trancada {
-            background: #5e35b1;
-        }
-        .room-card.problema {
-            background: #f57c00;
-            animation: pulseWarning 1s infinite;
-        }
-        .room-card.ocupada {
-            background: #d81b60;
-        }
-        .room-card.limpa {
-            background: #7f8c8d;
-        }
+        .room-card.validada { background: #2b7a3e; }
+        .room-card.trancada { background: #5e3c9e; }
+        .room-card.problema { background: #e06c2e; animation: softPulse 1s infinite; }
+        .room-card.ocupada { background: #c9386e; }
+        .room-card.limpa { background: #94a3b8; }
 
-        @keyframes pulseWarning {
-            0% { opacity: 0.9; background: #f57c00; }
-            50% { opacity: 1; background: #ff9800; }
-            100% { opacity: 0.9; background: #f57c00; }
+        @keyframes softPulse {
+            0% { opacity: 0.9; background: #e06c2e; }
+            50% { opacity: 1; background: #f07c3e; }
+            100% { opacity: 0.9; background: #e06c2e; }
         }
 
         .room-number {
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 0.75rem;
+            font-weight: 600;
             display: block;
         }
 
         .room-status-badge {
-            font-size: 0.7rem;
-            background: rgba(0,0,0,0.5);
+            font-size: 0.65rem;
+            background: rgba(0,0,0,0.35);
             border-radius: 20px;
-            padding: 2px 6px;
-            margin-top: 6px;
+            padding: 2px 5px;
+            margin-top: 5px;
             display: inline-block;
         }
 
+        /* Painel de botões menores e mais elegantes */
         .status-panel {
-            margin-top: 25px;
-            background: white;
-            border-radius: 28px;
-            padding: 15px 20px;
+            margin-top: 24px;
+            background: #f8fafc;
+            border-radius: 48px;
+            padding: 12px 20px;
             display: flex;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            border: 1px solid #e0e7ed;
+            border: 1px solid #e2edf2;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .status-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
         .status-btn {
-            padding: 8px 24px;
+            padding: 6px 18px;
             border-radius: 40px;
             border: none;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.75rem;
             cursor: pointer;
-            transition: 0.15s;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            background: #eef2f6;
+            color: #1e2f3a;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .status-btn.active-status {
-            transform: scale(1.02);
-            box-shadow: 0 0 0 3px white, 0 0 0 5px #1e466e;
+            transform: scale(0.96);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 2px #ffc107;
         }
 
-        .status-btn.validada { background: #2e7d32; color: white; }
-        .status-btn.trancada { background: #5e35b1; color: white; }
-        .status-btn.problema { background: #f57c00; color: white; }
-        .status-btn.ocupada { background: #d81b60; color: white; }
+        .status-btn.validada { background: #2b7a3e; color: white; }
+        .status-btn.trancada { background: #5e3c9e; color: white; }
+        .status-btn.problema { background: #e06c2e; color: white; }
+        .status-btn.ocupada { background: #c9386e; color: white; }
 
         .action-buttons {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .action-btn {
-            background: #34495e;
-            color: white;
+            background: #eef2f6;
             border: none;
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 40px;
-            font-weight: bold;
+            font-weight: 500;
+            font-size: 0.75rem;
             cursor: pointer;
-            transition: 0.1s;
+            transition: 0.2s;
+            color: #2c3e50;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .action-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
         }
 
         .action-btn.clear-all {
-            background: #6c5b7b;
+            background: #94a3b8;
+            color: white;
         }
 
+        .action-btn.clear-all:hover {
+            background: #7e8da0;
+        }
+
+        /* RELATÓRIO CLEAN - mostra apenas andares com validação */
         .report-section {
-            background: #fffef7;
-            border-top: 4px solid #ffc107;
-            padding: 20px 30px;
+            background: #ffffff;
+            border-top: 1px solid #eef2f8;
+            padding: 18px 28px 24px;
         }
 
         .report-header {
@@ -331,66 +351,90 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
             justify-content: space-between;
             align-items: baseline;
             flex-wrap: wrap;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
         }
 
         .report-header h3 {
-            color: #1e466e;
-            font-size: 1.4rem;
+            color: #1a3a4f;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.2px;
         }
 
         .report-stats {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
-            margin-bottom: 15px;
-            background: #ecf0f1;
-            padding: 12px 18px;
-            border-radius: 40px;
+            margin-bottom: 18px;
+            background: #f8fafc;
+            padding: 10px 20px;
+            border-radius: 48px;
+            font-size: 0.8rem;
         }
 
         .stat-item {
-            font-weight: bold;
+            font-weight: 600;
+            color: #2d3e50;
         }
 
         .report-detail {
-            background: #f8f9fa;
-            border-radius: 20px;
-            padding: 15px;
-            max-height: 250px;
+            background: #fefefe;
+            border-radius: 24px;
+            padding: 12px 16px;
+            max-height: 280px;
             overflow-y: auto;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            border-left: 5px solid #ffc107;
+            font-size: 0.8rem;
+            border: 1px solid #edf2f7;
         }
 
-        .floor-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 8px;
-            margin-top: 10px;
+        .clean-report-empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 24px;
+            font-style: italic;
         }
 
-        .floor-summary-item {
-            background: #e9ecef;
-            padding: 6px 10px;
-            border-radius: 8px;
+        .floor-card-clean {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .floor-title-clean {
+            font-weight: 700;
+            color: #1e466e;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .status-badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
             font-size: 0.75rem;
+        }
+
+        .status-tag {
+            background: #eef2ff;
+            padding: 4px 12px;
+            border-radius: 32px;
         }
 
         footer {
             text-align: center;
-            padding: 15px;
-            font-size: 0.7rem;
-            color: #7f8c8d;
-            background: #eef2f7;
+            padding: 14px;
+            font-size: 0.65rem;
+            color: #7c8b9c;
+            background: #fafcff;
+            border-top: 1px solid #eef2f8;
         }
 
-        @media (max-width: 800px) {
-            .floors-sidebar { width: 70px; }
-            .floor-item { font-size: 0.7rem; padding: 10px 4px; }
-            .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(55px, 65px)); }
-            .room-card { padding: 8px 3px; }
+        @media (max-width: 700px) {
+            .rooms-grid { grid-template-columns: repeat(auto-fill, minmax(50px, 55px)); }
+            .floors-sidebar { width: 65px; }
+            .floor-item { font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -399,50 +443,47 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
     <div class="header">
         <div class="header-top">
             <div class="auditor-section">
-                <label>🕵️‍♂️ AUDITOR:</label>
-                <input type="text" id="auditorName" placeholder="Nome completo" value="Roberto Almeida">
+                <label>🕵️ Auditor</label>
+                <input type="text" id="auditorName" placeholder="Seu nome" value="Roberto Almeida">
             </div>
             <div class="predio-section">
                 <div class="predio-option">
                     <input type="radio" name="predio" id="predioBerrini" value="berrini" checked>
-                    <label for="predioBerrini">🏢 BERRINI</label>
+                    <label for="predioBerrini">Berrini</label>
                 </div>
                 <div class="predio-option">
                     <input type="radio" name="predio" id="predioChucri" value="chucri">
-                    <label for="predioChucri">🏙️ CHUCRI</label>
+                    <label for="predioChucri">Chucri</label>
                 </div>
             </div>
             <div class="endereco-box" id="enderecoDisplay">
-                📍 Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, SP
+                📍 Av. Eng. Luís Carlos Berrini, 1295
             </div>
         </div>
-        <div style="font-size: 0.85rem; opacity: 0.9;">📋 Sistema de Validação | 32 Andares | 50 Salas por andar | Total 1600 ambientes</div>
     </div>
 
     <div class="content-split">
         <div class="floors-sidebar" id="floorsSidebar"></div>
-
         <div class="rooms-area">
             <div class="current-floor-header">
                 <div class="current-floor-title">
-                    🪟 ANDAR <span id="currentFloorNumber">1</span>° - SALAS
+                    🪟 ANDAR <span id="currentFloorNumber">1</span>°
                 </div>
                 <div class="flow-hint">
-                    📌 Fluxo: 1️⃣ Escolha o ANDAR → 2️⃣ Clique na SALA → 3️⃣ Escolha o STATUS
+                    ① andar ② sala ③ status
                 </div>
             </div>
             <div class="rooms-grid" id="roomsGrid"></div>
-
             <div class="status-panel">
                 <div class="status-buttons" id="statusButtons">
-                    <button class="status-btn validada" data-status="validada">✅ VALIDADA</button>
-                    <button class="status-btn trancada" data-status="trancada">🔒 TRANCADA</button>
-                    <button class="status-btn problema" data-status="problema">⚠️ PROBLEMA</button>
-                    <button class="status-btn ocupada" data-status="ocupada">👥 OCUPADA</button>
+                    <button class="status-btn validada" data-status="validada">✅ Validada</button>
+                    <button class="status-btn trancada" data-status="trancada">🔒 Trancada</button>
+                    <button class="status-btn problema" data-status="problema">⚠️ Problema</button>
+                    <button class="status-btn ocupada" data-status="ocupada">👥 Ocupada</button>
                 </div>
                 <div class="action-buttons">
-                    <button class="action-btn clear-all" id="clearAllBtn">🧹 LIMPAR TUDO</button>
-                    <button class="action-btn" id="resetValidadaBtn">🔄 RESETAR (VALIDADA)</button>
+                    <button class="action-btn clear-all" id="clearAllBtn">🧹 Limpar tudo</button>
+                    <button class="action-btn" id="resetValidadaBtn">🔄 Resetar (Validada)</button>
                 </div>
             </div>
         </div>
@@ -450,42 +491,36 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
 
     <div class="report-section">
         <div class="report-header">
-            <h3>📄 RELATÓRIO DE VALIDAÇÃO</h3>
-            <span id="reportTime" style="color:#5a6874; font-size:0.8rem;"></span>
+            <h3>📋 Relatório de validação</h3>
+            <span id="reportTime" style="font-size:0.7rem; color:#7f8c8d;"></span>
         </div>
         <div class="report-stats" id="reportStats"></div>
         <div class="report-detail" id="reportDetail"></div>
     </div>
     <footer>
-        ✅ Fluxo correto: 1) Selecione o andar à esquerda → 2) Clique em uma sala (ficará destacada) → 3) Escolha o status desejado → A sala será atualizada e o relatório gerado automaticamente.
-        🧹 "LIMPAR TUDO" = todas as salas ficam CINZA e o relatório é zerado.
+        🔍 Clique no andar → selecione a sala → escolha o status. Relatório exibe apenas andares com alguma validação.
     </footer>
 </div>
 
 <script>
     const TOTAL_FLOORS = 32;
     const ROOMS_PER_FLOOR = 50;
-
-    // Dados: cada célula pode ser 'validada', 'trancada', 'problema', 'ocupada' ou null (limpo)
     let buildingData = [];
-
     let currentFloor = 1;
     let selectedRoom = null;
     let activeStatus = 'validada';
 
     const addresses = {
-        berrini: "Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, São Paulo - SP, 04571-010",
-        chucri: "Av. Dr. Chucri Zaidan, 940 - Vila Cordeiro, São Paulo - SP, 04583-906"
+        berrini: "Av. Eng. Luís Carlos Berrini, 1295 - Brooklin, São Paulo - SP",
+        chucri: "Av. Dr. Chucri Zaidan, 940 - Vila Cordeiro, São Paulo - SP"
     };
 
     function initDataCleared() {
         const data = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floorRooms = [];
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                floorRooms.push(null);
-            }
-            data.push(floorRooms);
+            const floor = [];
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) floor.push(null);
+            data.push(floor);
         }
         return data;
     }
@@ -493,17 +528,16 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
     function initDataValidada() {
         const data = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            const floorRooms = [];
-            for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
-                floorRooms.push('validada');
-            }
-            data.push(floorRooms);
+            const floor = [];
+            for (let r = 0; r < ROOMS_PER_FLOOR; r++) floor.push('validada');
+            data.push(floor);
         }
         return data;
     }
 
     buildingData = initDataCleared();
 
+    // DOM
     const floorsSidebar = document.getElementById('floorsSidebar');
     const roomsGrid = document.getElementById('roomsGrid');
     const currentFloorNumberSpan = document.getElementById('currentFloorNumber');
@@ -517,29 +551,6 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
     const clearAllBtn = document.getElementById('clearAllBtn');
     const resetValidadaBtn = document.getElementById('resetValidadaBtn');
 
-    function renderFloorsList() {
-        floorsSidebar.innerHTML = '';
-        for (let i = 1; i <= TOTAL_FLOORS; i++) {
-            const floorDiv = document.createElement('div');
-            floorDiv.className = 'floor-item';
-            if (i === currentFloor) floorDiv.classList.add('active');
-            floorDiv.innerText = `${i}°`;
-            floorDiv.addEventListener('click', (function(floorNum) {
-                return function() {
-                    currentFloor = floorNum;
-                    selectedRoom = null;
-                    currentFloorNumberSpan.innerText = currentFloor;
-                    document.querySelectorAll('.floor-item').forEach((el, idx) => {
-                        if (idx + 1 === currentFloor) el.classList.add('active');
-                        else el.classList.remove('active');
-                    });
-                    renderRoomsForCurrentFloor();
-                };
-            })(i));
-            floorsSidebar.appendChild(floorDiv);
-        }
-    }
-
     function getStatusClass(status) {
         if (status === 'validada') return 'validada';
         if (status === 'trancada') return 'trancada';
@@ -549,96 +560,90 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
     }
 
     function getStatusBadge(status) {
-        if (status === 'validada') return '✅';
+        if (status === 'validada') return '✓';
         if (status === 'trancada') return '🔒';
-        if (status === 'problema') return '⚠️';
+        if (status === 'problema') return '!';
         if (status === 'ocupada') return '👥';
-        return '⚪';
+        return '○';
     }
 
-    function getStatusText(status) {
-        if (status === 'validada') return 'VALIDADA';
-        if (status === 'trancada') return 'TRANCADA';
-        if (status === 'problema') return 'PROBLEMA';
-        if (status === 'ocupada') return 'OCUPADA';
-        return 'AGUARDANDO';
+    function getStatusName(status) {
+        if (status === 'validada') return 'Validada';
+        if (status === 'trancada') return 'Trancada';
+        if (status === 'problema') return 'Problema';
+        if (status === 'ocupada') return 'Ocupada';
+        return 'Aguardando';
+    }
+
+    function renderFloorsList() {
+        floorsSidebar.innerHTML = '';
+        for (let i = 1; i <= TOTAL_FLOORS; i++) {
+            const div = document.createElement('div');
+            div.className = 'floor-item';
+            if (i === currentFloor) div.classList.add('active');
+            div.innerText = `${i}°`;
+            div.addEventListener('click', () => {
+                currentFloor = i;
+                selectedRoom = null;
+                currentFloorNumberSpan.innerText = currentFloor;
+                document.querySelectorAll('.floor-item').forEach((el, idx) => {
+                    if (idx + 1 === currentFloor) el.classList.add('active');
+                    else el.classList.remove('active');
+                });
+                renderRoomsForCurrentFloor();
+            });
+            floorsSidebar.appendChild(div);
+        }
     }
 
     function renderRoomsForCurrentFloor() {
-        const floorIndex = currentFloor - 1;
-        const roomsStatus = buildingData[floorIndex];
+        const floorIdx = currentFloor - 1;
+        const roomsStatus = buildingData[floorIdx];
         roomsGrid.innerHTML = '';
-        
         for (let i = 0; i < ROOMS_PER_FLOOR; i++) {
             const status = roomsStatus[i];
             const roomNum = i + 1;
-            const roomDiv = document.createElement('div');
-            roomDiv.className = `room-card ${getStatusClass(status)}`;
-            if (selectedRoom === roomNum) roomDiv.classList.add('selected');
-            
-            const roomNumberSpan = document.createElement('span');
-            roomNumberSpan.className = 'room-number';
-            roomNumberSpan.innerText = `${roomNum}`;
-            const statusBadge = document.createElement('span');
-            statusBadge.className = 'room-status-badge';
-            statusBadge.innerText = getStatusBadge(status);
-            
-            roomDiv.appendChild(roomNumberSpan);
-            roomDiv.appendChild(statusBadge);
-            
-            roomDiv.addEventListener('click', (function(roomIdx) {
-                return function(e) {
-                    e.stopPropagation();
-                    selectedRoom = roomIdx + 1;
-                    renderRoomsForCurrentFloor();
-                    updateQuickMessage(`Sala ${selectedRoom} selecionada. Escolha um status para aplicar.`);
-                };
-            })(i));
-            
-            roomsGrid.appendChild(roomDiv);
+            const card = document.createElement('div');
+            card.className = `room-card ${getStatusClass(status)}`;
+            if (selectedRoom === roomNum) card.classList.add('selected');
+            card.innerHTML = `
+                <span class="room-number">${roomNum}</span>
+                <span class="room-status-badge">${getStatusBadge(status)}</span>
+            `;
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectedRoom = roomNum;
+                renderRoomsForCurrentFloor();
+                // feedback suave no relatório
+                updateReport(); 
+            });
+            roomsGrid.appendChild(card);
         }
     }
 
-    function updateQuickMessage(msg) {
-        const auditor = auditorInput.value.trim() || "Não informado";
-        const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-        const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-        const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        
-        reportStatsDiv.innerHTML = `<div class="stat-item">📊 Aguardando validações</div>`;
-        reportDetailDiv.innerHTML = `
-            <div><strong>👤 Auditor:</strong> ${auditor}</div>
-            <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-            <div style="background:#fff3cd; padding:8px; border-radius:12px; margin:8px 0;">ℹ️ ${msg}</div>
-            <div>🖱️ Siga o fluxo: Andar → Sala → Status para registrar validações.</div>
-        `;
-    }
-
-    function applyStatusToSelectedRoom() {
+    function applyStatusToSelected() {
         if (selectedRoom === null) {
-            alert("⚠️ Primeiro selecione uma sala clicando nela!");
+            alert("Primeiro clique em uma sala para selecioná-la.");
             return false;
         }
-        
-        const floorIndex = currentFloor - 1;
-        const roomIndex = selectedRoom - 1;
-        const currentStatus = buildingData[floorIndex][roomIndex];
-        const newStatus = activeStatus;
-        
-        if (currentStatus !== newStatus) {
-            buildingData[floorIndex][roomIndex] = newStatus;
+        const floorIdx = currentFloor - 1;
+        const roomIdx = selectedRoom - 1;
+        const old = buildingData[floorIdx][roomIdx];
+        if (old !== activeStatus) {
+            buildingData[floorIdx][roomIdx] = activeStatus;
             renderRoomsForCurrentFloor();
             updateReport();
             return true;
         } else {
-            updateQuickMessage(`Sala ${selectedRoom} já está com status ${getStatusText(newStatus)}.`);
+            updateReport(); // apenas atualiza
             return false;
         }
     }
 
+    // RELATÓRIO CLEAN: mostra APENAS andares que possuem alguma sala com status definido (não null)
     function updateReport() {
+        // estatísticas gerais
         let stats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
-        
         for (let f = 0; f < TOTAL_FLOORS; f++) {
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
@@ -649,115 +654,90 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
                 else stats.limpa++;
             }
         }
-        
         const total = TOTAL_FLOORS * ROOMS_PER_FLOOR;
-        const validadasTotal = stats.validada + stats.trancada + stats.problema + stats.ocupada;
-        
         const auditor = auditorInput.value.trim() || "Não informado";
         const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
         const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
         const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-        
         enderecoDisplay.innerHTML = `📍 ${enderecoAtual}`;
-        
+
         reportStatsDiv.innerHTML = `
-            <div class="stat-item">✅ Validada: ${stats.validada}</div>
-            <div class="stat-item">🔒 Trancada: ${stats.trancada}</div>
-            <div class="stat-item">⚠️ Problema: ${stats.problema}</div>
-            <div class="stat-item">👥 Ocupada: ${stats.ocupada}</div>
-            <div class="stat-item">⚪ Aguardando: ${stats.limpa}</div>
-            <div class="stat-item">🏢 Total: ${total}</div>
+            <div class="stat-item">✅ ${stats.validada}</div>
+            <div class="stat-item">🔒 ${stats.trancada}</div>
+            <div class="stat-item">⚠️ ${stats.problema}</div>
+            <div class="stat-item">👥 ${stats.ocupada}</div>
+            <div class="stat-item">⚪ ${stats.limpa}</div>
+            <div class="stat-item">📊 ${total}</div>
         `;
-        
-        // Gerar detalhamento por andar (SOMENTE 32 ANDARES)
-        let porAndarHtml = `<strong>📋 DETALHAMENTO POR ANDAR (32 andares x 50 salas):</strong><br><div class="floor-summary">`;
-        
+
+        // CONSTRUIR RELATÓRIO CLEAN: apenas andares com pelo menos uma validação
+        const floorsWithData = [];
         for (let f = 0; f < TOTAL_FLOORS; f++) {
-            let andarStats = { validada: 0, trancada: 0, problema: 0, ocupada: 0, limpa: 0 };
+            let hasValidation = false;
+            const floorStats = { validada: 0, trancada: 0, problema: 0, ocupada: 0 };
             for (let r = 0; r < ROOMS_PER_FLOOR; r++) {
                 const s = buildingData[f][r];
-                if (s === 'validada') andarStats.validada++;
-                else if (s === 'trancada') andarStats.trancada++;
-                else if (s === 'problema') andarStats.problema++;
-                else if (s === 'ocupada') andarStats.ocupada++;
-                else andarStats.limpa++;
+                if (s !== null) {
+                    hasValidation = true;
+                    if (s === 'validada') floorStats.validada++;
+                    else if (s === 'trancada') floorStats.trancada++;
+                    else if (s === 'problema') floorStats.problema++;
+                    else if (s === 'ocupada') floorStats.ocupada++;
+                }
             }
-            
-            porAndarHtml += `
-                <div class="floor-summary-item">
-                    <strong>${f+1}° ANDAR</strong><br>
-                    ✅ ${andarStats.validada} | 🔒 ${andarStats.trancada}<br>
-                    ⚠️ ${andarStats.problema} | 👥 ${andarStats.ocupada}<br>
-                    ⚪ ${andarStats.limpa} aguardando
-                </div>
-            `;
+            if (hasValidation) {
+                floorsWithData.push({ floor: f+1, stats: floorStats });
+            }
         }
-        porAndarHtml += `</div>`;
+
+        const now = new Date().toLocaleString('pt-BR');
+        reportTimeSpan.innerText = `🕘 ${now}`;
+
+        if (floorsWithData.length === 0) {
+            reportDetailDiv.innerHTML = `<div class="clean-report-empty">✨ Nenhuma validação registrada ainda.<br>Siga o fluxo: andar → sala → status.</div>`;
+        } else {
+            let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
+            for (let item of floorsWithData) {
+                const f = item.floor;
+                const st = item.stats;
+                const totalFloorValid = st.validada + st.trancada + st.problema + st.ocupada;
+                html += `
+                    <div class="floor-card-clean">
+                        <div class="floor-title-clean">🏢 ${f}° ANDAR — ${totalFloorValid} sala(s) validada(s)</div>
+                        <div class="status-badge-list">
+                            ${st.validada > 0 ? `<span class="status-tag" style="background:#e0f2e3;">✅ ${st.validada} Validada</span>` : ''}
+                            ${st.trancada > 0 ? `<span class="status-tag" style="background:#ede7f6;">🔒 ${st.trancada} Trancada</span>` : ''}
+                            ${st.problema > 0 ? `<span class="status-tag" style="background:#ffede3;">⚠️ ${st.problema} Problema</span>` : ''}
+                            ${st.ocupada > 0 ? `<span class="status-tag" style="background:#ffe4ec;">👥 ${st.ocupada} Ocupada</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            html += `</div><div style="margin-top:12px; font-size:0.7rem; color:#6c7a8e;">✔️ Andares sem validação estão ocultos no relatório.</div>`;
+            reportDetailDiv.innerHTML = html;
+        }
         
-        const dataHora = new Date().toLocaleString('pt-BR');
-        reportTimeSpan.innerText = `📅 ${dataHora}`;
-        
-        let lastActionMsg = '';
+        // adicional: pequena mensagem de última ação se houver sala selecionada
         if (selectedRoom !== null) {
-            const statusAtualSala = buildingData[currentFloor-1][selectedRoom-1];
-            lastActionMsg = `<div style="background:#e9ecef; padding:8px; border-radius:12px; margin-top:8px;">
-                🎯 <strong>Última ação:</strong> Andar ${currentFloor}°, Sala ${selectedRoom} → <strong style="color:#1e466e;">${getStatusText(statusAtualSala)}</strong>
-            </div>`;
+            const floorIdx = currentFloor - 1;
+            const statusAtual = buildingData[floorIdx][selectedRoom - 1];
+            const statusNome = getStatusName(statusAtual);
+            // não polui, apenas mantém clean, mas pode adicionar leve dica
         }
-        
-        reportDetailDiv.innerHTML = `
-            <div><strong>👤 Auditor:</strong> ${auditor}</div>
-            <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-            <div><strong>📊 Consolidado:</strong> ${validadasTotal} salas validadas | ${stats.limpa} aguardando validação</div>
-            ${porAndarHtml}
-            ${lastActionMsg}
-            <div style="margin-top:12px; font-style:italic; color:#5a6874;">✔️ Fluxo: Andar → Sala → Status. Cada clique no status aplica à sala selecionada.</div>
-        `;
     }
 
     function clearAll() {
-        if (confirm("🧹 LIMPAR TUDO: Todas as salas ficarão CINZA (aguardando validação) e o relatório será zerado. Continuar?")) {
+        if (confirm("Limpar tudo? Todas as salas ficarão cinza (aguardando) e o relatório será zerado.")) {
             buildingData = initDataCleared();
             selectedRoom = null;
             renderFloorsList();
             renderRoomsForCurrentFloor();
-            
-            const auditor = auditorInput.value.trim() || "Não informado";
-            const predioSelecionado = document.querySelector('input[name="predio"]:checked').value;
-            const predioNome = predioSelecionado === 'berrini' ? 'Berrini' : 'Chucri';
-            const enderecoAtual = predioSelecionado === 'berrini' ? addresses.berrini : addresses.chucri;
-            
-            reportStatsDiv.innerHTML = `
-                <div class="stat-item">✅ Validada: 0</div>
-                <div class="stat-item">🔒 Trancada: 0</div>
-                <div class="stat-item">⚠️ Problema: 0</div>
-                <div class="stat-item">👥 Ocupada: 0</div>
-                <div class="stat-item">⚪ Aguardando: 1600</div>
-                <div class="stat-item">🏢 Total: 1600</div>
-            `;
-            
-            reportDetailDiv.innerHTML = `
-                <div><strong>👤 Auditor:</strong> ${auditor}</div>
-                <div><strong>🏛️ Edifício:</strong> ${predioNome} - ${enderecoAtual}</div>
-                <div class="floor-summary">
-                    ${Array.from({length: TOTAL_FLOORS}, (_, i) => `
-                        <div class="floor-summary-item">
-                            <strong>${i+1}° ANDAR</strong><br>
-                            ✅ 0 | 🔒 0 | ⚠️ 0 | 👥 0<br>
-                            ⚪ 50 aguardando
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="margin-top:12px; background:#e9ecef; padding:8px; border-radius:12px;">
-                    🧹 Sistema limpo! Todas as salas em estado neutro (cinza). Siga o fluxo: Andar → Sala → Status.
-                </div>
-            `;
-            reportTimeSpan.innerText = `📅 ${new Date().toLocaleString('pt-BR')}`;
+            updateReport();
         }
     }
 
     function resetToValidada() {
-        if (confirm("🔄 RESETAR PARA VALIDADA: Todas as 1600 salas ficarão verdes (status Validada). O relatório será atualizado. Continuar?")) {
+        if (confirm("Resetar todas as salas para status VALIDADA? O relatório será atualizado.")) {
             buildingData = initDataValidada();
             selectedRoom = null;
             renderFloorsList();
@@ -775,32 +755,25 @@ Compreendo o problema! O relatório está mostrando um andar para cada sala, qua
                     activeStatus = status;
                     btns.forEach(b => b.classList.remove('active-status'));
                     btn.classList.add('active-status');
-                    applyStatusToSelectedRoom();
+                    applyStatusToSelected();
                 }
             });
         });
-        const defaultBtn = document.querySelector('.status-btn.validada');
-        if (defaultBtn) defaultBtn.classList.add('active-status');
+        document.querySelector('.status-btn.validada')?.classList.add('active-status');
     }
 
-    radioBerrini.addEventListener('change', () => {
-        if (radioBerrini.checked) updateReport();
-    });
-    radioChucri.addEventListener('change', () => {
-        if (radioChucri.checked) updateReport();
-    });
-    
+    radioBerrini.addEventListener('change', () => updateReport());
+    radioChucri.addEventListener('change', () => updateReport());
     auditorInput.addEventListener('input', () => updateReport());
     clearAllBtn.addEventListener('click', clearAll);
     resetValidadaBtn.addEventListener('click', resetToValidada);
-    
+
     function init() {
         renderFloorsList();
         renderRoomsForCurrentFloor();
         setupStatusButtons();
-        clearAll();
+        updateReport();
     }
-    
     init();
 </script>
 </body>
