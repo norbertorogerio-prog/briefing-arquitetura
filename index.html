@@ -23,7 +23,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         .header {
             text-align: center;
             color: white;
@@ -41,14 +40,12 @@
             opacity: 0.9;
         }
 
-        /* Grid principal */
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
             gap: 30px;
         }
 
-        /* Card do prédio */
         .building-card {
             background: white;
             border-radius: 20px;
@@ -81,7 +78,6 @@
             align-items: center;
         }
 
-        /* Representação visual do prédio */
         .building-structure {
             width: 100%;
             max-width: 300px;
@@ -161,7 +157,6 @@
             margin: 5px;
         }
 
-        /* Lista de salas */
         .rooms-card {
             background: white;
             border-radius: 20px;
@@ -183,23 +178,75 @@
             padding: 15px;
             background: #f8f9fa;
             border-radius: 12px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
             flex: 1;
             text-align: center;
+            min-width: 80px;
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            color: #667eea;
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #666;
             margin-top: 5px;
+        }
+
+        .stat-avaliada .stat-number { color: #10b981; }
+        .stat-trancada .stat-number { color: #f59e0b; }
+        .stat-ocupada .stat-number { color: #3b82f6; }
+        .stat-problemas .stat-number { color: #ef4444; }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            transform: scale(1.05);
         }
 
         .rooms-list {
@@ -220,14 +267,10 @@
             border-left: 4px solid #ddd;
         }
 
-        .room-item.validated {
-            border-left-color: #10b981;
-            background: linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%);
-        }
-
-        .room-item.pending {
-            border-left-color: #f59e0b;
-        }
+        .room-item.status-avaliada { border-left-color: #10b981; }
+        .room-item.status-trancada { border-left-color: #f59e0b; }
+        .room-item.status-ocupada { border-left-color: #3b82f6; }
+        .room-item.status-problemas { border-left-color: #ef4444; }
 
         .room-info {
             flex: 1;
@@ -235,12 +278,12 @@
 
         .room-code {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #333;
         }
 
         .room-location {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #666;
             margin-top: 4px;
         }
@@ -249,7 +292,7 @@
             display: inline-block;
             padding: 2px 8px;
             border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             margin-right: 8px;
         }
 
@@ -263,50 +306,29 @@
             color: white;
         }
 
-        .room-status {
+        .room-status-select {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .status-badge {
-            padding: 5px 12px;
+        .status-select {
+            padding: 6px 12px;
             border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            background: white;
             font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-validated {
-            background: #10b981;
-            color: white;
-        }
-
-        .status-pending {
-            background: #f59e0b;
-            color: white;
-        }
-
-        .btn-validate {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
             transition: all 0.3s ease;
         }
 
-        .btn-validate:hover {
-            background: #5a67d8;
-            transform: scale(1.05);
-        }
+        .status-select.status-avaliada { background: #10b98120; color: #10b981; border-color: #10b981; }
+        .status-select.status-trancada { background: #f59e0b20; color: #f59e0b; border-color: #f59e0b; }
+        .status-select.status-ocupada { background: #3b82f620; color: #3b82f6; border-color: #3b82f6; }
+        .status-select.status-problemas { background: #ef444420; color: #ef4444; border-color: #ef4444; }
 
-        .btn-validate:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
+        .status-select:hover {
+            transform: scale(1.02);
         }
 
         .btn-reset {
@@ -326,24 +348,6 @@
             background: #dc2626;
         }
 
-        .search-box {
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
         @media (max-width: 768px) {
             .main-grid {
                 grid-template-columns: 1fr;
@@ -352,6 +356,14 @@
             .header h1 {
                 font-size: 1.8rem;
             }
+
+            .stats {
+                gap: 8px;
+            }
+
+            .stat-number {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -359,11 +371,10 @@
     <div class="container">
         <div class="header">
             <h1>🏢 Validação de Salas</h1>
-            <p>Prédio Comercial | Sistema de Validação e Controle</p>
+            <p>Prédio Comercial | 32 Andares | 50 Salas</p>
         </div>
 
         <div class="main-grid">
-            <!-- Lado esquerdo: Prédio -->
             <div class="building-card">
                 <h2>📍 Torre Comercial</h2>
                 <div class="building-image">
@@ -371,44 +382,44 @@
                         <div class="zone-alta">
                             ZONA ALTA
                             <div class="floors-alta">
-                                Pisos 16 a 32
+                                Pisos 17 a 32
                             </div>
                         </div>
                         <div class="zone-baixa">
                             ZONA BAIXA
                             <div class="floors-baixa">
-                                Pisos 01 a 15
+                                Pisos 01 a 16
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="building-info">
                     <span class="info-tag">🏷️ Código: 32-SL13</span>
-                    <span class="info-tag">📐 Área total: 12.500m²</span>
-                    <span class="info-tag">🚪 32 andares</span>
-                    <span class="info-tag">✅ Sistema de validação ativo</span>
+                    <span class="info-tag">📐 32 Andares</span>
+                    <span class="info-tag">🚪 50 Salas Comerciais</span>
+                    <span class="info-tag">✅ Sistema de Gestão</span>
                 </div>
-                <p style="margin-top: 15px; color: #666; font-size: 0.85rem; text-align: center;">
-                    *Clique em "Validar Sala" ao lado para confirmar as ocupações
-                </p>
             </div>
 
-            <!-- Lado direito: Lista de salas -->
             <div class="rooms-card">
                 <h2>📋 Salas Comerciais</h2>
                 
                 <div class="stats" id="stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="totalCount">0</div>
-                        <div class="stat-label">Total de Salas</div>
+                    <div class="stat-item stat-avaliada">
+                        <div class="stat-number" id="avaliadaCount">0</div>
+                        <div class="stat-label">✓ Avaliada</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="validatedCount">0</div>
-                        <div class="stat-label">Validadas</div>
+                    <div class="stat-item stat-trancada">
+                        <div class="stat-number" id="trancadaCount">0</div>
+                        <div class="stat-label">🔒 Trancada</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="pendingCount">0</div>
-                        <div class="stat-label">Pendentes</div>
+                    <div class="stat-item stat-ocupada">
+                        <div class="stat-number" id="ocupadaCount">0</div>
+                        <div class="stat-label">👥 Ocupada</div>
+                    </div>
+                    <div class="stat-item stat-problemas">
+                        <div class="stat-number" id="problemasCount">0</div>
+                        <div class="stat-label">⚠️ Problemas</div>
                     </div>
                 </div>
 
@@ -416,95 +427,102 @@
                     <input type="text" id="searchInput" placeholder="🔍 Buscar sala por código...">
                 </div>
 
-                <div class="rooms-list" id="roomsList">
-                    <!-- Lista de salas será gerada via JavaScript -->
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="todos">Todos</button>
+                    <button class="filter-btn" data-filter="avaliada">✓ Avaliada</button>
+                    <button class="filter-btn" data-filter="trancada">🔒 Trancada</button>
+                    <button class="filter-btn" data-filter="ocupada">👥 Ocupada</button>
+                    <button class="filter-btn" data-filter="problemas">⚠️ Problemas</button>
                 </div>
 
-                <button class="btn-reset" id="resetBtn">🔄 Resetar Todas as Validações</button>
+                <div class="rooms-list" id="roomsList"></div>
+
+                <button class="btn-reset" id="resetBtn">🔄 Resetar Todos os Status</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Gerar lista de salas baseada na referência 32-SL13
+        // Status possíveis
+        const STATUS = ['avaliada', 'trancada', 'ocupada', 'problemas'];
+        const STATUS_LABELS = {
+            avaliada: { text: '✓ Avaliada', icon: '✓', color: '#10b981' },
+            trancada: { text: '🔒 Trancada', icon: '🔒', color: '#f59e0b' },
+            ocupada: { text: '👥 Ocupada', icon: '👥', color: '#3b82f6' },
+            problemas: { text: '⚠️ Problemas', icon: '⚠️', color: '#ef4444' }
+        };
+
+        // Gerar 50 salas distribuídas em 32 andares
         const generateRooms = () => {
             const rooms = [];
-            const prefixes = ['32-SL', '32-SB', '32-AP'];
+            const prefixes = ['SL', 'SB', 'AP', 'CO', 'AD'];
             
-            for (let i = 1; i <= 32; i++) {
-                // Para cada andar, criar 2-4 salas
-                const numRooms = Math.floor(Math.random() * 3) + 2; // 2 a 4 salas por andar
-                for (let j = 1; j <= numRooms; j++) {
-                    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-                    const roomCode = `${prefix}${String(i).padStart(2, '0')}${String(j).padStart(2, '0')}`;
-                    const zone = i >= 16 ? 'Alta' : 'Baixa';
-                    const floor = i;
-                    
-                    rooms.push({
-                        id: `${roomCode}`,
-                        code: roomCode,
-                        floor: floor,
-                        zone: zone,
-                        validated: Math.random() > 0.6, // 40% já validados aleatoriamente
-                        validatedAt: null
-                    });
-                }
-            }
-            
-            // Adicionar várias salas com o código 32-SL13 como referência
-            for (let i = 1; i <= 8; i++) {
+            for (let i = 1; i <= 50; i++) {
+                // Distribuir andares de forma equilibrada
+                const floor = Math.floor((i - 1) / (50 / 32)) + 1;
+                const zone = floor >= 17 ? 'Alta' : 'Baixa';
+                const prefix = prefixes[i % prefixes.length];
+                const roomNumber = String(i).padStart(3, '0');
+                const roomCode = `${floor.toString().padStart(2, '0')}-${prefix}${roomNumber}`;
+                
+                // Distribuir status iniciais
+                let status;
+                if (i <= 12) status = 'avaliada';
+                else if (i <= 22) status = 'trancada';
+                else if (i <= 38) status = 'ocupada';
+                else status = 'problemas';
+                
                 rooms.push({
-                    id: `32-SL13-${i}`,
-                    code: `32-SL13${String(i).padStart(2, '0')}`,
-                    floor: 13,
-                    zone: 'Baixa',
-                    validated: false,
-                    validatedAt: null
+                    id: i,
+                    code: roomCode,
+                    floor: floor,
+                    zone: zone,
+                    status: status,
+                    lastUpdate: new Date().toLocaleString('pt-BR')
                 });
             }
             
-            return rooms.sort((a, b) => a.code.localeCompare(b.code));
+            // Ordenar por andar e código
+            return rooms.sort((a, b) => {
+                if (a.floor === b.floor) return a.code.localeCompare(b.code);
+                return a.floor - b.floor;
+            });
         };
 
         let rooms = generateRooms();
         let searchTerm = '';
+        let currentFilter = 'todos';
 
         // Atualizar estatísticas
         const updateStats = () => {
-            const total = rooms.length;
-            const validated = rooms.filter(r => r.validated).length;
-            const pending = total - validated;
+            const avaliada = rooms.filter(r => r.status === 'avaliada').length;
+            const trancada = rooms.filter(r => r.status === 'trancada').length;
+            const ocupada = rooms.filter(r => r.status === 'ocupada').length;
+            const problemas = rooms.filter(r => r.status === 'problemas').length;
             
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('validatedCount').textContent = validated;
-            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('avaliadaCount').textContent = avaliada;
+            document.getElementById('trancadaCount').textContent = trancada;
+            document.getElementById('ocupadaCount').textContent = ocupada;
+            document.getElementById('problemasCount').textContent = problemas;
         };
 
-        // Validar sala
-        const validateRoom = (roomId) => {
+        // Atualizar status da sala
+        const updateRoomStatus = (roomId, newStatus) => {
             const room = rooms.find(r => r.id === roomId);
-            if (room && !room.validated) {
-                room.validated = true;
-                room.validatedAt = new Date().toLocaleString('pt-BR');
+            if (room) {
+                room.status = newStatus;
+                room.lastUpdate = new Date().toLocaleString('pt-BR');
                 renderRoomsList();
                 updateStats();
-                
-                // Animação de feedback
-                const button = document.querySelector(`[data-room-id="${roomId}"]`);
-                if (button) {
-                    button.textContent = '✓ Validado';
-                    button.disabled = true;
-                    button.style.background = '#10b981';
-                }
             }
         };
 
-        // Resetar todas as validações
-        const resetAllValidations = () => {
-            if (confirm('Tem certeza que deseja resetar todas as validações? Esta ação não pode ser desfeita.')) {
+        // Resetar todos os status
+        const resetAllStatus = () => {
+            if (confirm('Tem certeza que deseja resetar todos os status? Esta ação não pode ser desfeita.')) {
                 rooms.forEach(room => {
-                    room.validated = false;
-                    room.validatedAt = null;
+                    room.status = 'avaliada';
+                    room.lastUpdate = new Date().toLocaleString('pt-BR');
                 });
                 renderRoomsList();
                 updateStats();
@@ -513,12 +531,16 @@
 
         // Renderizar lista de salas
         const renderRoomsList = () => {
-            const filteredRooms = rooms.filter(room => 
+            let filteredRooms = rooms.filter(room => 
                 room.code.toLowerCase().includes(searchTerm.toLowerCase())
             );
             
+            if (currentFilter !== 'todos') {
+                filteredRooms = filteredRooms.filter(room => room.status === currentFilter);
+            }
+            
             const roomsListHtml = filteredRooms.map(room => `
-                <div class="room-item ${room.validated ? 'validated' : 'pending'}">
+                <div class="room-item status-${room.status}">
                     <div class="room-info">
                         <div class="room-code">${room.code}</div>
                         <div class="room-location">
@@ -526,18 +548,20 @@
                                 Zona ${room.zone}
                             </span>
                             Andar ${room.floor}
-                            ${room.validated && room.validatedAt ? `<span style="font-size: 0.7rem; color: #10b981;"> • Validado em ${room.validatedAt}</span>` : ''}
+                            <span style="font-size: 0.7rem; color: #999; margin-left: 8px;">
+                                • Última atualização: ${room.lastUpdate}
+                            </span>
                         </div>
                     </div>
-                    <div class="room-status">
-                        <span class="status-badge ${room.validated ? 'status-validated' : 'status-pending'}">
-                            ${room.validated ? '✓ Validada' : '⏳ Pendente'}
-                        </span>
-                        ${!room.validated ? `
-                            <button class="btn-validate" data-room-id="${room.id}" onclick="validateRoom('${room.id}')">
-                                Validar Sala
-                            </button>
-                        ` : ''}
+                    <div class="room-status-select">
+                        <select class="status-select status-${room.status}" 
+                                onchange="updateRoomStatus(${room.id}, this.value)"
+                                style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: white; font-size: 0.8rem; cursor: pointer;">
+                            <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
+                            <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
+                            <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
+                            <option value="problemas" ${room.status === 'problemas' ? 'selected' : ''}>⚠️ Problemas</option>
+                        </select>
                     </div>
                 </div>
             `).join('');
@@ -559,13 +583,27 @@
             });
         };
 
+        // Configurar filtros
+        const setupFilters = () => {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderRoomsList();
+                });
+            });
+        };
+
         // Inicializar
         const init = () => {
             setupSearch();
+            setupFilters();
             renderRoomsList();
             updateStats();
             
-            document.getElementById('resetBtn').addEventListener('click', resetAllValidations);
+            document.getElementById('resetBtn').addEventListener('click', resetAllStatus);
         };
 
         init();
