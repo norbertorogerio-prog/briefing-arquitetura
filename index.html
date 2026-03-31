@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover"/>
-<title>Vistoria Técnica | Design Premium</title>
+<title>Vistoria Técnica Vivo | Design Premium</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -342,10 +342,11 @@ label {
 .btn-action:hover { background: rgba(102, 0, 204, 0.3); transform: translateY(-2px); }
 .btn-share { background: linear-gradient(135deg, #25D366, #128C7E); border: none; }
 
+/* Mock do celular - MAIS LARGO */
 .phone-wrap {
   margin: 12px auto;
   width: 100%;
-  max-width: 420px;
+  max-width: 560px;
   border-radius: 48px;
   padding: 16px 14px 20px;
   background: linear-gradient(180deg, #2A2A3E 0%, #1A1A2E 100%);
@@ -356,7 +357,7 @@ label {
 }
 
 .phone-notch {
-  width: 160px;
+  width: 180px;
   height: 28px;
   background: #0F0F1A;
   border-radius: 0 0 20px 20px;
@@ -369,7 +370,7 @@ label {
   border-radius: 32px;
   overflow: auto;
   position: relative;
-  max-height: 620px;
+  max-height: 700px;
 }
 
 .phone-footer {
@@ -396,35 +397,35 @@ label {
 
 .phone-screen .report-content {
   background: transparent;
-  padding: 20px 18px 24px;
-  font-size: 13px;
-  line-height: 1.55;
-  min-height: 480px;
+  padding: 24px 24px 28px;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 520px;
 }
 
 .report-content .h-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(102, 0, 204, 0.4), transparent);
-  margin: 14px 0;
+  margin: 16px 0;
 }
-.report-content .title { font-weight: 800; font-size: 15px; letter-spacing: -0.2px; color: var(--vivo-purple-light); margin-bottom: 8px; }
-.report-content .kvs { margin: 8px 0 0; }
-.report-content .kv { display: flex; gap: 12px; font-size: 12px; margin: 8px 0; }
-.report-content .kv b { color: var(--vivo-purple-light); min-width: 85px; text-transform: uppercase; font-size: 11px; font-weight: 700; }
-.report-content .bullet { margin: 8px 0 8px 16px; }
+.report-content .title { font-weight: 800; font-size: 16px; letter-spacing: -0.2px; color: var(--vivo-purple-light); margin-bottom: 12px; }
+.report-content .kvs { margin: 12px 0 0; }
+.report-content .kv { display: flex; gap: 14px; font-size: 13px; margin: 10px 0; }
+.report-content .kv b { color: var(--vivo-purple-light); min-width: 90px; text-transform: uppercase; font-size: 12px; font-weight: 700; }
+.report-content .bullet { margin: 10px 0 10px 20px; font-size: 13px; }
 
 .report-room-photos {
-  margin: 16px 0;
-  padding: 14px;
+  margin: 20px 0;
+  padding: 16px;
   background: rgba(102, 0, 204, 0.08);
-  border-radius: 16px;
+  border-radius: 18px;
 }
-.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 10px; font-size: 12px; }
-.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 12px; font-size: 13px; }
+.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
 .report-thumb {
-  width: 70px;
-  height: 70px;
-  border-radius: 12px;
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
   object-fit: cover;
   border: 2px solid var(--vivo-purple);
   cursor: pointer;
@@ -826,7 +827,7 @@ async function generateImage(){
   
   try{
     const canvas = await html2canvas(phone, {
-      scale: 2,
+      scale: 2.2,
       backgroundColor: null,
       logging: false,
       useCORS: true,
