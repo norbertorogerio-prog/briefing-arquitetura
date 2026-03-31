@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validação de Salas - Prédio Comercial</title>
+    <title>Gerenciador de Salas Comerciais</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -32,7 +32,6 @@
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .header p {
@@ -40,310 +39,167 @@
             opacity: 0.9;
         }
 
-        .main-grid {
+        .dashboard {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
         }
 
-        .building-card {
+        .card {
             background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .building-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .building-card h2 {
+        .card h2 {
             color: #333;
             margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
-            display: inline-block;
         }
 
-        .building-image {
-            background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            position: relative;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .zone-section {
-            margin-bottom: 25px;
-            padding: 15px;
-            border-radius: 12px;
-        }
-
-        .zone-alta-section {
-            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
-            border: 2px solid #667eea;
-        }
-
-        .zone-baixa-section {
-            background: linear-gradient(135deg, #f093fb20 0%, #f5576c20 100%);
-            border: 2px solid #f5576c;
-        }
-
-        .zone-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .zone-alta-section .zone-title {
-            color: #667eea;
-        }
-
-        .zone-baixa-section .zone-title {
-            color: #f5576c;
-        }
-
-        .floor-selector {
-            margin-bottom: 15px;
-        }
-
-        .floor-selector label {
+        label {
             display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #333;
             margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
         }
 
-        .floor-selector select {
+        input, select {
             width: 100%;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 1rem;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
-        .floor-selector select:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #667eea;
         }
 
-        .rooms-on-floor {
-            margin-top: 12px;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .rooms-header {
-            background: #f1f5f9;
-            padding: 10px;
-            display: flex;
-            justify-content: flex-end;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .add-room-btn {
-            background: #667eea;
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 5px 15px;
-            border-radius: 15px;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            transition: transform 0.2s;
+            width: 100%;
         }
 
-        .add-room-btn:hover {
-            background: #5a67d8;
-            transform: scale(1.05);
+        button:hover {
+            transform: translateY(-2px);
         }
 
-        .rooms-list-floor {
-            max-height: 350px;
+        .room-list {
+            max-height: 500px;
             overflow-y: auto;
         }
 
-        .room-item-floor {
+        .room-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #f1f5f9;
-            transition: all 0.3s ease;
-            flex-wrap: wrap;
+            transition: all 0.3s;
+        }
+
+        .room-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .room-info {
+            flex: 1;
+        }
+
+        .room-name {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .room-details {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .room-actions {
+            display: flex;
             gap: 10px;
         }
 
-        .room-item-floor:hover {
-            background: #f8fafc;
-        }
-
-        .room-info-floor {
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .room-code-floor {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #334155;
-        }
-
-        .floor-status-select {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .floor-status-select:hover {
-            border-color: #667eea;
-        }
-
-        .remove-room-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
+        .edit-btn, .delete-btn {
             padding: 5px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .remove-room-btn:hover {
-            background: #dc2626;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-content h3 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .modal-room-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        .modal-room-item {
-            padding: 8px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
             font-size: 0.85rem;
-            font-weight: 500;
+            width: auto;
         }
 
-        .modal-room-item:hover {
-            background: #667eea;
-            color: white;
-            transform: scale(1.05);
+        .edit-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
         }
 
-        .close-modal {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 0.9rem;
-            margin-top: 10px;
+        .delete-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         }
 
-        .building-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .info-tag {
+        .status {
             display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin: 5px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 10px;
         }
 
-        .rooms-card {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        .status.available {
+            background: #d4edda;
+            color: #155724;
         }
 
-        .rooms-card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+        .status.occupied {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.maintenance {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px;
         }
 
         .stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
             border-radius: 10px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-2px);
+            text-align: center;
         }
 
         .stat-number {
@@ -352,144 +208,18 @@
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            margin-top: 5px;
-            font-weight: 500;
-        }
-
-        .stat-avaliada { background: #10b98120; }
-        .stat-avaliada .stat-number { color: #10b981; }
-        .stat-trancada { background: #f59e0b20; }
-        .stat-trancada .stat-number { color: #f59e0b; }
-        .stat-ocupada { background: #3b82f620; }
-        .stat-ocupada .stat-number { color: #3b82f6; }
-        .stat-problemas { background: #ef444420; }
-        .stat-problemas .stat-number { color: #ef4444; }
-
-        .search-box {
-            margin-bottom: 20px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .filter-btn.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .rooms-list {
-            max-height: 550px;
-            overflow-y: auto;
-            border-radius: 12px;
-        }
-
-        .room-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            margin: 8px 0;
-            background: #f8f9fa;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            border-left: 4px solid #ddd;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .room-item.status-avaliada { border-left-color: #10b981; }
-        .room-item.status-trancada { border-left-color: #f59e0b; }
-        .room-item.status-ocupada { border-left-color: #3b82f6; }
-        .room-item.status-problemas { border-left-color: #ef4444; }
-
-        .room-info {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .room-code {
-            font-weight: bold;
-            font-size: 1rem;
-            color: #333;
-        }
-
-        .room-location {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 4px;
-        }
-
-        .room-status-select {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-select {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-        .btn-reset {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
             font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 20px;
-            width: 100%;
+            opacity: 0.9;
+            margin-top: 5px;
         }
 
         @media (max-width: 768px) {
-            .main-grid {
+            .dashboard {
                 grid-template-columns: 1fr;
             }
             
-            .room-item-floor {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .room-info-floor {
-                width: 100%;
+            .header h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -497,379 +227,277 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏢 Validação de Salas</h1>
-            <p>Prédio Comercial | 32 Andares | Salas SL01 a SL50</p>
+            <h1>🏢 Gerenciador de Salas Comerciais</h1>
+            <p>Adicione e gerencie suas salas de forma eficiente</p>
         </div>
 
-        <div class="main-grid">
-            <div class="building-card">
-                <h2>📍 Torre Comercial</h2>
-                <div class="building-image">
-                    <div class="zone-section zone-alta-section">
-                        <div class="zone-title">
-                            <span>🏢</span> ZONA ALTA (Andares 17 a 32)
-                        </div>
-                        <div class="floor-selector">
-                            <label>Selecione o Andar:</label>
-                            <select id="altaFloorSelect">
-                                <option value="">Selecione um andar</option>
-                            </select>
-                        </div>
-                        <div id="altaFloorContent"></div>
+        <div class="dashboard">
+            <div class="card">
+                <h2>➕ Adicionar Nova Sala</h2>
+                <form id="roomForm">
+                    <div class="form-group">
+                        <label for="roomName">Nome da Sala *</label>
+                        <input type="text" id="roomName" required placeholder="Ex: Sala 101, Sala Executiva, etc.">
                     </div>
-
-                    <div class="zone-section zone-baixa-section">
-                        <div class="zone-title">
-                            <span>🏬</span> ZONA BAIXA (Andares 1 a 16)
-                        </div>
-                        <div class="floor-selector">
-                            <label>Selecione o Andar:</label>
-                            <select id="baixaFloorSelect">
-                                <option value="">Selecione um andar</option>
-                            </select>
-                        </div>
-                        <div id="baixaFloorContent"></div>
+                    
+                    <div class="form-group">
+                        <label for="roomNumber">Número/Identificador *</label>
+                        <input type="text" id="roomNumber" required placeholder="Ex: 101, A-01, SL01">
                     </div>
-                </div>
-                <div class="building-info">
-                    <span class="info-tag">🏷️ Salas: SL01 a SL50</span>
-                    <span class="info-tag">📐 32 Andares</span>
-                    <span class="info-tag">🚪 50 Salas Comerciais</span>
-                    <span class="info-tag">✅ Adicione e gerencie salas</span>
-                </div>
+                    
+                    <div class="form-group">
+                        <label for="roomFloor">Andar</label>
+                        <input type="text" id="roomFloor" placeholder="Ex: 1º Andar, Térreo">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roomStatus">Status</label>
+                        <select id="roomStatus">
+                            <option value="available">✅ Disponível</option>
+                            <option value="occupied">🔒 Ocupada</option>
+                            <option value="maintenance">🔧 Manutenção</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="roomCapacity">Capacidade (pessoas)</label>
+                        <input type="number" id="roomCapacity" placeholder="Ex: 10, 20, 50">
+                    </div>
+                    
+                    <button type="submit">Adicionar Sala</button>
+                </form>
             </div>
 
-            <div class="rooms-card">
-                <h2>📋 Lista Geral de Salas</h2>
+            <div class="card">
+                <h2>📊 Estatísticas</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalRooms">0</div>
+                        <div class="stat-label">Total de Salas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="availableRooms">0</div>
+                        <div class="stat-label">Disponíveis</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="occupiedRooms">0</div>
+                        <div class="stat-label">Ocupadas</div>
+                    </div>
+                </div>
                 
-                <div class="stats" id="stats">
-                    <div class="stat-item stat-avaliada">
-                        <div class="stat-number" id="avaliadaCount">0</div>
-                        <div class="stat-label">✓ Avaliada</div>
-                    </div>
-                    <div class="stat-item stat-trancada">
-                        <div class="stat-number" id="trancadaCount">0</div>
-                        <div class="stat-label">🔒 Trancada</div>
-                    </div>
-                    <div class="stat-item stat-ocupada">
-                        <div class="stat-number" id="ocupadaCount">0</div>
-                        <div class="stat-label">👥 Ocupada</div>
-                    </div>
-                    <div class="stat-item stat-problemas">
-                        <div class="stat-number" id="problemasCount">0</div>
-                        <div class="stat-label">⚠️ Problemas</div>
+                <h2 style="margin-top: 20px;">📋 Lista de Salas</h2>
+                <div class="room-list" id="roomList">
+                    <div class="empty-state">
+                        Nenhuma sala cadastrada. Adicione sua primeira sala!
                     </div>
                 </div>
-
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="🔍 Buscar sala...">
-                </div>
-
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="todos">📋 Todos</button>
-                    <button class="filter-btn" data-filter="avaliada">✓ Avaliada</button>
-                    <button class="filter-btn" data-filter="trancada">🔒 Trancada</button>
-                    <button class="filter-btn" data-filter="ocupada">👥 Ocupada</button>
-                    <button class="filter-btn" data-filter="problemas">⚠️ Problemas</button>
-                </div>
-
-                <div class="rooms-list" id="roomsList"></div>
-
-                <button class="btn-reset" id="resetBtn">🗑️ Limpar Todos os Status</button>
             </div>
-        </div>
-    </div>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <h3>➕ Adicionar Sala ao Andar</h3>
-            <p>Selecione uma sala para adicionar:</p>
-            <div id="modalRoomList" class="modal-room-list"></div>
-            <button class="close-modal" onclick="closeModal()">Fechar</button>
         </div>
     </div>
 
     <script>
-        // Todas as salas disponíveis (SL01 a SL50)
-        const allRooms = Array.from({ length: 50 }, (_, i) => ({
-            id: i + 1,
-            code: `SL${String(i + 1).padStart(2, '0')}`,
-            status: null,
-            floors: []
-        }));
+        let rooms = [];
 
-        // Estrutura para armazenar salas por andar
-        let roomsByFloor = {};
-        let currentFloorForModal = null;
-
-        // Inicializar andares
-        for (let i = 1; i <= 32; i++) {
-            roomsByFloor[i] = [];
+        // Carregar salas do localStorage
+        function loadRooms() {
+            const savedRooms = localStorage.getItem('commercialRooms');
+            if (savedRooms) {
+                rooms = JSON.parse(savedRooms);
+            }
+            updateDisplay();
         }
 
-        let currentFilter = 'todos';
-        let searchTerm = '';
+        // Salvar salas no localStorage
+        function saveRooms() {
+            localStorage.setItem('commercialRooms', JSON.stringify(rooms));
+        }
 
-        // Funções auxiliares
-        const getStatusText = (status) => {
-            if (!status) return 'Sem status';
-            const map = {
-                'avaliada': '✓ Avaliada',
-                'trancada': '🔒 Trancada',
-                'ocupada': '👥 Ocupada',
-                'problemas': '⚠️ Problemas'
-            };
-            return map[status];
-        };
+        // Atualizar exibição
+        function updateDisplay() {
+            updateRoomList();
+            updateStats();
+        }
 
-        // Atualizar estatísticas
-        const updateStats = () => {
-            document.getElementById('avaliadaCount').textContent = allRooms.filter(r => r.status === 'avaliada').length;
-            document.getElementById('trancadaCount').textContent = allRooms.filter(r => r.status === 'trancada').length;
-            document.getElementById('ocupadaCount').textContent = allRooms.filter(r => r.status === 'ocupada').length;
-            document.getElementById('problemasCount').textContent = allRooms.filter(r => r.status === 'problemas').length;
-        };
-
-        // Atualizar status de uma sala
-        const updateRoomStatus = (roomId, newStatus) => {
-            const room = allRooms.find(r => r.id === roomId);
-            if (room) {
-                room.status = newStatus === '' ? null : newStatus;
-                renderRoomsList();
-                updateStats();
-                refreshAllFloorViews();
-            }
-        };
-
-        // Adicionar sala a um andar
-        const addRoomToFloor = (floor, roomId) => {
-            const room = allRooms.find(r => r.id === roomId);
-            if (room && !roomsByFloor[floor].includes(roomId)) {
-                roomsByFloor[floor].push(roomId);
-                if (!room.floors.includes(floor)) {
-                    room.floors.push(floor);
-                }
-                refreshFloorView(floor);
-                renderRoomsList();
-            }
-            closeModal();
-        };
-
-        // Remover sala de um andar
-        const removeRoomFromFloor = (floor, roomId) => {
-            const index = roomsByFloor[floor].indexOf(roomId);
-            if (index !== -1) {
-                roomsByFloor[floor].splice(index, 1);
-                const room = allRooms.find(r => r.id === roomId);
-                if (room) {
-                    const floorIndex = room.floors.indexOf(floor);
-                    if (floorIndex !== -1) room.floors.splice(floorIndex, 1);
-                }
-                refreshFloorView(floor);
-                renderRoomsList();
-            }
-        };
-
-        // Renderizar visualização de um andar
-        const refreshFloorView = (floor) => {
-            const zone = floor >= 17 ? 'alta' : 'baixa';
-            const containerId = zone === 'alta' ? 'altaFloorContent' : 'baixaFloorContent';
-            const container = document.getElementById(containerId);
-            const selectElement = zone === 'alta' ? document.getElementById('altaFloorSelect') : document.getElementById('baixaFloorSelect');
+        // Atualizar lista de salas
+        function updateRoomList() {
+            const roomListElement = document.getElementById('roomList');
             
-            if (selectElement.value != floor) return;
-            
-            const roomsOnFloor = roomsByFloor[floor];
-            const roomsData = roomsOnFloor.map(roomId => allRooms.find(r => r.id === roomId)).filter(r => r);
-            
-            if (roomsOnFloor.length === 0) {
-                container.innerHTML = `
-                    <div class="rooms-on-floor">
-                        <div class="rooms-header">
-                            <button class="add-room-btn" onclick="openModal(${floor})">+ Adicionar Sala</button>
-                        </div>
-                        <div style="padding: 20px; text-align: center; color: #666;">
-                            Nenhuma sala cadastrada neste andar
-                        </div>
-                    </div>
-                `;
+            if (rooms.length === 0) {
+                roomListElement.innerHTML = '<div class="empty-state">✨ Nenhuma sala cadastrada. Adicione sua primeira sala!</div>';
                 return;
             }
             
-            container.innerHTML = `
-                <div class="rooms-on-floor">
-                    <div class="rooms-header">
-                        <button class="add-room-btn" onclick="openModal(${floor})">+ Adicionar Sala</button>
-                    </div>
-                    <div class="rooms-list-floor">
-                        ${roomsData.map(room => `
-                            <div class="room-item-floor">
-                                <div class="room-info-floor">
-                                    <span class="room-code-floor">${room.code}</span>
-                                </div>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <select class="floor-status-select" onchange="updateRoomStatus(${room.id}, this.value)">
-                                        <option value="" ${!room.status ? 'selected' : ''}>📋 Sem status</option>
-                                        <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
-                                        <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
-                                        <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
-                                        <option value="problemas" ${room.status === 'problemas' ? 'selected' : ''}>⚠️ Problemas</option>
-                                    </select>
-                                    <button class="remove-room-btn" onclick="removeRoomFromFloor(${floor}, ${room.id})">Remover</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        };
-
-        // Atualizar todas as visualizações de andar
-        const refreshAllFloorViews = () => {
-            const altaSelect = document.getElementById('altaFloorSelect');
-            const baixaSelect = document.getElementById('baixaFloorSelect');
-            if (altaSelect.value) refreshFloorView(parseInt(altaSelect.value));
-            if (baixaSelect.value) refreshFloorView(parseInt(baixaSelect.value));
-        };
-
-        // Abrir modal para adicionar sala
-        const openModal = (floor) => {
-            currentFloorForModal = floor;
-            const roomsOnFloor = roomsByFloor[floor];
-            const availableRooms = allRooms.filter(room => !roomsOnFloor.includes(room.id));
-            
-            const modal = document.getElementById('modal');
-            const modalList = document.getElementById('modalRoomList');
-            
-            if (availableRooms.length === 0) {
-                modalList.innerHTML = '<div style="text-align: center; padding: 20px;">Todas as salas já estão neste andar</div>';
-            } else {
-                modalList.innerHTML = availableRooms.map(room => `
-                    <div class="modal-room-item" onclick="addRoomToFloor(${floor}, ${room.id})">
-                        ${room.code}
-                    </div>
-                `).join('');
-            }
-            
-            modal.style.display = 'flex';
-        };
-
-        const closeModal = () => {
-            document.getElementById('modal').style.display = 'none';
-            currentFloorForModal = null;
-        };
-
-        // Renderizar lista geral de salas
-        const renderRoomsList = () => {
-            let filteredRooms = allRooms.filter(room => 
-                room.code.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            
-            if (currentFilter !== 'todos') {
-                filteredRooms = filteredRooms.filter(room => room.status === currentFilter);
-            }
-            
-            const html = filteredRooms.map(room => `
-                <div class="room-item ${room.status ? `status-${room.status}` : ''}">
+            roomListElement.innerHTML = rooms.map((room, index) => `
+                <div class="room-item">
                     <div class="room-info">
-                        <div class="room-code">${room.code}</div>
-                        <div class="room-location">
-                            ${room.floors.length > 0 ? 
-                                `📍 Andares: ${room.floors.sort((a,b)=>a-b).join(', ')}` : 
-                                '📍 Nenhum andar cadastrado'}
+                        <div class="room-name">
+                            ${room.name || room.number}
+                            <span class="status ${room.status}">
+                                ${getStatusText(room.status)}
+                            </span>
+                        </div>
+                        <div class="room-details">
+                            ${room.number ? `📌 ${room.number}` : ''}
+                            ${room.floor ? ` | 🏢 ${room.floor}` : ''}
+                            ${room.capacity ? ` | 👥 ${room.capacity} pessoas` : ''}
                         </div>
                     </div>
-                    <div class="room-status-select">
-                        <select class="status-select" onchange="updateRoomStatus(${room.id}, this.value)">
-                            <option value="" ${!room.status ? 'selected' : ''}>📋 Sem status</option>
-                            <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
-                            <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
-                            <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
-                            <option value="problemas" ${room.status === 'problemas' ? 'selected' : ''}>⚠️ Problemas</option>
-                        </select>
+                    <div class="room-actions">
+                        <button class="edit-btn" onclick="editRoom(${index})">✏️ Editar</button>
+                        <button class="delete-btn" onclick="deleteRoom(${index})">🗑️ Excluir</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        // Obter texto do status
+        function getStatusText(status) {
+            const statusMap = {
+                'available': '✅ Disponível',
+                'occupied': '🔒 Ocupada',
+                'maintenance': '🔧 Manutenção'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            const total = rooms.length;
+            const available = rooms.filter(room => room.status === 'available').length;
+            const occupied = rooms.filter(room => room.status === 'occupied').length;
             
-            const container = document.getElementById('roomsList');
-            if (filteredRooms.length === 0) {
-                container.innerHTML = '<div style="text-align: center; padding: 40px;">Nenhuma sala encontrada</div>';
-            } else {
-                container.innerHTML = html;
-            }
-        };
+            document.getElementById('totalRooms').textContent = total;
+            document.getElementById('availableRooms').textContent = available;
+            document.getElementById('occupiedRooms').textContent = occupied;
+        }
 
-        // Configurar busca
-        const setupSearch = () => {
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                searchTerm = e.target.value;
-                renderRoomsList();
-            });
-        };
-
-        // Configurar filtros
-        const setupFilters = () => {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.filter;
-                    renderRoomsList();
-                });
-            });
-        };
-
-        // Configurar selects de andares
-        const setupFloorSelectors = () => {
-            const altaSelect = document.getElementById('altaFloorSelect');
-            const baixaSelect = document.getElementById('baixaFloorSelect');
+        // Adicionar sala
+        function addRoom(event) {
+            event.preventDefault();
             
-            for (let i = 17; i <= 32; i++) {
-                altaSelect.innerHTML += `<option value="${i}">${i}º Andar</option>`;
-            }
-            for (let i = 1; i <= 16; i++) {
-                baixaSelect.innerHTML += `<option value="${i}">${i}º Andar</option>`;
+            const name = document.getElementById('roomName').value;
+            const number = document.getElementById('roomNumber').value;
+            const floor = document.getElementById('roomFloor').value;
+            const status = document.getElementById('roomStatus').value;
+            const capacity = document.getElementById('roomCapacity').value;
+            
+            if (!name && !number) {
+                alert('Por favor, informe pelo menos o nome ou número da sala!');
+                return;
             }
             
-            altaSelect.addEventListener('change', (e) => {
-                if (e.target.value) refreshFloorView(parseInt(e.target.value));
-                else document.getElementById('altaFloorContent').innerHTML = '';
-            });
+            const newRoom = {
+                id: Date.now(),
+                name: name || '',
+                number: number || '',
+                floor: floor || '',
+                status: status,
+                capacity: capacity || ''
+            };
             
-            baixaSelect.addEventListener('change', (e) => {
-                if (e.target.value) refreshFloorView(parseInt(e.target.value));
-                else document.getElementById('baixaFloorContent').innerHTML = '';
-            });
-        };
+            rooms.push(newRoom);
+            saveRooms();
+            updateDisplay();
+            
+            // Limpar formulário
+            document.getElementById('roomForm').reset();
+            
+            // Mensagem de sucesso
+            showNotification('Sala adicionada com sucesso!', 'success');
+        }
 
-        // Resetar todos os status
-        const resetAllStatus = () => {
-            if (confirm('Tem certeza que deseja limpar TODOS os status?')) {
-                allRooms.forEach(room => room.status = null);
-                renderRoomsList();
-                updateStats();
-                refreshAllFloorViews();
+        // Editar sala
+        function editRoom(index) {
+            const room = rooms[index];
+            
+            const newName = prompt('Nome da sala:', room.name);
+            if (newName !== null) room.name = newName;
+            
+            const newNumber = prompt('Número/Identificador:', room.number);
+            if (newNumber !== null) room.number = newNumber;
+            
+            const newFloor = prompt('Andar:', room.floor);
+            if (newFloor !== null) room.floor = newFloor;
+            
+            const newStatus = prompt('Status (available/occupied/maintenance):', room.status);
+            if (newStatus !== null && ['available', 'occupied', 'maintenance'].includes(newStatus)) {
+                room.status = newStatus;
             }
-        };
+            
+            const newCapacity = prompt('Capacidade:', room.capacity);
+            if (newCapacity !== null) room.capacity = newCapacity;
+            
+            saveRooms();
+            updateDisplay();
+            showNotification('Sala atualizada com sucesso!', 'success');
+        }
 
-        // Adicionar algumas salas de exemplo para demonstração
-        const addExampleRooms = () => {
-            addRoomToFloor(17, 4);
-            addRoomToFloor(9, 17);
-        };
+        // Excluir sala
+        function deleteRoom(index) {
+            if (confirm('Tem certeza que deseja excluir esta sala?')) {
+                rooms.splice(index, 1);
+                saveRooms();
+                updateDisplay();
+                showNotification('Sala excluída com sucesso!', 'success');
+            }
+        }
 
+        // Mostrar notificação
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4CAF50' : '#f44336'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Adicionar estilos de animação
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Event listener
+        document.getElementById('roomForm').addEventListener('submit', addRoom);
+        
         // Inicializar
-        const init = () => {
-            setupSearch();
-            setupFilters();
-            setupFloorSelectors();
-            renderRoomsList();
-            updateStats();
-            document.getElementById('resetBtn').addEventListener('click', resetAllStatus);
-            addExampleRooms();
-        };
-
-        init();
+        loadRooms();
     </script>
 </body>
 </html>
