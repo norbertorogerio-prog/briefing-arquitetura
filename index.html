@@ -137,13 +137,64 @@
 
         .selected-floor-info {
             background: white;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
             margin-top: 10px;
             font-size: 0.85rem;
-            color: #666;
-            text-align: center;
         }
+
+        .rooms-on-floor {
+            margin-top: 12px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .rooms-title {
+            background: #f1f5f9;
+            padding: 10px;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .rooms-list-floor {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .room-item-floor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .room-item-floor:hover {
+            background: #f8fafc;
+        }
+
+        .room-code-floor {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #334155;
+        }
+
+        .room-status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .status-badge-avaliada { background: #10b98120; color: #10b981; }
+        .status-badge-trancada { background: #f59e0b20; color: #f59e0b; }
+        .status-badge-ocupada { background: #3b82f620; color: #3b82f6; }
+        .status-badge-problemas { background: #ef444420; color: #ef4444; }
+        .status-badge-null { background: #94a3b820; color: #64748b; }
 
         .building-info {
             background: #f8f9fa;
@@ -378,10 +429,6 @@
             gap: 8px;
         }
 
-        .floor-divider:first-of-type {
-            margin-top: 0;
-        }
-
         @media (max-width: 768px) {
             .main-grid {
                 grid-template-columns: 1fr;
@@ -428,8 +475,10 @@
                                 <option value="">Selecione um andar</option>
                             </select>
                         </div>
-                        <div class="selected-floor-info" id="altaSelectedInfo">
-                            Nenhum andar selecionado
+                        <div id="altaFloorContent">
+                            <div class="selected-floor-info" id="altaSelectedInfo">
+                                Nenhum andar selecionado
+                            </div>
                         </div>
                     </div>
 
@@ -443,8 +492,10 @@
                                 <option value="">Selecione um andar</option>
                             </select>
                         </div>
-                        <div class="selected-floor-info" id="baixaSelectedInfo">
-                            Nenhum andar selecionado
+                        <div id="baixaFloorContent">
+                            <div class="selected-floor-info" id="baixaSelectedInfo">
+                                Nenhum andar selecionado
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -498,13 +549,12 @@
     </div>
 
     <script>
-        // Gerar salas SL01 até SL50 - TODAS COM STATUS LIMPO (sem status definido)
+        // Gerar salas SL01 até SL50
         const generateRooms = () => {
             const rooms = [];
             const totalRooms = 50;
             const totalFloors = 32;
             
-            // Distribuir as 50 salas pelos 32 andares de forma equilibrada
             const roomsPerFloor = Math.floor(totalRooms / totalFloors);
             const remainder = totalRooms % totalFloors;
             
@@ -527,7 +577,7 @@
                         roomNumber: roomCounter,
                         floor: floor,
                         zone: zone,
-                        status: null, // Limpo, sem status definido
+                        status: null,
                         lastUpdate: null
                     });
                     
@@ -541,6 +591,63 @@
         let rooms = generateRooms();
         let searchTerm = '';
         let currentFilter = 'todos';
+
+        // Função para obter o texto do status
+        const getStatusText = (status) => {
+            if (!status) return 'Sem status';
+            const statusMap = {
+                'avaliada': '✓ Avaliada',
+                'trancada': '🔒 Trancada',
+                'ocupada': '👥 Ocupada',
+                'problemas': '⚠️ Problemas'
+            };
+            return statusMap[status] || 'Sem status';
+        };
+
+        // Função para obter a classe do status
+        const getStatusClass = (status) => {
+            if (!status) return 'status-badge-null';
+            return `status-badge-${status}`;
+        };
+
+        // Renderizar salas de um andar específico
+        const renderFloorRooms = (floor, containerId) => {
+            const roomsOnFloor = rooms.filter(r => r.floor === floor);
+            const container = document.getElementById(containerId);
+            
+            if (roomsOnFloor.length === 0) {
+                container.innerHTML = `
+                    <div class="selected-floor-info">
+                        <strong>Andar ${floor} selecionado</strong><br>
+                        Nenhuma sala neste andar
+                    </div>
+                `;
+                return;
+            }
+            
+            const roomsHtml = `
+                <div class="selected-floor-info">
+                    <strong>Andar ${floor} selecionado</strong>
+                </div>
+                <div class="rooms-on-floor">
+                    <div class="rooms-title">
+                        📋 Salas disponíveis (${roomsOnFloor.length} salas)
+                    </div>
+                    <div class="rooms-list-floor">
+                        ${roomsOnFloor.map(room => `
+                            <div class="room-item-floor">
+                                <span class="room-code-floor">${room.code}</span>
+                                <span class="room-status-badge ${getStatusClass(room.status)}">
+                                    ${getStatusText(room.status)}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = roomsHtml;
+        };
 
         // Atualizar estatísticas
         const updateStats = () => {
@@ -568,6 +675,17 @@
                 }
                 renderRoomsList();
                 updateStats();
+                
+                // Atualizar a visualização dos andares selecionados
+                const altaSelect = document.getElementById('altaFloorSelect');
+                const baixaSelect = document.getElementById('baixaFloorSelect');
+                
+                if (altaSelect.value) {
+                    renderFloorRooms(parseInt(altaSelect.value), 'altaFloorContent');
+                }
+                if (baixaSelect.value) {
+                    renderFloorRooms(parseInt(baixaSelect.value), 'baixaFloorContent');
+                }
             }
         };
 
@@ -580,6 +698,17 @@
                 });
                 renderRoomsList();
                 updateStats();
+                
+                // Atualizar a visualização dos andares selecionados
+                const altaSelect = document.getElementById('altaFloorSelect');
+                const baixaSelect = document.getElementById('baixaFloorSelect');
+                
+                if (altaSelect.value) {
+                    renderFloorRooms(parseInt(altaSelect.value), 'altaFloorContent');
+                }
+                if (baixaSelect.value) {
+                    renderFloorRooms(parseInt(baixaSelect.value), 'baixaFloorContent');
+                }
             }
         };
 
@@ -594,7 +723,6 @@
                 filteredRooms = filteredRooms.filter(room => room.status === currentFilter);
             }
             
-            // Agrupar por andar
             const roomsByFloor = {};
             filteredRooms.forEach(room => {
                 if (!roomsByFloor[room.floor]) {
@@ -678,8 +806,6 @@
         const setupFloorSelectors = () => {
             const altaSelect = document.getElementById('altaFloorSelect');
             const baixaSelect = document.getElementById('baixaFloorSelect');
-            const altaInfo = document.getElementById('altaSelectedInfo');
-            const baixaInfo = document.getElementById('baixaSelectedInfo');
             
             // Preencher andares da zona alta (17 a 32)
             for (let i = 17; i <= 32; i++) {
@@ -701,13 +827,13 @@
             altaSelect.addEventListener('change', (e) => {
                 const floor = e.target.value;
                 if (floor) {
-                    const roomsOnFloor = rooms.filter(r => r.floor === parseInt(floor));
-                    altaInfo.innerHTML = `
-                        <strong>Andar ${floor} selecionado</strong><br>
-                        Salas neste andar: ${roomsOnFloor.map(r => r.code).join(', ') || 'Nenhuma sala'}
-                    `;
+                    renderFloorRooms(parseInt(floor), 'altaFloorContent');
                 } else {
-                    altaInfo.innerHTML = 'Nenhum andar selecionado';
+                    document.getElementById('altaFloorContent').innerHTML = `
+                        <div class="selected-floor-info">
+                            Nenhum andar selecionado
+                        </div>
+                    `;
                 }
             });
             
@@ -715,13 +841,13 @@
             baixaSelect.addEventListener('change', (e) => {
                 const floor = e.target.value;
                 if (floor) {
-                    const roomsOnFloor = rooms.filter(r => r.floor === parseInt(floor));
-                    baixaInfo.innerHTML = `
-                        <strong>Andar ${floor} selecionado</strong><br>
-                        Salas neste andar: ${roomsOnFloor.map(r => r.code).join(', ') || 'Nenhuma sala'}
-                    `;
+                    renderFloorRooms(parseInt(floor), 'baixaFloorContent');
                 } else {
-                    baixaInfo.innerHTML = 'Nenhum andar selecionado';
+                    document.getElementById('baixaFloorContent').innerHTML = `
+                        <div class="selected-floor-info">
+                            Nenhum andar selecionado
+                        </div>
+                    `;
                 }
             });
         };
