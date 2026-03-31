@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover"/>
 <title>Vistoria Técnica Vivo | Design Premium</title>
 
-<!-- Fonte + html2canvas para gerar PNG -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root {
   --vivo-purple: #6600CC;
-  --vivo-purple-dark: #4C0099;
   --vivo-purple-light: #8833FF;
   --vivo-purple-glow: rgba(102, 0, 204, 0.2);
   --grad-primary: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
@@ -26,13 +24,7 @@
   --orange: #FF9800;
   --white: #FFFFFF;
   --black: #1A1A2E;
-  --gray-100: #2A2A3E;
-  --gray-200: #3A3A4E;
-  --gray-300: #4A4A5E;
-  --gray-400: #6A6A7A;
   --gray-500: #9A9AAD;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 20px rgba(102, 0, 204, 0.3);
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
@@ -57,9 +49,8 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: 
-    linear-gradient(rgba(102, 0, 204, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(102, 0, 204, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(102, 0, 204, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(102, 0, 204, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -100,13 +91,8 @@ body::before {
   border: 1px solid rgba(102, 0, 204, 0.25);
   border-radius: 24px;
   padding: 24px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   transition: var(--transition-base);
-}
-
-.card:hover, .section:hover {
-  border-color: rgba(102, 0, 204, 0.4);
-  box-shadow: var(--shadow-lg);
 }
 
 h2 {
@@ -123,7 +109,7 @@ h2 {
   gap: 8px;
 }
 
-h2::before { content: '✨'; background: none; -webkit-background-clip: unset; background-clip: unset; color: var(--vivo-purple-light); }
+h2::before { content: '✨'; background: none; color: var(--vivo-purple-light); }
 
 h3 {
   font-size: 16px;
@@ -165,10 +151,9 @@ label {
   border-color: var(--vivo-purple);
   background: rgba(102, 0, 204, 0.1);
   box-shadow: 0 0 0 3px var(--vivo-purple-glow);
-  transform: translateY(-1px);
 }
 
-.form-select option { background: var(--gray-100); color: var(--white); }
+.form-select option { background: #2A2A3E; color: var(--white); }
 
 .number-input-group { display: flex; gap: 16px; margin-bottom: 8px; }
 .number-input-group > div { flex: 1; }
@@ -200,23 +185,9 @@ label {
   overflow: hidden;
 }
 
-.status::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.4s, height 0.4s;
-}
-
-.status:active::before { width: 200%; height: 200%; }
 .status:hover { background: rgba(102, 0, 204, 0.25); transform: translateY(-2px); border-color: var(--vivo-purple); }
 
-.dot { width: 12px; height: 12px; border-radius: 50%; transition: var(--transition-fast); }
+.dot { width: 12px; height: 12px; border-radius: 50%; }
 .dot.valid { background: var(--green); box-shadow: 0 0 10px rgba(0, 200, 83, 0.5); }
 .dot.lock { background: var(--yellow); box-shadow: 0 0 10px rgba(255, 214, 0, 0.5); }
 .dot.prob { background: var(--red); box-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
@@ -251,16 +222,13 @@ label {
   overflow: hidden;
   border: 2px solid rgba(102, 0, 204, 0.3);
   background: rgba(0, 0, 0, 0.4);
-  transition: var(--transition-fast);
 }
-.photo-item:hover { transform: scale(1.02); border-color: var(--vivo-purple); box-shadow: var(--shadow-glow); }
 .photo-item img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 .photo-delete {
   position: absolute;
   top: 6px;
   right: 6px;
   background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
   border-radius: 50%;
   width: 26px;
   height: 26px;
@@ -270,10 +238,9 @@ label {
   cursor: pointer;
   font-size: 12px;
   color: var(--red);
-  transition: var(--transition-fast);
   font-weight: bold;
 }
-.photo-delete:hover { background: var(--red); color: white; transform: scale(1.1); }
+.photo-delete:hover { background: var(--red); color: white; }
 
 .btn {
   width: 100%;
@@ -286,22 +253,7 @@ label {
   cursor: pointer;
   font-size: 13px;
   transition: var(--transition-base);
-  position: relative;
-  overflow: hidden;
 }
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.4s, height 0.4s;
-}
-.btn:active::before { width: 200%; height: 200%; }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 0, 204, 0.4); }
 
 .row { display: flex; gap: 12px; margin-top: 20px; }
@@ -325,25 +277,10 @@ label {
   border: 1px solid rgba(102, 0, 204, 0.25);
   background: linear-gradient(135deg, rgba(102, 0, 204, 0.08), rgba(102, 0, 204, 0.02));
   min-width: 130px;
-  transition: var(--transition-base);
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.room-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--grad-primary);
-  transform: scaleX(0);
-  transition: transform 0.3s;
+  transition: var(--transition-base);
 }
 .room-card:hover { border-color: var(--vivo-purple); transform: translateY(-3px); box-shadow: var(--shadow-glow); }
-.room-card:hover::before { transform: scaleX(1); }
-.room-card.has-photo { border-color: var(--green); background: linear-gradient(135deg, rgba(0, 200, 83, 0.08), rgba(102, 0, 204, 0.02)); }
 
 .badge {
   display: inline-flex;
@@ -371,12 +308,10 @@ label {
 .pill.prob { background: var(--grad-danger); color: white; }
 .pill.occupied { background: var(--grad-occupied); color: var(--black); }
 
-.photo-indicator { font-size: 11px; color: var(--green); font-weight: 600; }
-
 .report-box {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.3);
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(102, 0, 204, 0.3);
 }
 
@@ -410,38 +345,38 @@ label {
 .phone-wrap {
   margin: 12px auto;
   width: 100%;
-  max-width: 380px;
-  border-radius: 44px;
+  max-width: 420px;
+  border-radius: 48px;
   padding: 16px 14px 20px;
   background: linear-gradient(180deg, #2A2A3E 0%, #1A1A2E 100%);
   box-shadow: var(--shadow-lg), 0 0 0 8px rgba(102, 0, 204, 0.1);
   border: 1px solid rgba(102, 0, 204, 0.3);
   position: relative;
+  overflow: hidden;
 }
 
 .phone-notch {
-  width: 180px;
+  width: 160px;
   height: 28px;
-  background: var(--black);
+  background: #0F0F1A;
   border-radius: 0 0 20px 20px;
   margin: -8px auto 12px;
   position: relative;
 }
-.phone-notch::before { content: '🔊'; position: absolute; right: 20px; top: 4px; font-size: 10px; opacity: 0.5; }
 
 .phone-screen {
   background: #0A0A12;
   border-radius: 32px;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
-  min-height: 500px;
+  max-height: 620px;
 }
 
 .phone-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 10px 12px;
+  padding: 14px 10px 10px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.04));
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -461,43 +396,39 @@ label {
 
 .phone-screen .report-content {
   background: transparent;
-  padding: 20px 18px 8px;
-  max-height: 520px;
-  overflow-y: auto;
+  padding: 20px 18px 24px;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.55;
+  min-height: 480px;
 }
 
 .report-content .h-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(102, 0, 204, 0.4), transparent);
-  margin: 12px 0;
+  margin: 14px 0;
 }
-.report-content .title { font-weight: 800; font-size: 15px; letter-spacing: -0.2px; color: var(--vivo-purple-light); }
+.report-content .title { font-weight: 800; font-size: 15px; letter-spacing: -0.2px; color: var(--vivo-purple-light); margin-bottom: 8px; }
 .report-content .kvs { margin: 8px 0 0; }
-.report-content .kv { display: flex; gap: 12px; font-size: 12px; margin: 6px 0; }
+.report-content .kv { display: flex; gap: 12px; font-size: 12px; margin: 8px 0; }
 .report-content .kv b { color: var(--vivo-purple-light); min-width: 85px; text-transform: uppercase; font-size: 11px; font-weight: 700; }
-.report-content .bullet { margin: 6px 0 6px 16px; }
+.report-content .bullet { margin: 8px 0 8px 16px; }
 
 .report-room-photos {
-  margin: 20px 0;
-  padding: 16px;
+  margin: 16px 0;
+  padding: 14px;
   background: rgba(102, 0, 204, 0.08);
-  border-radius: 20px;
-  border: 1px solid rgba(102, 0, 204, 0.2);
+  border-radius: 16px;
 }
-.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 12px; font-size: 13px; }
-.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 10px; font-size: 12px; }
+.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
 .report-thumb {
-  width: 80px;
-  height: 80px;
-  border-radius: 14px;
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
   object-fit: cover;
   border: 2px solid var(--vivo-purple);
   cursor: pointer;
-  transition: var(--transition-fast);
 }
-.report-thumb:hover { transform: scale(1.05); box-shadow: var(--shadow-glow); }
 
 .toast {
   position: fixed;
@@ -505,7 +436,7 @@ label {
   bottom: 20px;
   background: rgba(102, 0, 204, 0.95);
   backdrop-filter: blur(12px);
-  padding: 14px 24px;
+  padding: 12px 22px;
   border-radius: 60px;
   font-size: 13px;
   font-weight: 600;
@@ -514,7 +445,6 @@ label {
   transform: translateY(20px);
   transition: var(--transition-base);
   pointer-events: none;
-  box-shadow: var(--shadow-lg);
 }
 .toast.show { opacity: 1; transform: translateY(0); }
 
@@ -555,7 +485,7 @@ label {
   cursor: pointer;
   transition: var(--transition-fast);
 }
-.share-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.share-btn:hover { transform: translateY(-2px); }
 .share-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
 .share-btn.teams { background: linear-gradient(135deg, #6264A7, #464775); color: #fff; }
 .share-btn.email { background: linear-gradient(135deg, #EA4335, #C5221F); color: #fff; }
@@ -571,9 +501,7 @@ label {
   cursor: pointer;
   width: 100%;
   font-weight: 600;
-  transition: var(--transition-fast);
 }
-.close-modal:hover { background: rgba(102, 0, 204, 0.4); }
 
 .fullscreen-modal {
   display: none;
@@ -586,15 +514,13 @@ label {
   cursor: pointer;
 }
 .fullscreen-modal.show { display: flex; }
-.fullscreen-modal img { max-width: 95%; max-height: 95%; border-radius: 24px; box-shadow: var(--shadow-glow); animation: zoomIn 0.2s ease; }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.fullscreen-modal img { max-width: 95%; max-height: 95%; border-radius: 24px; }
 
 .small { font-size: 11px; color: var(--gray-500); text-align: center; margin-top: 16px; }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--vivo-purple); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--vivo-purple-light); }
 </style>
 </head>
 <body>
@@ -619,15 +545,11 @@ label {
     <div class="number-input-group">
       <div>
         <label>🏬 Andar</label>
-        <select id="floorSelect" class="form-select">
-          <option value="">Selecione o andar</option>
-        </select>
+        <select id="floorSelect" class="form-select"></select>
       </div>
       <div>
         <label>🚪 Sala</label>
-        <select id="roomSelect" class="form-select">
-          <option value="">Selecione a sala</option>
-        </select>
+        <select id="roomSelect" class="form-select"></select>
       </div>
     </div>
 
@@ -641,7 +563,7 @@ label {
 
     <div class="photo-section">
       <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">SL01</span></div>
-      <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto (câmera ou galeria)</div>
+      <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto</div>
       <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" multiple>
       <div id="photoGallery" class="photo-gallery"></div>
     </div>
@@ -665,7 +587,7 @@ label {
           <span>📋 Relatório de Vistoria</span>
           <div class="report-actions">
             <label style="display:inline-flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;">
-              <input id="useAI" type="checkbox" checked style="accent-color:#6600CC; width:16px; height:16px;"> IA ligada
+              <input id="useAI" type="checkbox" checked style="accent-color:#6600CC;"> IA ligada
             </label>
             <button id="btnShare" class="btn-action btn-share">📱 Compartilhar</button>
           </div>
@@ -694,7 +616,7 @@ label {
     <h4>✨ Compartilhar Relatório</h4>
     <div class="share-buttons">
       <button id="shareWhatsApp" class="share-btn whatsapp">💬 WhatsApp</button>
-      <button id="shareTeams" class="share-btn teams">💼 Microsoft Teams</button>
+      <button id="shareTeams" class="share-btn teams">💼 Teams</button>
       <button id="shareEmail" class="share-btn email">📧 E-mail</button>
       <button id="shareSave" class="share-btn download">📸 Salvar imagem</button>
     </div>
@@ -715,7 +637,7 @@ let currentFloor = 1, currentRoom = 1, currentImageData = null;
 
 function populateFloorOptions() {
   const floorSelect = document.getElementById("floorSelect");
-  floorSelect.innerHTML = '<option value="">Selecione o andar</option>';
+  floorSelect.innerHTML = '<option value="">Selecione</option>';
   for(let i = 1; i <= 32; i++) {
     const option = document.createElement("option");
     option.value = i;
@@ -726,7 +648,7 @@ function populateFloorOptions() {
 
 function populateRoomOptions() {
   const roomSelect = document.getElementById("roomSelect");
-  roomSelect.innerHTML = '<option value="">Selecione a sala</option>';
+  roomSelect.innerHTML = '<option value="">Selecione</option>';
   for(let i = 1; i <= 50; i++) {
     const option = document.createElement("option");
     option.value = i;
@@ -771,7 +693,7 @@ function addPhotoToRoom(f,r,photo){
   const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
   renderCreated(); renderReportWithPhotos();
-  showToast("📸 Foto adicionada com sucesso!");
+  showToast("📸 Foto adicionada!");
 }
 
 function deletePhotoFromRoom(f,r,idx){
@@ -783,21 +705,21 @@ function deletePhotoFromRoom(f,r,idx){
 function renderCurrentPhotos(){
   const gal = document.getElementById("photoGallery");
   const photos = getRoomPhotos(currentFloor,currentRoom);
-  if(!photos.length){ gal.innerHTML = '<p class="small" style="text-align:center;width:100%">Nenhuma foto adicionada</p>'; return; }
+  if(!photos.length){ gal.innerHTML = '<p class="small">Nenhuma foto</p>'; return; }
   gal.innerHTML = "";
   photos.forEach((p,i)=>{
     const div = document.createElement("div");
     div.className="photo-item";
     div.innerHTML = `
-      <img src="${p}" alt="Foto da sala" onclick="showFullscreenImage('${p}')">
+      <img src="${p}" onclick="showFullscreenImage('${p}')">
       <div class="photo-delete" onclick="event.stopPropagation(); deletePhotoFromRoom(${currentFloor},${currentRoom},${i})">✕</div>`;
     gal.appendChild(div);
   });
 }
 
-function showFullscreenImage(src){ const m=document.getElementById("fullscreenModal"),i=document.getElementById("fullscreenImage"); i.src=src; m.classList.add("show"); }
+function showFullscreenImage(src){ document.getElementById("fullscreenImage").src=src; document.getElementById("fullscreenModal").classList.add("show"); }
 function closeFullscreen(){ document.getElementById("fullscreenModal").classList.remove("show"); }
-window.deletePhotoFromRoom=deletePhotoFromRoom; window.showFullscreenImage=showFullscreenImage; window.closeFullscreen=closeFullscreen;
+window.deletePhotoFromRoom=deletePhotoFromRoom; window.showFullscreenImage=showFullscreenImage;
 
 document.querySelectorAll(".status").forEach(btn=>{
   btn.addEventListener("click", ()=>{
@@ -811,72 +733,19 @@ document.querySelectorAll(".status").forEach(btn=>{
 
 function renderCreated(){
   const sorted = [...entries].sort((a,b)=> a.f-b.f || a.r-b.r);
-  const countSpan = document.getElementById("roomsCount");
-  if(countSpan) countSpan.textContent = entries.length;
-  if(!sorted.length){ createdGrid.innerHTML='<p class="small" style="text-align:center;width:100%">Nenhuma sala registrada</p>'; return; }
-  createdGrid.innerHTML="";
+  document.getElementById("roomsCount").textContent = entries.length;
+  if(!sorted.length){ createdGrid.innerHTML='<p class="small">Nenhuma sala registrada</p>'; return; }
+  createdGrid.innerHTML = "";
   sorted.forEach(it=>{
     const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
     const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
     card.onclick=()=>{ floorSelect.value = it.f; roomSelect.value = it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
-    const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • ${formatRoomNumber(it.r)}${has?' 📸':''}`;
-    const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
-    card.appendChild(badge); card.appendChild(pill);
-    if(has){ const pi=document.createElement("div"); pi.className="photo-indicator"; pi.textContent=`📸 ${photos.length} foto(s)`; card.appendChild(pi); }
+    card.innerHTML = `
+      <div class="badge">A${pad2(it.f)} • ${formatRoomNumber(it.r)}${has?' 📸':''}</div>
+      <div class="pill ${statusClass(it.status)}">${statusEmoji(it.status)} ${statusName(it.status)}</div>
+      ${has ? `<div class="photo-indicator">📸 ${photos.length} foto(s)</div>` : ''}`;
     createdGrid.appendChild(card);
   });
-}
-
-function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
-  const stats={valid:0,lock:0,prob:0,occupied:0}, floors={};
-  entries.forEach(e=>{
-    stats[e.status]=(stats[e.status]||0)+1;
-    if(!floors[e.f]) floors[e.f]={valid:[],lock:[],prob:[],occupied:[]};
-    floors[e.f][e.status].push(e.r);
-  });
-  const total=entries.length, dataStr=new Date().toLocaleString("pt-BR");
-  const headline = total===0
-    ? "Nenhuma sala foi registrada nesta vistoria."
-    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"}, ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios"} e ${stats.occupied>0?`${stats.occupied} sala(s) ocupada(s)`:"nenhuma sala ocupada"}.`;
-
-  const meta =
-`<div class="kv"><b>Prédio</b><span>${predio||"—"}</span></div>
-<div class="kv"><b>Endereço</b><span>${endereco||"—"}</span></div>
-<div class="kv"><b>Data</b><span>${dataStr}</span></div>
-<div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
-
-  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • 🟠 Ocupadas: ${stats.occupied}`;
-
-  let detalhe = "";
-  if(total>0){
-    detalhe += `<div class="bullet"><b>Detalhe por andar</b></div>`;
-    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f=>{
-      const a=floors[f], parts=[];
-      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      detalhe += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")||"—"}</div>`;
-    });
-  }
-  const fotos = totalFotos?`📸 Evidências registradas: ${totalFotos} foto(s).`:"";
-
-  return (
-`<div class="title">📊 Resumo IA</div>
-<div class="h-line"></div>
-<div class="kvs">${meta}</div>
-<div class="h-line"></div>
-<div class="bullet">${headline}</div>
-<div class="h-line"></div>
-<div class="title">📈 Indicadores</div>
-<div class="h-line"></div>
-<div class="bullet">${global}</div>
-<div class="h-line"></div>
-<div class="title">📍 Detalhamento</div>
-<div class="h-line"></div>
-${detalhe || "<div class='bullet'>Sem entradas.</div>"}
-${fotos?`<div class="h-line"></div><div class="bullet">${fotos}</div>`:""}`
-  );
 }
 
 function renderReportWithPhotos(){
@@ -884,95 +753,109 @@ function renderReportWithPhotos(){
   const endereco = enderecoInp.value || "Não informado";
   const auditor = auditorInp.value || "Não informado";
   const useAI = !!document.getElementById("useAI")?.checked;
+  const dataStr = new Date().toLocaleString("pt-BR");
 
-  let totalFotos = 0; const roomsWithPhotos = [];
-  entries.forEach(item=>{
-    const photos = getRoomPhotos(item.f,item.r);
-    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-${formatRoomNumber(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
+  const stats = {valid:0, lock:0, prob:0, occupied:0};
+  const floors = {};
+  entries.forEach(e=>{
+    stats[e.status] = (stats[e.status]||0)+1;
+    if(!floors[e.f]) floors[e.f] = {valid:[], lock:[], prob:[], occupied:[]};
+    floors[e.f][e.status].push(e.r);
   });
 
-  let mainHtml;
-  if(useAI){
-    mainHtml = aiComposeReportText({predio,endereco,auditor,entries,totalFotos});
-  }else{
-    const dataStr = new Date().toLocaleString("pt-BR");
-    mainHtml =
-`<div class="title">📋 Relatório</div>
-<div class="h-line"></div>
-<div class="kvs">
-  <div class="kv"><b>Prédio</b><span>${predio}</span></div>
-  <div class="kv"><b>Endereço</b><span>${endereco}</span></div>
-  <div class="kv"><b>Data</b><span>${dataStr}</span></div>
-  <div class="kv"><b>Auditor</b><span>${auditor}</span></div>
-</div>`;
+  const total = entries.length;
+  const totalFotos = entries.reduce((acc, e) => acc + getRoomPhotos(e.f, e.r).length, 0);
+
+  let html = `
+    <div class="title">📊 ${useAI ? 'Resumo IA' : 'Relatório'}</div>
+    <div class="h-line"></div>
+    <div class="kvs">
+      <div class="kv"><b>Prédio</b><span>${predio}</span></div>
+      <div class="kv"><b>Endereço</b><span>${endereco}</span></div>
+      <div class="kv"><b>Data</b><span>${dataStr}</span></div>
+      <div class="kv"><b>Auditor</b><span>${auditor}</span></div>
+    </div>
+    <div class="h-line"></div>`;
+
+  if(total > 0){
+    const headline = `Vistoria de ${total} sala(s) concluída. ${stats.valid} validações, ${stats.prob} problema(s), ${stats.lock} bloqueio(s) e ${stats.occupied} ocupada(s).`;
+    html += `<div class="bullet">${headline}</div><div class="h-line"></div>`;
+    
+    html += `<div class="title">📈 Indicadores</div><div class="h-line"></div>`;
+    html += `<div class="bullet">✅ Validadas: ${stats.valid}</div>`;
+    html += `<div class="bullet">🔒 Trancadas: ${stats.lock}</div>`;
+    html += `<div class="bullet">❌ Problemas: ${stats.prob}</div>`;
+    html += `<div class="bullet">🟠 Ocupadas: ${stats.occupied}</div><div class="h-line"></div>`;
+    
+    html += `<div class="title">📍 Detalhamento</div><div class="h-line"></div>`;
+    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f => {
+      const a = floors[f];
+      const parts = [];
+      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.lock.length) parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.prob.length) parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      html += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")}</div>`;
+    });
+  } else {
+    html += `<div class="bullet">Nenhuma sala registrada.</div>`;
   }
 
-  let photosHtml = "";
-  if(roomsWithPhotos.length){
-    photosHtml = `<div class="h-line"></div><div class="title">📸 Evidências Fotográficas</div><div class="h-line"></div>`;
-    roomsWithPhotos.forEach(r=>{
-      photosHtml += `<div class="report-room-photos">
-        <div class="report-room-title">${r.statusEmoji} ${r.room} — ${r.status} (${r.photos.length} foto${r.photos.length>1?"s":""})</div>
-        <div class="report-photo-thumbnails">` + r.photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')" loading="lazy" crossorigin="anonymous">`).join("") + `</div>
-      </div>`;
+  if(totalFotos > 0){
+    html += `<div class="h-line"></div><div class="title">📸 Evidências (${totalFotos} foto${totalFotos>1?'s':''})</div><div class="h-line"></div>`;
+    entries.forEach(item=>{
+      const photos = getRoomPhotos(item.f,item.r);
+      if(photos.length){
+        html += `<div class="report-room-photos">
+          <div class="report-room-title">${statusEmoji(item.status)} A${pad2(item.f)}-${formatRoomNumber(item.r)} — ${statusName(item.status)}</div>
+          <div class="report-photo-thumbnails">` + photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')">`).join("") + `</div>
+        </div>`;
+      }
     });
   }
 
-  document.getElementById("relatorio").innerHTML = mainHtml + photosHtml;
+  document.getElementById("relatorio").innerHTML = html;
 }
 
 async function generateImage(){
   const phone = document.getElementById("phoneMock");
-  if(!phone){ showToast("Nada para gerar"); return null; }
+  if(!phone){ showToast("Erro"); return null; }
   showToast("📸 Gerando imagem...");
   
-  // Aguarda um pequeno delay para garantir que tudo foi renderizado
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 200));
   
   try{
     const canvas = await html2canvas(phone, {
-      scale: 2.5,
+      scale: 2,
       backgroundColor: null,
       logging: false,
       useCORS: true,
       allowTaint: false,
-      foreignObjectRendering: false,
-      onclone: (clonedDoc, element) => {
-        // Força o carregamento de todas as imagens no clone
-        const images = clonedDoc.querySelectorAll('img');
-        images.forEach(img => {
-          if(img.src && img.src.startsWith('data:image')) {
-            // Data URLs já estão embutidas, não precisa fazer nada
-          }
-        });
-      }
+      windowWidth: phone.scrollWidth,
+      windowHeight: phone.scrollHeight
     });
     return canvas.toDataURL('image/png');
   }catch(e){ 
-    console.error('Erro ao gerar imagem:', e);
-    showToast("❌ Erro ao gerar imagem: " + e.message); 
+    showToast("❌ Erro: " + e.message); 
     return null; 
   }
 }
 
 async function openShareModal(){ 
-  const d=await generateImage(); 
-  if(!d)return; 
-  currentImageData=d; 
+  const d = await generateImage(); 
+  if(!d) return; 
+  currentImageData = d; 
   shareModal.classList.add("show"); 
 }
 
 function shareToWhatsApp(){
   if(!currentImageData) return;
-  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}`;
+  const text = `✨ RELATÓRIO DE VISTORIA ✨\n🏢 ${predioSel.value||"Prédio"}\n👤 ${auditorInp.value||"Auditor"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 ${entries.length} sala(s)`;
   if(navigator.share){
-    fetch(currentImageData)
-      .then(r=>r.blob())
-      .then(b=>{
-        navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
-      })
-      .catch(e=>{ window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`); });
-  }else{
+    fetch(currentImageData).then(r=>r.blob()).then(b=>{
+      navigator.share({title:'Relatório', text, files:[new File([b],"relatorio.png",{type:"image/png"})]});
+    }).catch(()=> window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`));
+  } else {
     window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`);
   }
   shareModal.classList.remove("show");
@@ -980,49 +863,52 @@ function shareToWhatsApp(){
 
 function shareToTeams(){
   if(!currentImageData) return;
-  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}`;
-  navigator.clipboard.writeText(msg); 
-  showToast("✅ Mensagem copiada! Cole no Teams");
-  const a=document.createElement('a'); 
-  a.download=`vistoria.png`; 
-  a.href=currentImageData; 
+  const msg = `✨ Relatório - ${predioSel.value||"Vistoria"}\n👤 ${auditorInp.value||"Auditor"}\n📊 ${entries.length} sala(s)`;
+  navigator.clipboard.writeText(msg);
+  showToast("✅ Mensagem copiada!");
+  const a = document.createElement('a');
+  a.download = `vistoria.png`;
+  a.href = currentImageData;
   a.click();
   shareModal.classList.remove("show");
 }
 
 function shareToEmail(){
   if(!currentImageData) return;
-  const subject=`Relatório de Vistoria - ${predioSel.value||"Vistoria"}`;
-  const body=`Relatório gerado em ${new Date().toLocaleString("pt-BR")}\nAuditor: ${auditorInp.value||"Não informado"}\nTotal de salas: ${entries.length}\n\nImagem em anexo.`;
-  window.location.href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  setTimeout(()=>{ 
-    const a=document.createElement('a'); 
-    a.download=`vistoria.png`; 
-    a.href=currentImageData; 
-    a.click(); 
-  },500);
+  const subject = `Relatório - ${predioSel.value||"Vistoria"}`;
+  const body = `Relatório gerado em ${new Date().toLocaleString("pt-BR")}\nAuditor: ${auditorInp.value||"Não informado"}\nTotal: ${entries.length} sala(s)`;
+  window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  setTimeout(()=>{ const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click(); }, 300);
   shareModal.classList.remove("show");
 }
 
-function shareSaveImage(){ 
-  if(!currentImageData) return; 
-  const a=document.createElement('a'); 
-  a.download=`vistoria_${predioSel.value||"vistoria"}.png`; 
-  a.href=currentImageData; 
-  a.click(); 
-  shareModal.classList.remove("show"); 
-  showToast("✅ Imagem salva!"); 
+function shareSaveImage(){
+  if(!currentImageData) return;
+  const a = document.createElement('a');
+  a.download = `vistoria_${predioSel.value||"relatorio"}.png`;
+  a.href = currentImageData;
+  a.click();
+  shareModal.classList.remove("show");
+  showToast("✅ Imagem salva!");
 }
 
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
-function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
-  t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2500); }
+function showToast(msg){ 
+  let t = document.querySelector(".toast"); 
+  if(!t){ t = document.createElement("div"); t.className = "toast"; document.body.appendChild(t); }
+  t.textContent = msg; 
+  t.classList.add("show"); 
+  setTimeout(()=>t.classList.remove("show"), 2500); 
+}
 
 photoBtn.addEventListener("click", ()=> photoInput.click());
 photoInput.addEventListener("change",(e)=>{
-  const files=[...e.target.files];
-  files.forEach(file=>{ const rd=new FileReader(); rd.onload=ev=> addPhotoToRoom(currentFloor,currentRoom,ev.target.result); rd.readAsDataURL(file); });
-  photoInput.value="";
+  [...e.target.files].forEach(file=>{ 
+    const rd = new FileReader(); 
+    rd.onload = ev => addPhotoToRoom(currentFloor, currentRoom, ev.target.result); 
+    rd.readAsDataURL(file); 
+  });
+  photoInput.value = "";
 });
 
 document.getElementById("btnShare").addEventListener("click", openShareModal);
@@ -1035,19 +921,19 @@ shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.
 document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
-  if(!confirm("⚠️ Limpar TODOS os registros e fotos?")) return;
-  entries=[];
-  const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) keys.push(k); }
-  keys.forEach(k=> localStorage.removeItem(k));
-  auditorInp.value=""; predioSel.value=""; enderecoInp.value="";
-  persist(); renderCreated(); renderReportWithPhotos(); renderCurrentPhotos(); showToast("✓ Todos os dados removidos");
+  if(!confirm("⚠️ Limpar TODOS os dados?")) return;
+  entries = [];
+  for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) localStorage.removeItem(k); }
+  auditorInp.value = ""; predioSel.value = ""; enderecoInp.value = "";
+  persist(); renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
+  showToast("✓ Dados removidos");
 });
 
 predioSel.addEventListener("change", ()=>{
-  const v=predioSel.value;
-  if(v==="Eco Berrini") enderecoInp.value="Av. Eng. Luís Carlos Berrini, 1376 - SP";
-  else if(v==="Chucri Zaidan") enderecoInp.value="Av. Dr. Chucri Zaidan, 2460 - SP";
-  else enderecoInp.value="";
+  const v = predioSel.value;
+  if(v==="Eco Berrini") enderecoInp.value = "Av. Eng. Luís Carlos Berrini, 1376 - SP";
+  else if(v==="Chucri Zaidan") enderecoInp.value = "Av. Dr. Chucri Zaidan, 2460 - SP";
+  else enderecoInp.value = "";
   renderReportWithPhotos();
 });
 
