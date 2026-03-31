@@ -11,28 +11,14 @@
 
 <style>
 :root {
-  /* Cores principais */
   --vivo-purple: #6600CC;
   --vivo-purple-dark: #4C0099;
   --vivo-purple-light: #8833FF;
   --vivo-purple-glow: rgba(102, 0, 204, 0.2);
-  --vivo-purple-soft: rgba(102, 0, 204, 0.1);
-  
-  /* Gradientes */
-  --grad-primary: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
-  --grad-primary-dark: linear-gradient(135deg, #4C0099 0%, #6600CC 100%);
-  --grad-success: linear-gradient(135deg, #00C853 0%, #00E676 100%);
-  --grad-warning: linear-gradient(135deg, #FFD600 0%, #FFEA00 100%);
-  --grad-danger: linear-gradient(135deg, #FF3B3B 0%, #FF6B6B 100%);
-  --grad-occupied: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
-  
-  /* Cores de status */
   --green: #00C853;
   --yellow: #FFD600;
   --red: #FF3B3B;
   --orange: #FF9800;
-  
-  /* Neutras */
   --white: #FFFFFF;
   --black: #1A1A2E;
   --gray-100: #2A2A3E;
@@ -40,15 +26,12 @@
   --gray-300: #4A4A5E;
   --gray-400: #6A6A7A;
   --gray-500: #9A9AAD;
-  
-  /* Efeitos */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 20px rgba(102, 0, 204, 0.3);
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -66,7 +49,6 @@ body {
   position: relative;
 }
 
-/* Efeito de grid de fundo */
 body::before {
   content: '';
   position: fixed;
@@ -93,9 +75,7 @@ body::before {
 }
 
 @media (min-width: 980px) {
-  body {
-    padding: 24px;
-  }
+  body { padding: 24px; }
   .app {
     flex-direction: row;
     gap: 28px;
@@ -113,7 +93,6 @@ body::before {
   }
 }
 
-/* Cards com efeito glassmorphism */
 .card, .section {
   background: rgba(26, 26, 46, 0.75);
   backdrop-filter: blur(12px);
@@ -129,11 +108,10 @@ body::before {
   box-shadow: var(--shadow-lg);
 }
 
-/* Títulos */
 h2 {
   font-size: 22px;
   font-weight: 800;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -164,7 +142,6 @@ h3 {
   justify-content: space-between;
 }
 
-/* Labels */
 label {
   display: block;
   margin: 16px 0 8px 0;
@@ -175,7 +152,6 @@ label {
   letter-spacing: 0.5px;
 }
 
-/* Campos de formulário - select personalizado */
 .form-field, .form-select {
   width: 100%;
   border: 1.5px solid rgba(102, 0, 204, 0.2);
@@ -202,7 +178,6 @@ label {
   color: var(--white);
 }
 
-/* Input group */
 .number-input-group {
   display: flex;
   gap: 16px;
@@ -213,7 +188,6 @@ label {
   flex: 1;
 }
 
-/* Status strip */
 .status-strip {
   display: flex;
   gap: 12px;
@@ -265,10 +239,6 @@ label {
   border-color: var(--vivo-purple);
 }
 
-.status:active {
-  transform: translateY(0);
-}
-
 .dot {
   width: 12px;
   height: 12px;
@@ -281,7 +251,6 @@ label {
 .dot.prob { background: var(--red); box-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
 .dot.occupied { background: var(--orange); box-shadow: 0 0 10px rgba(255, 152, 0, 0.5); }
 
-/* Seção de fotos */
 .photo-section {
   margin-top: 24px;
   padding-top: 20px;
@@ -371,12 +340,11 @@ label {
   transform: scale(1.1);
 }
 
-/* Botões */
 .btn {
   width: 100%;
   border: none;
   border-radius: 14px;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
   color: var(--white);
   font-weight: 700;
   padding: 12px;
@@ -420,7 +388,6 @@ label {
   flex: 1;
 }
 
-/* Grade de salas */
 .created-grid {
   display: flex;
   flex-wrap: wrap;
@@ -452,7 +419,7 @@ label {
   left: 0;
   right: 0;
   height: 3px;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
   transform: scaleX(0);
   transition: transform 0.3s;
 }
@@ -494,10 +461,10 @@ label {
   width: fit-content;
 }
 
-.pill.valid { background: var(--grad-success); color: var(--black); }
-.pill.lock { background: var(--grad-warning); color: var(--black); }
-.pill.prob { background: var(--grad-danger); color: white; }
-.pill.occupied { background: var(--grad-occupied); color: var(--black); }
+.pill.valid { background: linear-gradient(135deg, #00C853, #00E676); color: var(--black); }
+.pill.lock { background: linear-gradient(135deg, #FFD600, #FFEA00); color: var(--black); }
+.pill.prob { background: linear-gradient(135deg, #FF3B3B, #FF6B6B); color: white; }
+.pill.occupied { background: linear-gradient(135deg, #FF9800, #FFB74D); color: var(--black); }
 
 .photo-indicator {
   font-size: 11px;
@@ -505,7 +472,6 @@ label {
   font-weight: 600;
 }
 
-/* Relatório */
 .report-box {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.3);
@@ -527,7 +493,7 @@ label {
 .report-title span {
   font-size: 16px;
   font-weight: 800;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -561,13 +527,13 @@ label {
   border: none;
 }
 
-/* Mock do celular */
+/* Mock do celular - ESTILOS MELHORADOS */
 .phone-wrap {
   margin: 12px auto;
   width: 100%;
-  max-width: 380px;
-  border-radius: 44px;
-  padding: 16px 14px 20px;
+  max-width: 400px;
+  border-radius: 48px;
+  padding: 16px 12px 20px;
   background: linear-gradient(180deg, #2A2A3E 0%, #1A1A2E 100%);
   box-shadow: var(--shadow-lg), 0 0 0 8px rgba(102, 0, 204, 0.1);
   border: 1px solid rgba(102, 0, 204, 0.3);
@@ -575,135 +541,253 @@ label {
 }
 
 .phone-notch {
-  width: 180px;
+  width: 160px;
   height: 28px;
-  background: var(--black);
+  background: #0F0F1A;
   border-radius: 0 0 20px 20px;
   margin: -8px auto 12px;
   position: relative;
 }
 
-.phone-notch::before {
-  content: '🔊';
-  position: absolute;
-  right: 20px;
-  top: 4px;
-  font-size: 10px;
-  opacity: 0.5;
-}
-
 .phone-screen {
-  background: #0A0A12;
+  background: #FFFFFF;
   border-radius: 32px;
   overflow: hidden;
   position: relative;
-  min-height: 500px;
+  min-height: 580px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+/* ESTILOS DO RELATÓRIO DENTRO DO CELULAR */
+.phone-screen .report-content {
+  background: #FFFFFF;
+  padding: 24px 20px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1F2937;
+  font-size: 13px;
+  line-height: 1.5;
+  max-height: 580px;
+  overflow-y: auto;
+}
+
+/* Cabeçalho do relatório */
+.report-header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+.report-header .report-logo {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6600CC, #8833FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 8px;
+}
+
+.report-header .report-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  letter-spacing: -0.3px;
+}
+
+/* Cards de informação */
+.info-card {
+  background: #F9FAFB;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #E5E7EB;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-icon {
+  font-size: 18px;
+  min-width: 32px;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #6B7280;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.info-value {
+  font-weight: 600;
+  color: #1F2937;
+  font-size: 14px;
+}
+
+/* Seções do relatório */
+.report-section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #6600CC;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 3px solid #6600CC;
+  padding-left: 12px;
+}
+
+/* Cards de indicadores */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: #F9FAFB;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #E5E7EB;
+}
+
+.stat-emoji {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1F2937;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 500;
+}
+
+/* Lista de salas por andar */
+.floor-card {
+  background: #F9FAFB;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #E5E7EB;
+}
+
+.floor-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.rooms-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.room-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.room-badge.valid { border-left: 3px solid #00C853; }
+.room-badge.lock { border-left: 3px solid #FFD600; }
+.room-badge.prob { border-left: 3px solid #FF3B3B; }
+.room-badge.occupied { border-left: 3px solid #FF9800; }
+
+/* Evidências */
+.evidence-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid #E5E7EB;
+}
+
+.evidence-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.evidence-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.evidence-item {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #E5E7EB;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.evidence-item:hover {
+  transform: scale(1.05);
+  border-color: #6600CC;
+}
+
+.evidence-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .phone-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 10px 12px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.04));
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 10px 10px;
+  background: #F9FAFB;
+  border-top: 1px solid #E5E7EB;
 }
 
 .vivo-logo {
-  font-weight: 900;
-  letter-spacing: 2px;
-  font-size: 12px;
-  background: linear-gradient(135deg, #fff, #d9c9ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding: 4px 12px;
-  border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Conteúdo do relatório */
-.phone-screen .report-content {
-  background: transparent;
-  padding: 20px 18px 8px;
-  max-height: 520px;
-  overflow-y: auto;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.report-content .h-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(102, 0, 204, 0.4), transparent);
-  margin: 12px 0;
-}
-
-.report-content .title {
   font-weight: 800;
-  font-size: 15px;
-  letter-spacing: -0.2px;
-  color: var(--vivo-purple-light);
-}
-
-.report-content .kvs {
-  margin: 8px 0 0;
-}
-
-.report-content .kv {
-  display: flex;
-  gap: 12px;
   font-size: 12px;
-  margin: 6px 0;
-}
-
-.report-content .kv b {
-  color: var(--vivo-purple-light);
-  min-width: 85px;
-  text-transform: uppercase;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.report-content .bullet {
-  margin: 6px 0 6px 16px;
-}
-
-/* Fotos no relatório */
-.report-room-photos {
-  margin: 20px 0;
-  padding: 16px;
-  background: rgba(102, 0, 204, 0.08);
-  border-radius: 20px;
-  border: 1px solid rgba(102, 0, 204, 0.2);
-}
-
-.report-room-title {
-  font-weight: 700;
-  color: var(--vivo-purple-light);
-  margin-bottom: 12px;
-  font-size: 13px;
-}
-
-.report-photo-thumbnails {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.report-thumb {
-  width: 80px;
-  height: 80px;
-  border-radius: 14px;
-  object-fit: cover;
-  border: 2px solid var(--vivo-purple);
-  cursor: pointer;
-  transition: var(--transition-fast);
-}
-
-.report-thumb:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow);
+  color: #6600CC;
+  letter-spacing: 1px;
 }
 
 /* Toast e modais */
@@ -771,7 +855,7 @@ label {
   margin-bottom: 24px;
   font-size: 20px;
   text-align: center;
-  background: var(--grad-primary);
+  background: linear-gradient(135deg, #6600CC, #8833FF);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -803,7 +887,7 @@ label {
 .share-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
 .share-btn.teams { background: linear-gradient(135deg, #6264A7, #464775); color: #fff; }
 .share-btn.email { background: linear-gradient(135deg, #EA4335, #C5221F); color: #fff; }
-.share-btn.download { background: var(--grad-primary); color: #fff; }
+.share-btn.download { background: linear-gradient(135deg, #6600CC, #8833FF); color: #fff; }
 
 .close-modal {
   background: rgba(102, 0, 204, 0.2);
@@ -863,7 +947,6 @@ label {
   margin-top: 16px;
 }
 
-/* Scrollbar customizada */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -878,16 +961,11 @@ label {
   background: var(--vivo-purple);
   border-radius: 10px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--vivo-purple-light);
-}
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ESQUERDA -->
   <div class="card">
     <h2>Vistoria Técnica</h2>
 
@@ -927,7 +1005,6 @@ label {
       <button class="status" data-status="occupied"><span class="dot occupied"></span>Ocupada</button>
     </div>
 
-    <!-- FOTOS DA SALA ATUAL -->
     <div class="photo-section">
       <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">SL01</span></div>
       <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto (câmera ou galeria)</div>
@@ -938,10 +1015,8 @@ label {
     <div class="row">
       <button id="btnClear" class="btn">🗑️ Limpar Todos os Dados</button>
     </div>
-
   </div>
 
-  <!-- DIREITA -->
   <div class="viewer">
     <div class="section">
       <h3>📦 Salas vistoriadas <span id="roomsCount" style="color: var(--vivo-purple-light);">0</span></h3>
@@ -962,28 +1037,56 @@ label {
           </div>
         </div>
 
-        <!-- MOCK do celular -->
         <div id="phoneMock" class="phone-wrap">
           <div class="phone-notch"></div>
           <div id="reportCaptureArea" class="phone-screen">
             <div id="relatorio" class="report-content">
-              <div class="title">Relatório de Vistoria</div>
-              <div class="h-line"></div>
-              <div class="bullet">Aguardando registros...</div>
+              <div class="report-header">
+                <div class="report-logo">VIVO</div>
+                <div class="report-title">RELATÓRIO DE VISTORIA</div>
+              </div>
+              <div class="info-card">
+                <div class="info-row">
+                  <div class="info-icon">🏢</div>
+                  <div>
+                    <div class="info-label">PRÉDIO</div>
+                    <div class="info-value" id="reportPredio">—</div>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <div class="info-icon">📍</div>
+                  <div>
+                    <div class="info-label">ENDEREÇO</div>
+                    <div class="info-value" id="reportEndereco">—</div>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <div class="info-icon">📅</div>
+                  <div>
+                    <div class="info-label">DATA</div>
+                    <div class="info-value" id="reportData">—</div>
+                  </div>
+                </div>
+                <div class="info-row">
+                  <div class="info-icon">👤</div>
+                  <div>
+                    <div class="info-label">AUDITOR</div>
+                    <div class="info-value" id="reportAuditor">—</div>
+                  </div>
+                </div>
+              </div>
+              <div id="reportContent"></div>
             </div>
             <div class="phone-footer">
               <div class="vivo-logo">VIVO</div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- Modal de Compartilhamento -->
 <div id="shareModal" class="share-modal">
   <div class="share-card">
     <h4>✨ Compartilhar Relatório</h4>
@@ -997,7 +1100,6 @@ label {
   </div>
 </div>
 
-<!-- Modal foto em tela cheia -->
 <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
   <img id="fullscreenImage" src="">
 </div>
@@ -1005,12 +1107,10 @@ label {
 <div class="toast"></div>
 
 <script>
-/* ===== Estado ===== */
 const STORAGE_KEY = "vistoria_simple_v2";
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let currentFloor = 1, currentRoom = 1, currentImageData = null;
 
-/* ===== Gerar opções de andares ===== */
 function populateFloorOptions() {
   const floorSelect = document.getElementById("floorSelect");
   floorSelect.innerHTML = '<option value="">Selecione o andar</option>';
@@ -1022,7 +1122,6 @@ function populateFloorOptions() {
   }
 }
 
-/* ===== Gerar opções de salas ===== */
 function populateRoomOptions() {
   const roomSelect = document.getElementById("roomSelect");
   roomSelect.innerHTML = '<option value="">Selecione a sala</option>';
@@ -1034,27 +1133,24 @@ function populateRoomOptions() {
   }
 }
 
-/* ===== Helpers ===== */
 const pad2 = n => String(n).padStart(2,"0");
 const formatRoomNumber = n => `SL${String(n).padStart(2, '0')}`;
 const statusName = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Ocupada";
 const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"occupied";
 const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"🟠";
 
-/* ===== DOM ===== */
-const floorSelect   = document.getElementById("floorSelect");
-const roomSelect    = document.getElementById("roomSelect");
-const dispFloor     = document.getElementById("currentDisplayFloor");
-const dispRoom      = document.getElementById("currentDisplayRoom");
-const createdGrid   = document.getElementById("createdGrid");
-const predioSel     = document.getElementById("predio");
-const enderecoInp   = document.getElementById("endereco");
-const auditorInp    = document.getElementById("auditor");
-const photoInput    = document.getElementById("photoInput");
-const photoBtn      = document.getElementById("photoUploadBtn");
-const shareModal    = document.getElementById("shareModal");
+const floorSelect = document.getElementById("floorSelect");
+const roomSelect = document.getElementById("roomSelect");
+const dispFloor = document.getElementById("currentDisplayFloor");
+const dispRoom = document.getElementById("currentDisplayRoom");
+const createdGrid = document.getElementById("createdGrid");
+const predioSel = document.getElementById("predio");
+const enderecoInp = document.getElementById("endereco");
+const auditorInp = document.getElementById("auditor");
+const photoInput = document.getElementById("photoInput");
+const photoBtn = document.getElementById("photoUploadBtn");
+const shareModal = document.getElementById("shareModal");
 
-/* ===== Sala atual ===== */
 function updateCurrentDisplay(){
   currentFloor = parseInt(floorSelect.value) || 1;
   currentRoom = parseInt(roomSelect.value) || 1;
@@ -1065,21 +1161,23 @@ function updateCurrentDisplay(){
 floorSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
 roomSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
 
-/* ===== Fotos por sala ===== */
 const roomKey = (f,r)=>`A${pad2(f)}-${formatRoomNumber(r)}`;
 const getRoomPhotos = (f,r)=> JSON.parse(localStorage.getItem(`photos_${roomKey(f,r)}`)||"[]");
 const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`, JSON.stringify(arr));
+
 function addPhotoToRoom(f,r,photo){
   const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
   renderCreated(); renderReportWithPhotos();
   showToast("📸 Foto adicionada com sucesso!");
 }
+
 function deletePhotoFromRoom(f,r,idx){
   const arr = getRoomPhotos(f,r); arr.splice(idx,1); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
   renderCreated(); renderReportWithPhotos(); showToast("📸 Foto removida");
 }
+
 function renderCurrentPhotos(){
   const gal = document.getElementById("photoGallery");
   const photos = getRoomPhotos(currentFloor,currentRoom);
@@ -1094,11 +1192,11 @@ function renderCurrentPhotos(){
     gal.appendChild(div);
   });
 }
+
 function showFullscreenImage(src){ const m=document.getElementById("fullscreenModal"),i=document.getElementById("fullscreenImage"); i.src=src; m.classList.add("show"); }
 function closeFullscreen(){ document.getElementById("fullscreenModal").classList.remove("show"); }
 window.deletePhotoFromRoom=deletePhotoFromRoom; window.showFullscreenImage=showFullscreenImage; window.closeFullscreen=closeFullscreen;
 
-/* ===== Registrar sala ao clicar status ===== */
 document.querySelectorAll(".status").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     const status = btn.dataset.status, f=currentFloor, r=currentRoom;
@@ -1109,7 +1207,6 @@ document.querySelectorAll(".status").forEach(btn=>{
   });
 });
 
-/* ===== Grade de itens criados ===== */
 function renderCreated(){
   const sorted = [...entries].sort((a,b)=> a.f-b.f || a.r-b.r);
   const countSpan = document.getElementById("roomsCount");
@@ -1119,12 +1216,7 @@ function renderCreated(){
   sorted.forEach(it=>{
     const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
     const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
-    card.onclick=()=>{ 
-      floorSelect.value = it.f; 
-      roomSelect.value = it.r; 
-      updateCurrentDisplay(); 
-      renderCurrentPhotos(); 
-    };
+    card.onclick=()=>{ floorSelect.value = it.f; roomSelect.value = it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
     const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • ${formatRoomNumber(it.r)}${has?' 📸':''}`;
     const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
     card.appendChild(badge); card.appendChild(pill);
@@ -1133,103 +1225,134 @@ function renderCreated(){
   });
 }
 
-/* ===== IA de narrativa ===== */
-function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
-  const stats={valid:0,lock:0,prob:0,occupied:0}, floors={};
-  entries.forEach(e=>{
-    stats[e.status]=(stats[e.status]||0)+1;
-    if(!floors[e.f]) floors[e.f]={valid:[],lock:[],prob:[],occupied:[]};
-    floors[e.f][e.status].push(e.r);
-  });
-  const total=entries.length, dataStr=new Date().toLocaleString("pt-BR");
-  const headline = total===0
-    ? "Nenhuma sala foi registrada nesta vistoria."
-    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"}, ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios"} e ${stats.occupied>0?`${stats.occupied} sala(s) ocupada(s)`:"nenhuma sala ocupada"}.`;
-
-  const meta =
-`<div class="kv"><b>Prédio</b><span>${predio||"—"}</span></div>
-<div class="kv"><b>Endereço</b><span>${endereco||"—"}</span></div>
-<div class="kv"><b>Data</b><span>${dataStr}</span></div>
-<div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
-
-  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • 🟠 Ocupadas: ${stats.occupied}`;
-
-  let detalhe = "";
-  if(total>0){
-    detalhe += `<div class="bullet"><b>Detalhe por andar</b></div>`;
-    Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f=>{
-      const a=floors[f], parts=[];
-      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
-      detalhe += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")||"—"}</div>`;
-    });
-  }
-  const fotos = totalFotos?`📸 Evidências registradas: ${totalFotos} foto(s).`:"";
-
-  return (
-`<div class="title">📊 Resumo IA</div>
-<div class="h-line"></div>
-<div class="kvs">${meta}</div>
-<div class="h-line"></div>
-<div class="bullet">${headline}</div>
-<div class="h-line"></div>
-<div class="title">📈 Indicadores</div>
-<div class="h-line"></div>
-<div class="bullet">${global}</div>
-<div class="h-line"></div>
-<div class="title">📍 Detalhamento</div>
-<div class="h-line"></div>
-${detalhe || "<div class='bullet'>Sem entradas.</div>"}
-${fotos?`<div class="h-line"></div><div class="bullet">${fotos}</div>`:""}`
-  );
-}
-
-/* ===== Relatório ===== */
 function renderReportWithPhotos(){
   const predio = predioSel.value || "Não selecionado";
   const endereco = enderecoInp.value || "Não informado";
   const auditor = auditorInp.value || "Não informado";
+  const dataStr = new Date().toLocaleString("pt-BR");
   const useAI = !!document.getElementById("useAI")?.checked;
 
-  let totalFotos = 0; const roomsWithPhotos = [];
-  entries.forEach(item=>{
-    const photos = getRoomPhotos(item.f,item.r);
-    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-${formatRoomNumber(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
+  document.getElementById("reportPredio").textContent = predio;
+  document.getElementById("reportEndereco").textContent = endereco;
+  document.getElementById("reportData").textContent = dataStr;
+  document.getElementById("reportAuditor").textContent = auditor;
+
+  const stats = {valid:0, lock:0, prob:0, occupied:0};
+  const floors = {};
+
+  entries.forEach(e=>{
+    stats[e.status] = (stats[e.status]||0)+1;
+    if(!floors[e.f]) floors[e.f] = {valid:[], lock:[], prob:[], occupied:[]};
+    floors[e.f][e.status].push(e.r);
   });
 
-  let mainHtml;
+  const total = entries.length;
+  const totalFotos = entries.reduce((acc, e) => acc + getRoomPhotos(e.f, e.r).length, 0);
+
+  let html = '';
+
   if(useAI){
-    mainHtml = aiComposeReportText({predio,endereco,auditor,entries,totalFotos});
-  }else{
-    const dataStr = new Date().toLocaleString("pt-BR");
-    mainHtml =
-`<div class="title">📋 Relatório</div>
-<div class="h-line"></div>
-<div class="kvs">
-  <div class="kv"><b>Prédio</b><span>${predio}</span></div>
-  <div class="kv"><b>Endereço</b><span>${endereco}</span></div>
-  <div class="kv"><b>Data</b><span>${dataStr}</span></div>
-  <div class="kv"><b>Auditor</b><span>${auditor}</span></div>
-</div>`;
+    const headline = total === 0 
+      ? "Nenhuma sala foi registrada nesta vistoria."
+      : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"}, ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios"} e ${stats.occupied>0?`${stats.occupied} sala(s) ocupada(s)`:"nenhuma sala ocupada"}.`;
+
+    html += `<div class="report-section">
+      <div class="section-title">📊 Resumo</div>
+      <div style="background:#F9FAFB; padding:12px 16px; border-radius:12px; margin-bottom:16px;">
+        <p style="font-size:13px; color:#374151; line-height:1.5;">${headline}</p>
+      </div>
+    </div>`;
+
+    html += `<div class="report-section">
+      <div class="section-title">📈 Indicadores</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-emoji">✅</div><div class="stat-number">${stats.valid}</div><div class="stat-label">Validadas</div></div>
+        <div class="stat-card"><div class="stat-emoji">🔒</div><div class="stat-number">${stats.lock}</div><div class="stat-label">Trancadas</div></div>
+        <div class="stat-card"><div class="stat-emoji">❌</div><div class="stat-number">${stats.prob}</div><div class="stat-label">Problemas</div></div>
+        <div class="stat-card"><div class="stat-emoji">🟠</div><div class="stat-number">${stats.occupied}</div><div class="stat-label">Ocupadas</div></div>
+      </div>
+    </div>`;
+
+    if(total > 0){
+      html += `<div class="report-section">
+        <div class="section-title">📍 Detalhamento por Andar</div>`;
+      Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f => {
+        const a = floors[f];
+        const parts = [];
+        if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.lock.length) parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.prob.length) parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        
+        html += `<div class="floor-card">
+          <div class="floor-title">🏢 ${pad2(f)}° Andar</div>
+          <div class="rooms-list">${parts.map(p => `<span class="room-badge">${p}</span>`).join('')}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+  } else {
+    html += `<div class="report-section">
+      <div class="section-title">📈 Indicadores</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-emoji">✅</div><div class="stat-number">${stats.valid}</div><div class="stat-label">Validadas</div></div>
+        <div class="stat-card"><div class="stat-emoji">🔒</div><div class="stat-number">${stats.lock}</div><div class="stat-label">Trancadas</div></div>
+        <div class="stat-card"><div class="stat-emoji">❌</div><div class="stat-number">${stats.prob}</div><div class="stat-label">Problemas</div></div>
+        <div class="stat-card"><div class="stat-emoji">🟠</div><div class="stat-number">${stats.occupied}</div><div class="stat-label">Ocupadas</div></div>
+      </div>
+    </div>`;
+    
+    if(total > 0){
+      html += `<div class="report-section">
+        <div class="section-title">📍 Detalhamento por Andar</div>`;
+      Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f => {
+        const a = floors[f];
+        const parts = [];
+        if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.lock.length) parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.prob.length) parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+        
+        html += `<div class="floor-card">
+          <div class="floor-title">🏢 ${pad2(f)}° Andar</div>
+          <div class="rooms-list">${parts.map(p => `<span class="room-badge">${p}</span>`).join('')}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
   }
 
-  let photosHtml = "";
+  const roomsWithPhotos = [];
+  entries.forEach(item=>{
+    const photos = getRoomPhotos(item.f,item.r);
+    if(photos.length){
+      roomsWithPhotos.push({room:`A${pad2(item.f)}-${formatRoomNumber(item.r)}`, status:statusName(item.status), statusEmoji:statusEmoji(item.status), photos});
+    }
+  });
+
   if(roomsWithPhotos.length){
-    photosHtml = `<div class="h-line"></div><div class="title">📸 Evidências Fotográficas</div><div class="h-line"></div>`;
-    roomsWithPhotos.forEach(r=>{
-      photosHtml += `<div class="report-room-photos">
-        <div class="report-room-title">${r.statusEmoji} ${r.room} — ${r.status} (${r.photos.length} foto${r.photos.length>1?"s":""})</div>
-        <div class="report-photo-thumbnails">` + r.photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')" loading="lazy">`).join("") + `</div>
-      </div>`;
+    html += `<div class="evidence-section">
+      <div class="evidence-title">📸 Evidências Fotográficas (${totalFotos} foto${totalFotos>1?'s':''})</div>
+      <div class="evidence-gallery">`;
+    roomsWithPhotos.forEach(r => {
+      r.photos.forEach(p => {
+        html += `<div class="evidence-item" onclick="showFullscreenImage('${p}')"><img src="${p}" alt="Evidência"></div>`;
+      });
     });
+    html += `</div></div>`;
   }
 
-  document.getElementById("relatorio").innerHTML = mainHtml + photosHtml;
+  if(total === 0){
+    html = `<div style="text-align:center; padding:40px 20px; color:#9CA3AF;">
+      <div style="font-size:48px; margin-bottom:16px;">📋</div>
+      <div>Nenhuma sala registrada ainda</div>
+      <div style="font-size:12px; margin-top:8px;">Selecione um andar e sala, clique no status para começar</div>
+    </div>`;
+  }
+
+  document.getElementById("reportContent").innerHTML = html;
 }
 
-/* ===== PNG ===== */
 async function generateImage(){
   const phone = document.getElementById("phoneMock");
   if(!phone){ showToast("Nada para gerar"); return null; }
@@ -1240,11 +1363,10 @@ async function generateImage(){
   }catch(e){ showToast("❌ Erro ao gerar imagem"); return null; }
 }
 
-/* ===== Compartilhar ===== */
 async function openShareModal(){ const d=await generateImage(); if(!d)return; currentImageData=d; shareModal.classList.add("show"); }
 function shareToWhatsApp(){
   if(!currentImageData) return;
-  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
+  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}`;
   if(navigator.share){
     fetch(currentImageData).then(r=>r.blob()).then(b=>{
       navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
@@ -1256,7 +1378,7 @@ function shareToWhatsApp(){
 }
 function shareToTeams(){
   if(!currentImageData) return;
-  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
+  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}`;
   navigator.clipboard.writeText(msg); showToast("✅ Mensagem copiada! Cole no Teams");
   const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click();
   shareModal.classList.remove("show");
@@ -1271,12 +1393,10 @@ function shareToEmail(){
 }
 function shareSaveImage(){ if(!currentImageData) return; const a=document.createElement('a'); a.download=`vistoria_${predioSel.value||"vistoria"}.png`; a.href=currentImageData; a.click(); shareModal.classList.remove("show"); showToast("✅ Imagem salva!"); }
 
-/* ===== Persistência ===== */
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
 function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
   t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2500); }
 
-/* ===== Listeners ===== */
 photoBtn.addEventListener("click", ()=> photoInput.click());
 photoInput.addEventListener("change",(e)=>{
   const files=[...e.target.files];
@@ -1291,7 +1411,6 @@ document.getElementById("shareEmail").addEventListener("click", shareToEmail);
 document.getElementById("shareSave").addEventListener("click", shareSaveImage);
 document.getElementById("closeModal").addEventListener("click", ()=> shareModal.classList.remove("show"));
 shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.classList.remove("show"); });
-
 document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
@@ -1311,7 +1430,6 @@ predioSel.addEventListener("change", ()=>{
   renderReportWithPhotos();
 });
 
-/* ===== Boot ===== */
 (function init(){
   populateFloorOptions();
   populateRoomOptions();
