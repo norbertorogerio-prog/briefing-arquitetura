@@ -1303,7 +1303,7 @@ document.getElementById("btnCsv").addEventListener("click", exportCsv);
 document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
-  if(!confirm("⚠️ Limpar TODOS os registros e fotos?")) return;
+  if(!confirm("⚠️ Limpar TODOS registros e fotos?")) return;
   entries=[];
   const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) keys.push(k); }
   keys.forEach(k=> localStorage.removeItem(k));
