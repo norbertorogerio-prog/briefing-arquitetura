@@ -11,28 +11,19 @@
 
 <style>
 :root {
-  /* Cores principais */
   --vivo-purple: #6600CC;
   --vivo-purple-dark: #4C0099;
   --vivo-purple-light: #8833FF;
   --vivo-purple-glow: rgba(102, 0, 204, 0.2);
-  --vivo-purple-soft: rgba(102, 0, 204, 0.1);
-  
-  /* Gradientes */
   --grad-primary: linear-gradient(135deg, #6600CC 0%, #8833FF 100%);
-  --grad-primary-dark: linear-gradient(135deg, #4C0099 0%, #6600CC 100%);
   --grad-success: linear-gradient(135deg, #00C853 0%, #00E676 100%);
   --grad-warning: linear-gradient(135deg, #FFD600 0%, #FFEA00 100%);
   --grad-danger: linear-gradient(135deg, #FF3B3B 0%, #FF6B6B 100%);
   --grad-occupied: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
-  
-  /* Cores de status */
   --green: #00C853;
   --yellow: #FFD600;
   --red: #FF3B3B;
   --orange: #FF9800;
-  
-  /* Neutras */
   --white: #FFFFFF;
   --black: #1A1A2E;
   --gray-100: #2A2A3E;
@@ -40,22 +31,15 @@
   --gray-300: #4A4A5E;
   --gray-400: #6A6A7A;
   --gray-500: #9A9AAD;
-  
-  /* Efeitos */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
   --shadow-glow: 0 0 20px rgba(102, 0, 204, 0.3);
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background: linear-gradient(135deg, #0F0F1A 0%, #1A1A2E 100%);
@@ -66,7 +50,6 @@ body {
   position: relative;
 }
 
-/* Efeito de grid de fundo */
 body::before {
   content: '';
   position: fixed;
@@ -93,9 +76,7 @@ body::before {
 }
 
 @media (min-width: 980px) {
-  body {
-    padding: 24px;
-  }
+  body { padding: 24px; }
   .app {
     flex-direction: row;
     gap: 28px;
@@ -113,7 +94,6 @@ body::before {
   }
 }
 
-/* Cards com efeito glassmorphism */
 .card, .section {
   background: rgba(26, 26, 46, 0.75);
   backdrop-filter: blur(12px);
@@ -129,7 +109,6 @@ body::before {
   box-shadow: var(--shadow-lg);
 }
 
-/* Títulos */
 h2 {
   font-size: 22px;
   font-weight: 800;
@@ -144,13 +123,7 @@ h2 {
   gap: 8px;
 }
 
-h2::before {
-  content: '✨';
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-  color: var(--vivo-purple-light);
-}
+h2::before { content: '✨'; background: none; -webkit-background-clip: unset; background-clip: unset; color: var(--vivo-purple-light); }
 
 h3 {
   font-size: 16px;
@@ -164,7 +137,6 @@ h3 {
   justify-content: space-between;
 }
 
-/* Labels */
 label {
   display: block;
   margin: 16px 0 8px 0;
@@ -175,7 +147,6 @@ label {
   letter-spacing: 0.5px;
 }
 
-/* Campos de formulário - select personalizado */
 .form-field, .form-select {
   width: 100%;
   border: 1.5px solid rgba(102, 0, 204, 0.2);
@@ -197,23 +168,11 @@ label {
   transform: translateY(-1px);
 }
 
-.form-select option {
-  background: var(--gray-100);
-  color: var(--white);
-}
+.form-select option { background: var(--gray-100); color: var(--white); }
 
-/* Input group */
-.number-input-group {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 8px;
-}
+.number-input-group { display: flex; gap: 16px; margin-bottom: 8px; }
+.number-input-group > div { flex: 1; }
 
-.number-input-group > div {
-  flex: 1;
-}
-
-/* Status strip */
 .status-strip {
   display: flex;
   gap: 12px;
@@ -254,50 +213,17 @@ label {
   transition: width 0.4s, height 0.4s;
 }
 
-.status:active::before {
-  width: 200%;
-  height: 200%;
-}
+.status:active::before { width: 200%; height: 200%; }
+.status:hover { background: rgba(102, 0, 204, 0.25); transform: translateY(-2px); border-color: var(--vivo-purple); }
 
-.status:hover {
-  background: rgba(102, 0, 204, 0.25);
-  transform: translateY(-2px);
-  border-color: var(--vivo-purple);
-}
-
-.status:active {
-  transform: translateY(0);
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  transition: var(--transition-fast);
-}
-
+.dot { width: 12px; height: 12px; border-radius: 50%; transition: var(--transition-fast); }
 .dot.valid { background: var(--green); box-shadow: 0 0 10px rgba(0, 200, 83, 0.5); }
 .dot.lock { background: var(--yellow); box-shadow: 0 0 10px rgba(255, 214, 0, 0.5); }
 .dot.prob { background: var(--red); box-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
 .dot.occupied { background: var(--orange); box-shadow: 0 0 10px rgba(255, 152, 0, 0.5); }
 
-/* Seção de fotos */
-.photo-section {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(102, 0, 204, 0.2);
-}
-
-.photo-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  color: var(--gray-500);
-}
-
+.photo-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(102, 0, 204, 0.2); }
+.photo-label { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; margin-bottom: 12px; color: var(--gray-500); }
 .photo-upload-btn {
   background: rgba(102, 0, 204, 0.15);
   border: 1.5px dashed rgba(102, 0, 204, 0.4);
@@ -309,12 +235,7 @@ label {
   font-size: 13px;
   font-weight: 600;
 }
-
-.photo-upload-btn:hover {
-  background: rgba(102, 0, 204, 0.25);
-  border-color: var(--vivo-purple);
-  transform: translateY(-2px);
-}
+.photo-upload-btn:hover { background: rgba(102, 0, 204, 0.25); border-color: var(--vivo-purple); transform: translateY(-2px); }
 
 .photo-gallery {
   display: grid;
@@ -332,20 +253,8 @@ label {
   background: rgba(0, 0, 0, 0.4);
   transition: var(--transition-fast);
 }
-
-.photo-item:hover {
-  transform: scale(1.02);
-  border-color: var(--vivo-purple);
-  box-shadow: var(--shadow-glow);
-}
-
-.photo-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  cursor: pointer;
-}
-
+.photo-item:hover { transform: scale(1.02); border-color: var(--vivo-purple); box-shadow: var(--shadow-glow); }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 .photo-delete {
   position: absolute;
   top: 6px;
@@ -364,14 +273,8 @@ label {
   transition: var(--transition-fast);
   font-weight: bold;
 }
+.photo-delete:hover { background: var(--red); color: white; transform: scale(1.1); }
 
-.photo-delete:hover {
-  background: var(--red);
-  color: white;
-  transform: scale(1.1);
-}
-
-/* Botões */
 .btn {
   width: 100%;
   border: none;
@@ -386,7 +289,6 @@ label {
   position: relative;
   overflow: hidden;
 }
-
 .btn::before {
   content: '';
   position: absolute;
@@ -399,28 +301,12 @@ label {
   transform: translate(-50%, -50%);
   transition: width 0.4s, height 0.4s;
 }
+.btn:active::before { width: 200%; height: 200%; }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 0, 204, 0.4); }
 
-.btn:active::before {
-  width: 200%;
-  height: 200%;
-}
+.row { display: flex; gap: 12px; margin-top: 20px; }
+.row button { flex: 1; }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 0, 204, 0.4);
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.row button {
-  flex: 1;
-}
-
-/* Grade de salas */
 .created-grid {
   display: flex;
   flex-wrap: wrap;
@@ -444,7 +330,6 @@ label {
   position: relative;
   overflow: hidden;
 }
-
 .room-card::before {
   content: '';
   position: absolute;
@@ -456,21 +341,9 @@ label {
   transform: scaleX(0);
   transition: transform 0.3s;
 }
-
-.room-card:hover {
-  border-color: var(--vivo-purple);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-glow);
-}
-
-.room-card:hover::before {
-  transform: scaleX(1);
-}
-
-.room-card.has-photo {
-  border-color: var(--green);
-  background: linear-gradient(135deg, rgba(0, 200, 83, 0.08), rgba(102, 0, 204, 0.02));
-}
+.room-card:hover { border-color: var(--vivo-purple); transform: translateY(-3px); box-shadow: var(--shadow-glow); }
+.room-card:hover::before { transform: scaleX(1); }
+.room-card.has-photo { border-color: var(--green); background: linear-gradient(135deg, rgba(0, 200, 83, 0.08), rgba(102, 0, 204, 0.02)); }
 
 .badge {
   display: inline-flex;
@@ -493,19 +366,13 @@ label {
   padding: 5px 12px;
   width: fit-content;
 }
-
 .pill.valid { background: var(--grad-success); color: var(--black); }
 .pill.lock { background: var(--grad-warning); color: var(--black); }
 .pill.prob { background: var(--grad-danger); color: white; }
 .pill.occupied { background: var(--grad-occupied); color: var(--black); }
 
-.photo-indicator {
-  font-size: 11px;
-  color: var(--green);
-  font-weight: 600;
-}
+.photo-indicator { font-size: 11px; color: var(--green); font-weight: 600; }
 
-/* Relatório */
 .report-box {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.3);
@@ -523,21 +390,8 @@ label {
   flex-wrap: wrap;
   border-bottom: 1px solid rgba(102, 0, 204, 0.3);
 }
-
-.report-title span {
-  font-size: 16px;
-  font-weight: 800;
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.report-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.report-title span { font-size: 16px; font-weight: 800; background: var(--grad-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.report-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .btn-action {
   border: 1.5px solid rgba(102, 0, 204, 0.3);
@@ -550,18 +404,9 @@ label {
   cursor: pointer;
   transition: var(--transition-fast);
 }
+.btn-action:hover { background: rgba(102, 0, 204, 0.3); transform: translateY(-2px); }
+.btn-share { background: linear-gradient(135deg, #25D366, #128C7E); border: none; }
 
-.btn-action:hover {
-  background: rgba(102, 0, 204, 0.3);
-  transform: translateY(-2px);
-}
-
-.btn-share {
-  background: linear-gradient(135deg, #25D366, #128C7E);
-  border: none;
-}
-
-/* Mock do celular */
 .phone-wrap {
   margin: 12px auto;
   width: 100%;
@@ -582,15 +427,7 @@ label {
   margin: -8px auto 12px;
   position: relative;
 }
-
-.phone-notch::before {
-  content: '🔊';
-  position: absolute;
-  right: 20px;
-  top: 4px;
-  font-size: 10px;
-  opacity: 0.5;
-}
+.phone-notch::before { content: '🔊'; position: absolute; right: 20px; top: 4px; font-size: 10px; opacity: 0.5; }
 
 .phone-screen {
   background: #0A0A12;
@@ -622,7 +459,6 @@ label {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Conteúdo do relatório */
 .phone-screen .report-content {
   background: transparent;
   padding: 20px 18px 8px;
@@ -637,38 +473,12 @@ label {
   background: linear-gradient(90deg, transparent, rgba(102, 0, 204, 0.4), transparent);
   margin: 12px 0;
 }
+.report-content .title { font-weight: 800; font-size: 15px; letter-spacing: -0.2px; color: var(--vivo-purple-light); }
+.report-content .kvs { margin: 8px 0 0; }
+.report-content .kv { display: flex; gap: 12px; font-size: 12px; margin: 6px 0; }
+.report-content .kv b { color: var(--vivo-purple-light); min-width: 85px; text-transform: uppercase; font-size: 11px; font-weight: 700; }
+.report-content .bullet { margin: 6px 0 6px 16px; }
 
-.report-content .title {
-  font-weight: 800;
-  font-size: 15px;
-  letter-spacing: -0.2px;
-  color: var(--vivo-purple-light);
-}
-
-.report-content .kvs {
-  margin: 8px 0 0;
-}
-
-.report-content .kv {
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
-  margin: 6px 0;
-}
-
-.report-content .kv b {
-  color: var(--vivo-purple-light);
-  min-width: 85px;
-  text-transform: uppercase;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.report-content .bullet {
-  margin: 6px 0 6px 16px;
-}
-
-/* Fotos no relatório */
 .report-room-photos {
   margin: 20px 0;
   padding: 16px;
@@ -676,21 +486,8 @@ label {
   border-radius: 20px;
   border: 1px solid rgba(102, 0, 204, 0.2);
 }
-
-.report-room-title {
-  font-weight: 700;
-  color: var(--vivo-purple-light);
-  margin-bottom: 12px;
-  font-size: 13px;
-}
-
-.report-photo-thumbnails {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
-
+.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 12px; font-size: 13px; }
+.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
 .report-thumb {
   width: 80px;
   height: 80px;
@@ -700,13 +497,8 @@ label {
   cursor: pointer;
   transition: var(--transition-fast);
 }
+.report-thumb:hover { transform: scale(1.05); box-shadow: var(--shadow-glow); }
 
-.report-thumb:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-glow);
-}
-
-/* Toast e modais */
 .toast {
   position: fixed;
   right: 20px;
@@ -724,11 +516,7 @@ label {
   pointer-events: none;
   box-shadow: var(--shadow-lg);
 }
-
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+.toast.show { opacity: 1; transform: translateY(0); }
 
 .share-modal {
   display: none;
@@ -740,10 +528,7 @@ label {
   align-items: center;
   justify-content: center;
 }
-
-.share-modal.show {
-  display: flex;
-}
+.share-modal.show { display: flex; }
 
 .share-card {
   background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(20, 20, 36, 0.95));
@@ -755,34 +540,10 @@ label {
   width: 90%;
   animation: slideUp 0.3s ease;
 }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.share-card h4 {
-  margin-bottom: 24px;
-  font-size: 20px;
-  text-align: center;
-  background: var(--grad-primary);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.share-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
+.share-card h4 { margin-bottom: 24px; font-size: 20px; text-align: center; background: var(--grad-primary); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.share-buttons { display: flex; flex-direction: column; gap: 12px; }
 .share-btn {
   display: flex;
   align-items: center;
@@ -794,12 +555,7 @@ label {
   cursor: pointer;
   transition: var(--transition-fast);
 }
-
-.share-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.05);
-}
-
+.share-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
 .share-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
 .share-btn.teams { background: linear-gradient(135deg, #6264A7, #464775); color: #fff; }
 .share-btn.email { background: linear-gradient(135deg, #EA4335, #C5221F); color: #fff; }
@@ -817,10 +573,7 @@ label {
   font-weight: 600;
   transition: var(--transition-fast);
 }
-
-.close-modal:hover {
-  background: rgba(102, 0, 204, 0.4);
-}
+.close-modal:hover { background: rgba(102, 0, 204, 0.4); }
 
 .fullscreen-modal {
   display: none;
@@ -832,62 +585,21 @@ label {
   justify-content: center;
   cursor: pointer;
 }
+.fullscreen-modal.show { display: flex; }
+.fullscreen-modal img { max-width: 95%; max-height: 95%; border-radius: 24px; box-shadow: var(--shadow-glow); animation: zoomIn 0.2s ease; }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-.fullscreen-modal.show {
-  display: flex;
-}
+.small { font-size: 11px; color: var(--gray-500); text-align: center; margin-top: 16px; }
 
-.fullscreen-modal img {
-  max-width: 95%;
-  max-height: 95%;
-  border-radius: 24px;
-  box-shadow: var(--shadow-glow);
-  animation: zoomIn 0.2s ease;
-}
-
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.small {
-  font-size: 11px;
-  color: var(--gray-500);
-  text-align: center;
-  margin-top: 16px;
-}
-
-/* Scrollbar customizada */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--vivo-purple);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--vivo-purple-light);
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--vivo-purple); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--vivo-purple-light); }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ESQUERDA -->
   <div class="card">
     <h2>Vistoria Técnica</h2>
 
@@ -927,7 +639,6 @@ label {
       <button class="status" data-status="occupied"><span class="dot occupied"></span>Ocupada</button>
     </div>
 
-    <!-- FOTOS DA SALA ATUAL -->
     <div class="photo-section">
       <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">SL01</span></div>
       <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto (câmera ou galeria)</div>
@@ -938,10 +649,8 @@ label {
     <div class="row">
       <button id="btnClear" class="btn">🗑️ Limpar Todos os Dados</button>
     </div>
-
   </div>
 
-  <!-- DIREITA -->
   <div class="viewer">
     <div class="section">
       <h3>📦 Salas vistoriadas <span id="roomsCount" style="color: var(--vivo-purple-light);">0</span></h3>
@@ -962,7 +671,6 @@ label {
           </div>
         </div>
 
-        <!-- MOCK do celular -->
         <div id="phoneMock" class="phone-wrap">
           <div class="phone-notch"></div>
           <div id="reportCaptureArea" class="phone-screen">
@@ -976,14 +684,11 @@ label {
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- Modal de Compartilhamento -->
 <div id="shareModal" class="share-modal">
   <div class="share-card">
     <h4>✨ Compartilhar Relatório</h4>
@@ -997,7 +702,6 @@ label {
   </div>
 </div>
 
-<!-- Modal foto em tela cheia -->
 <div id="fullscreenModal" class="fullscreen-modal" onclick="closeFullscreen()">
   <img id="fullscreenImage" src="">
 </div>
@@ -1005,12 +709,10 @@ label {
 <div class="toast"></div>
 
 <script>
-/* ===== Estado ===== */
 const STORAGE_KEY = "vistoria_simple_v2";
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let currentFloor = 1, currentRoom = 1, currentImageData = null;
 
-/* ===== Gerar opções de andares ===== */
 function populateFloorOptions() {
   const floorSelect = document.getElementById("floorSelect");
   floorSelect.innerHTML = '<option value="">Selecione o andar</option>';
@@ -1022,7 +724,6 @@ function populateFloorOptions() {
   }
 }
 
-/* ===== Gerar opções de salas ===== */
 function populateRoomOptions() {
   const roomSelect = document.getElementById("roomSelect");
   roomSelect.innerHTML = '<option value="">Selecione a sala</option>';
@@ -1034,27 +735,24 @@ function populateRoomOptions() {
   }
 }
 
-/* ===== Helpers ===== */
 const pad2 = n => String(n).padStart(2,"0");
 const formatRoomNumber = n => `SL${String(n).padStart(2, '0')}`;
 const statusName = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Ocupada";
 const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"occupied";
 const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"🟠";
 
-/* ===== DOM ===== */
-const floorSelect   = document.getElementById("floorSelect");
-const roomSelect    = document.getElementById("roomSelect");
-const dispFloor     = document.getElementById("currentDisplayFloor");
-const dispRoom      = document.getElementById("currentDisplayRoom");
-const createdGrid   = document.getElementById("createdGrid");
-const predioSel     = document.getElementById("predio");
-const enderecoInp   = document.getElementById("endereco");
-const auditorInp    = document.getElementById("auditor");
-const photoInput    = document.getElementById("photoInput");
-const photoBtn      = document.getElementById("photoUploadBtn");
-const shareModal    = document.getElementById("shareModal");
+const floorSelect = document.getElementById("floorSelect");
+const roomSelect = document.getElementById("roomSelect");
+const dispFloor = document.getElementById("currentDisplayFloor");
+const dispRoom = document.getElementById("currentDisplayRoom");
+const createdGrid = document.getElementById("createdGrid");
+const predioSel = document.getElementById("predio");
+const enderecoInp = document.getElementById("endereco");
+const auditorInp = document.getElementById("auditor");
+const photoInput = document.getElementById("photoInput");
+const photoBtn = document.getElementById("photoUploadBtn");
+const shareModal = document.getElementById("shareModal");
 
-/* ===== Sala atual ===== */
 function updateCurrentDisplay(){
   currentFloor = parseInt(floorSelect.value) || 1;
   currentRoom = parseInt(roomSelect.value) || 1;
@@ -1065,21 +763,23 @@ function updateCurrentDisplay(){
 floorSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
 roomSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
 
-/* ===== Fotos por sala ===== */
 const roomKey = (f,r)=>`A${pad2(f)}-${formatRoomNumber(r)}`;
 const getRoomPhotos = (f,r)=> JSON.parse(localStorage.getItem(`photos_${roomKey(f,r)}`)||"[]");
 const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`, JSON.stringify(arr));
+
 function addPhotoToRoom(f,r,photo){
   const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
   renderCreated(); renderReportWithPhotos();
   showToast("📸 Foto adicionada com sucesso!");
 }
+
 function deletePhotoFromRoom(f,r,idx){
   const arr = getRoomPhotos(f,r); arr.splice(idx,1); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
   renderCreated(); renderReportWithPhotos(); showToast("📸 Foto removida");
 }
+
 function renderCurrentPhotos(){
   const gal = document.getElementById("photoGallery");
   const photos = getRoomPhotos(currentFloor,currentRoom);
@@ -1094,11 +794,11 @@ function renderCurrentPhotos(){
     gal.appendChild(div);
   });
 }
+
 function showFullscreenImage(src){ const m=document.getElementById("fullscreenModal"),i=document.getElementById("fullscreenImage"); i.src=src; m.classList.add("show"); }
 function closeFullscreen(){ document.getElementById("fullscreenModal").classList.remove("show"); }
 window.deletePhotoFromRoom=deletePhotoFromRoom; window.showFullscreenImage=showFullscreenImage; window.closeFullscreen=closeFullscreen;
 
-/* ===== Registrar sala ao clicar status ===== */
 document.querySelectorAll(".status").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     const status = btn.dataset.status, f=currentFloor, r=currentRoom;
@@ -1109,7 +809,6 @@ document.querySelectorAll(".status").forEach(btn=>{
   });
 });
 
-/* ===== Grade de itens criados ===== */
 function renderCreated(){
   const sorted = [...entries].sort((a,b)=> a.f-b.f || a.r-b.r);
   const countSpan = document.getElementById("roomsCount");
@@ -1119,12 +818,7 @@ function renderCreated(){
   sorted.forEach(it=>{
     const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
     const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
-    card.onclick=()=>{ 
-      floorSelect.value = it.f; 
-      roomSelect.value = it.r; 
-      updateCurrentDisplay(); 
-      renderCurrentPhotos(); 
-    };
+    card.onclick=()=>{ floorSelect.value = it.f; roomSelect.value = it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
     const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • ${formatRoomNumber(it.r)}${has?' 📸':''}`;
     const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
     card.appendChild(badge); card.appendChild(pill);
@@ -1133,7 +827,6 @@ function renderCreated(){
   });
 }
 
-/* ===== IA de narrativa ===== */
 function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
   const stats={valid:0,lock:0,prob:0,occupied:0}, floors={};
   entries.forEach(e=>{
@@ -1186,7 +879,6 @@ ${fotos?`<div class="h-line"></div><div class="bullet">${fotos}</div>`:""}`
   );
 }
 
-/* ===== Relatório ===== */
 function renderReportWithPhotos(){
   const predio = predioSel.value || "Não selecionado";
   const endereco = enderecoInp.value || "Não informado";
@@ -1221,7 +913,7 @@ function renderReportWithPhotos(){
     roomsWithPhotos.forEach(r=>{
       photosHtml += `<div class="report-room-photos">
         <div class="report-room-title">${r.statusEmoji} ${r.room} — ${r.status} (${r.photos.length} foto${r.photos.length>1?"s":""})</div>
-        <div class="report-photo-thumbnails">` + r.photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')" loading="lazy">`).join("") + `</div>
+        <div class="report-photo-thumbnails">` + r.photos.map(p=>`<img src="${p}" class="report-thumb" onclick="showFullscreenImage('${p}')" loading="lazy" crossorigin="anonymous">`).join("") + `</div>
       </div>`;
     });
   }
@@ -1229,54 +921,103 @@ function renderReportWithPhotos(){
   document.getElementById("relatorio").innerHTML = mainHtml + photosHtml;
 }
 
-/* ===== PNG ===== */
 async function generateImage(){
   const phone = document.getElementById("phoneMock");
   if(!phone){ showToast("Nada para gerar"); return null; }
   showToast("📸 Gerando imagem...");
+  
+  // Aguarda um pequeno delay para garantir que tudo foi renderizado
+  await new Promise(resolve => setTimeout(resolve, 100));
+  
   try{
-    const canvas = await html2canvas(phone,{scale:2,backgroundColor:null,logging:false,useCORS:true});
+    const canvas = await html2canvas(phone, {
+      scale: 2.5,
+      backgroundColor: null,
+      logging: false,
+      useCORS: true,
+      allowTaint: false,
+      foreignObjectRendering: false,
+      onclone: (clonedDoc, element) => {
+        // Força o carregamento de todas as imagens no clone
+        const images = clonedDoc.querySelectorAll('img');
+        images.forEach(img => {
+          if(img.src && img.src.startsWith('data:image')) {
+            // Data URLs já estão embutidas, não precisa fazer nada
+          }
+        });
+      }
+    });
     return canvas.toDataURL('image/png');
-  }catch(e){ showToast("❌ Erro ao gerar imagem"); return null; }
+  }catch(e){ 
+    console.error('Erro ao gerar imagem:', e);
+    showToast("❌ Erro ao gerar imagem: " + e.message); 
+    return null; 
+  }
 }
 
-/* ===== Compartilhar ===== */
-async function openShareModal(){ const d=await generateImage(); if(!d)return; currentImageData=d; shareModal.classList.add("show"); }
+async function openShareModal(){ 
+  const d=await generateImage(); 
+  if(!d)return; 
+  currentImageData=d; 
+  shareModal.classList.add("show"); 
+}
+
 function shareToWhatsApp(){
   if(!currentImageData) return;
-  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
+  const text=`✨ RELATÓRIO DE VISTORIA ✨\n\n🏢 ${predioSel.value||"Prédio"}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📅 ${new Date().toLocaleString("pt-BR")}\n📊 Total de salas: ${entries.length}`;
   if(navigator.share){
-    fetch(currentImageData).then(r=>r.blob()).then(b=>{
-      navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
-    });
+    fetch(currentImageData)
+      .then(r=>r.blob())
+      .then(b=>{
+        navigator.share({title:'Relatório',text:text,files:[new File([b],"relatorio.png",{type:"image/png"})]});
+      })
+      .catch(e=>{ window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`); });
   }else{
     window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`);
   }
   shareModal.classList.remove("show");
 }
+
 function shareToTeams(){
   if(!currentImageData) return;
-  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}\n📸 Imagem anexada`;
-  navigator.clipboard.writeText(msg); showToast("✅ Mensagem copiada! Cole no Teams");
-  const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click();
+  const msg=`✨ Relatório de Vistoria — ${predioSel.value||"Vistoria"}\n📅 ${new Date().toLocaleString("pt-BR")}\n👤 Auditor: ${auditorInp.value||"Não informado"}\n📊 Total de salas: ${entries.length}`;
+  navigator.clipboard.writeText(msg); 
+  showToast("✅ Mensagem copiada! Cole no Teams");
+  const a=document.createElement('a'); 
+  a.download=`vistoria.png`; 
+  a.href=currentImageData; 
+  a.click();
   shareModal.classList.remove("show");
 }
+
 function shareToEmail(){
   if(!currentImageData) return;
   const subject=`Relatório de Vistoria - ${predioSel.value||"Vistoria"}`;
   const body=`Relatório gerado em ${new Date().toLocaleString("pt-BR")}\nAuditor: ${auditorInp.value||"Não informado"}\nTotal de salas: ${entries.length}\n\nImagem em anexo.`;
   window.location.href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  setTimeout(()=>{ const a=document.createElement('a'); a.download=`vistoria.png`; a.href=currentImageData; a.click(); },500);
+  setTimeout(()=>{ 
+    const a=document.createElement('a'); 
+    a.download=`vistoria.png`; 
+    a.href=currentImageData; 
+    a.click(); 
+  },500);
   shareModal.classList.remove("show");
 }
-function shareSaveImage(){ if(!currentImageData) return; const a=document.createElement('a'); a.download=`vistoria_${predioSel.value||"vistoria"}.png`; a.href=currentImageData; a.click(); shareModal.classList.remove("show"); showToast("✅ Imagem salva!"); }
 
-/* ===== Persistência ===== */
+function shareSaveImage(){ 
+  if(!currentImageData) return; 
+  const a=document.createElement('a'); 
+  a.download=`vistoria_${predioSel.value||"vistoria"}.png`; 
+  a.href=currentImageData; 
+  a.click(); 
+  shareModal.classList.remove("show"); 
+  showToast("✅ Imagem salva!"); 
+}
+
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
 function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
   t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2500); }
 
-/* ===== Listeners ===== */
 photoBtn.addEventListener("click", ()=> photoInput.click());
 photoInput.addEventListener("change",(e)=>{
   const files=[...e.target.files];
@@ -1291,7 +1032,6 @@ document.getElementById("shareEmail").addEventListener("click", shareToEmail);
 document.getElementById("shareSave").addEventListener("click", shareSaveImage);
 document.getElementById("closeModal").addEventListener("click", ()=> shareModal.classList.remove("show"));
 shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.classList.remove("show"); });
-
 document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
@@ -1311,7 +1051,6 @@ predioSel.addEventListener("change", ()=>{
   renderReportWithPhotos();
 });
 
-/* ===== Boot ===== */
 (function init(){
   populateFloorOptions();
   populateRoomOptions();
