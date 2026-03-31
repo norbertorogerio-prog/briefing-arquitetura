@@ -226,20 +226,6 @@
         .status-badge-problemas { background: #ef444420; color: #ef4444; }
         .status-badge-null { background: #94a3b820; color: #64748b; }
 
-        .floor-status-select {
-            padding: 5px 10px;
-            border-radius: 15px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .floor-status-select:hover {
-            border-color: #667eea;
-        }
-
         .remove-room-btn {
             background: #ef4444;
             color: white;
@@ -308,12 +294,6 @@
             transform: scale(1.05);
         }
 
-        .modal-room-item.disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
         .close-modal {
             background: #667eea;
             color: white;
@@ -373,11 +353,6 @@
             padding: 10px;
             border-radius: 10px;
             transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-2px);
         }
 
         .stat-number {
@@ -479,20 +454,19 @@
             margin-top: 4px;
         }
 
-        .room-status-select {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .room-status-text {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        .status-select {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
+        .status-text-avaliada { background: #10b98120; color: #10b981; }
+        .status-text-trancada { background: #f59e0b20; color: #f59e0b; }
+        .status-text-ocupada { background: #3b82f620; color: #3b82f6; }
+        .status-text-problemas { background: #ef444420; color: #ef4444; }
+        .status-text-null { background: #94a3b820; color: #64748b; }
 
         .btn-reset {
             background: #ef4444;
@@ -656,23 +630,17 @@
             return `status-badge-${status}`;
         };
 
+        const getStatusTextClass = (status) => {
+            if (!status) return 'status-text-null';
+            return `status-text-${status}`;
+        };
+
         // Atualizar estatísticas
         const updateStats = () => {
             document.getElementById('avaliadaCount').textContent = allRooms.filter(r => r.status === 'avaliada').length;
             document.getElementById('trancadaCount').textContent = allRooms.filter(r => r.status === 'trancada').length;
             document.getElementById('ocupadaCount').textContent = allRooms.filter(r => r.status === 'ocupada').length;
             document.getElementById('problemasCount').textContent = allRooms.filter(r => r.status === 'problemas').length;
-        };
-
-        // Atualizar status de uma sala
-        const updateRoomStatus = (roomId, newStatus) => {
-            const room = allRooms.find(r => r.id === roomId);
-            if (room) {
-                room.status = newStatus === '' ? null : newStatus;
-                renderRoomsList();
-                updateStats();
-                refreshAllFloorViews();
-            }
         };
 
         // Adicionar sala a um andar
@@ -751,16 +719,7 @@
                                             ${getStatusText(room.status)}
                                         </span>
                                     </div>
-                                    <div style="display: flex; gap: 8px; align-items: center;">
-                                        <select class="floor-status-select" onchange="updateRoomStatus(${room.id}, this.value)">
-                                            <option value="" ${!room.status ? 'selected' : ''}>📋 Status</option>
-                                            <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
-                                            <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
-                                            <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
-                                            <option value="problemas" ${room.status === 'problemas' ? 'selected' : ''}>⚠️ Problemas</option>
-                                        </select>
-                                        <button class="remove-room-btn" onclick="removeRoomFromFloor(${floor}, ${room.id})">Remover</button>
-                                    </div>
+                                    <button class="remove-room-btn" onclick="removeRoomFromFloor(${floor}, ${room.id})">Remover</button>
                                 </div>
                             `).join('')}
                         </div>
@@ -804,7 +763,7 @@
             currentFloorForModal = null;
         };
 
-        // Renderizar lista geral de salas
+        // Renderizar lista geral de salas (sem selects de status)
         const renderRoomsList = () => {
             let filteredRooms = allRooms.filter(room => 
                 room.code.toLowerCase().includes(searchTerm.toLowerCase())
@@ -824,14 +783,10 @@
                                 '📍 Nenhum andar cadastrado'}
                         </div>
                     </div>
-                    <div class="room-status-select">
-                        <select class="status-select" onchange="updateRoomStatus(${room.id}, this.value)">
-                            <option value="" ${!room.status ? 'selected' : ''}>📋 Sem status</option>
-                            <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
-                            <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
-                            <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
-                            <option value="problemas" ${room.status === 'problemas' ? 'selected' : ''}>⚠️ Problemas</option>
-                        </select>
+                    <div>
+                        <span class="room-status-text ${getStatusTextClass(room.status)}">
+                            ${getStatusText(room.status)}
+                        </span>
                     </div>
                 </div>
             `).join('');
@@ -904,6 +859,19 @@
             addRoomToFloor(15, 1);
             addRoomToFloor(15, 2);
             addRoomToFloor(15, 3);
+            
+            // Adicionar status de exemplo
+            const room41 = allRooms.find(r => r.id === 41);
+            if (room41) room41.status = 'problemas';
+            
+            const room1 = allRooms.find(r => r.id === 1);
+            if (room1) room1.status = 'avaliada';
+            
+            const room2 = allRooms.find(r => r.id === 2);
+            if (room2) room2.status = 'trancada';
+            
+            const room3 = allRooms.find(r => r.id === 3);
+            if (room3) room3.status = 'ocupada';
         };
 
         // Inicializar
