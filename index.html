@@ -24,13 +24,13 @@
   --grad-success: linear-gradient(135deg, #00C853 0%, #00E676 100%);
   --grad-warning: linear-gradient(135deg, #FFD600 0%, #FFEA00 100%);
   --grad-danger: linear-gradient(135deg, #FF3B3B 0%, #FF6B6B 100%);
-  --grad-info: linear-gradient(135deg, #AA00FF 0%, #CC33FF 100%);
+  --grad-occupied: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
   
   /* Cores de status */
   --green: #00C853;
   --yellow: #FFD600;
   --red: #FF3B3B;
-  --purple-status: #AA00FF;
+  --orange: #FF9800;
   
   /* Neutras */
   --white: #FFFFFF;
@@ -175,8 +175,8 @@ label {
   letter-spacing: 0.5px;
 }
 
-/* Campos de formulário */
-.form-field {
+/* Campos de formulário - select personalizado */
+.form-field, .form-select {
   width: 100%;
   border: 1.5px solid rgba(102, 0, 204, 0.2);
   border-radius: 14px;
@@ -187,18 +187,19 @@ label {
   font-weight: 500;
   outline: none;
   transition: var(--transition-fast);
+  cursor: pointer;
 }
 
-.form-field:focus {
+.form-field:focus, .form-select:focus {
   border-color: var(--vivo-purple);
   background: rgba(102, 0, 204, 0.1);
   box-shadow: 0 0 0 3px var(--vivo-purple-glow);
   transform: translateY(-1px);
 }
 
-.form-field::placeholder {
-  color: var(--gray-400);
-  font-weight: 400;
+.form-select option {
+  background: var(--gray-100);
+  color: var(--white);
 }
 
 /* Input group */
@@ -278,7 +279,7 @@ label {
 .dot.valid { background: var(--green); box-shadow: 0 0 10px rgba(0, 200, 83, 0.5); }
 .dot.lock { background: var(--yellow); box-shadow: 0 0 10px rgba(255, 214, 0, 0.5); }
 .dot.prob { background: var(--red); box-shadow: 0 0 10px rgba(255, 59, 59, 0.5); }
-.dot.other { background: var(--purple-status); box-shadow: 0 0 10px rgba(170, 0, 255, 0.5); }
+.dot.occupied { background: var(--orange); box-shadow: 0 0 10px rgba(255, 152, 0, 0.5); }
 
 /* Seção de fotos */
 .photo-section {
@@ -496,7 +497,7 @@ label {
 .pill.valid { background: var(--grad-success); color: var(--black); }
 .pill.lock { background: var(--grad-warning); color: var(--black); }
 .pill.prob { background: var(--grad-danger); color: white; }
-.pill.other { background: var(--grad-info); color: white; }
+.pill.occupied { background: var(--grad-occupied); color: var(--black); }
 
 .photo-indicator {
   font-size: 11px;
@@ -557,11 +558,6 @@ label {
 
 .btn-share {
   background: linear-gradient(135deg, #25D366, #128C7E);
-  border: none;
-}
-
-.btn-png {
-  background: var(--grad-primary);
   border: none;
 }
 
@@ -899,7 +895,7 @@ label {
     <input id="auditor" class="form-field" placeholder="Nome completo do responsável"/>
 
     <label>🏢 Prédio</label>
-    <select id="predio" class="form-field">
+    <select id="predio" class="form-select">
       <option value="">Selecione o prédio</option>
       <option value="Eco Berrini">Eco Berrini</option>
       <option value="Chucri Zaidan">Chucri Zaidan</option>
@@ -911,11 +907,15 @@ label {
     <div class="number-input-group">
       <div>
         <label>🏬 Andar</label>
-        <input type="number" id="floorInput" class="form-field" min="1" value="1" placeholder="Andar"/>
+        <select id="floorSelect" class="form-select">
+          <option value="">Selecione o andar</option>
+        </select>
       </div>
       <div>
         <label>🚪 Sala</label>
-        <input type="number" id="roomInput" class="form-field" min="1" value="1" placeholder="Sala"/>
+        <select id="roomSelect" class="form-select">
+          <option value="">Selecione a sala</option>
+        </select>
       </div>
     </div>
 
@@ -924,12 +924,12 @@ label {
       <button class="status" data-status="valid"><span class="dot valid"></span>Validada</button>
       <button class="status" data-status="lock"><span class="dot lock"></span>Trancada</button>
       <button class="status" data-status="prob"><span class="dot prob"></span>Problemas</button>
-      <button class="status" data-status="other"><span class="dot other"></span>Outros</button>
+      <button class="status" data-status="occupied"><span class="dot occupied"></span>Ocupada</button>
     </div>
 
     <!-- FOTOS DA SALA ATUAL -->
     <div class="photo-section">
-      <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">01</span></div>
+      <div class="photo-label">📸 Fotos da Sala <span id="currentDisplayFloor">01</span>-<span id="currentDisplayRoom">SL01</span></div>
       <div id="photoUploadBtn" class="photo-upload-btn">📷 + Adicionar foto (câmera ou galeria)</div>
       <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" multiple>
       <div id="photoGallery" class="photo-gallery"></div>
@@ -959,10 +959,6 @@ label {
               <input id="useAI" type="checkbox" checked style="accent-color:#6600CC; width:16px; height:16px;"> IA ligada
             </label>
             <button id="btnShare" class="btn-action btn-share">📱 Compartilhar</button>
-            <button id="btnPNG" class="btn-action btn-png">📸 Salvar PNG</button>
-            <button id="btnCopy" class="btn-action">📋 Copiar</button>
-            <button id="btnDownload" class="btn-action">⬇️ Baixar .txt</button>
-            <button id="btnCsv" class="btn-action">🧾 Exportar CSV</button>
           </div>
         </div>
 
@@ -1014,37 +1010,63 @@ const STORAGE_KEY = "vistoria_simple_v2";
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 let currentFloor = 1, currentRoom = 1, currentImageData = null;
 
+/* ===== Gerar opções de andares ===== */
+function populateFloorOptions() {
+  const floorSelect = document.getElementById("floorSelect");
+  floorSelect.innerHTML = '<option value="">Selecione o andar</option>';
+  for(let i = 1; i <= 32; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = `${i}° Andar`;
+    floorSelect.appendChild(option);
+  }
+}
+
+/* ===== Gerar opções de salas ===== */
+function populateRoomOptions() {
+  const roomSelect = document.getElementById("roomSelect");
+  roomSelect.innerHTML = '<option value="">Selecione a sala</option>';
+  for(let i = 1; i <= 50; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = `SL${String(i).padStart(2, '0')}`;
+    roomSelect.appendChild(option);
+  }
+}
+
 /* ===== Helpers ===== */
 const pad2 = n => String(n).padStart(2,"0");
-const statusName  = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Outros";
-const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"other";
-const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"◻️";
+const formatRoomNumber = n => `SL${String(n).padStart(2, '0')}`;
+const statusName = s => s==="valid"?"Validada":s==="lock"?"Trancada":s==="prob"?"Problemas":"Ocupada";
+const statusClass = s => s==="valid"?"valid":s==="lock"?"lock":s==="prob"?"prob":"occupied";
+const statusEmoji = s => s==="valid"?"✅":s==="lock"?"🔒":s==="prob"?"❌":"🟠";
 
 /* ===== DOM ===== */
-const floorInput   = document.getElementById("floorInput");
-const roomInput    = document.getElementById("roomInput");
-const dispFloor    = document.getElementById("currentDisplayFloor");
-const dispRoom     = document.getElementById("currentDisplayRoom");
-const createdGrid  = document.getElementById("createdGrid");
-const predioSel    = document.getElementById("predio");
-const enderecoInp  = document.getElementById("endereco");
-const auditorInp   = document.getElementById("auditor");
-const photoInput   = document.getElementById("photoInput");
-const photoBtn     = document.getElementById("photoUploadBtn");
-const shareModal   = document.getElementById("shareModal");
+const floorSelect   = document.getElementById("floorSelect");
+const roomSelect    = document.getElementById("roomSelect");
+const dispFloor     = document.getElementById("currentDisplayFloor");
+const dispRoom      = document.getElementById("currentDisplayRoom");
+const createdGrid   = document.getElementById("createdGrid");
+const predioSel     = document.getElementById("predio");
+const enderecoInp   = document.getElementById("endereco");
+const auditorInp    = document.getElementById("auditor");
+const photoInput    = document.getElementById("photoInput");
+const photoBtn      = document.getElementById("photoUploadBtn");
+const shareModal    = document.getElementById("shareModal");
 
 /* ===== Sala atual ===== */
 function updateCurrentDisplay(){
-  currentFloor = Math.min(100, Math.max(1, parseInt(floorInput.value)||1));
-  currentRoom  = Math.min(100, Math.max(1, parseInt(roomInput.value)||1));
-  floorInput.value = currentFloor; roomInput.value = currentRoom;
-  dispFloor.textContent = pad2(currentFloor); dispRoom.textContent = pad2(currentRoom);
+  currentFloor = parseInt(floorSelect.value) || 1;
+  currentRoom = parseInt(roomSelect.value) || 1;
+  dispFloor.textContent = pad2(currentFloor);
+  dispRoom.textContent = formatRoomNumber(currentRoom);
 }
-floorInput.addEventListener("input", ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
-roomInput.addEventListener("input",  ()=>{ updateCurrentDisplay(); renderCurrentPhotos(); });
+
+floorSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
+roomSelect.addEventListener("change", () => { updateCurrentDisplay(); renderCurrentPhotos(); });
 
 /* ===== Fotos por sala ===== */
-const roomKey = (f,r)=>`A${pad2(f)}-S${pad2(r)}`;
+const roomKey = (f,r)=>`A${pad2(f)}-${formatRoomNumber(r)}`;
 const getRoomPhotos = (f,r)=> JSON.parse(localStorage.getItem(`photos_${roomKey(f,r)}`)||"[]");
 const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`, JSON.stringify(arr));
 function addPhotoToRoom(f,r,photo){
@@ -1083,7 +1105,7 @@ document.querySelectorAll(".status").forEach(btn=>{
     const idx = entries.findIndex(e=> e.f===f && e.r===r);
     if(idx>=0) entries[idx].status = status; else entries.push({f,r,status});
     persist(); renderCreated(); renderReportWithPhotos();
-    showToast(`✅ A${pad2(f)}-S${pad2(r)}: ${statusName(status)}`);
+    showToast(`✅ A${pad2(f)}-${formatRoomNumber(r)}: ${statusName(status)}`);
   });
 });
 
@@ -1097,8 +1119,13 @@ function renderCreated(){
   sorted.forEach(it=>{
     const photos = getRoomPhotos(it.f,it.r), has = photos.length>0;
     const card=document.createElement("div"); card.className = "room-card"+(has?' has-photo':'');
-    card.onclick=()=>{ floorInput.value=it.f; roomInput.value=it.r; updateCurrentDisplay(); renderCurrentPhotos(); };
-    const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • S${pad2(it.r)}${has?' 📸':''}`;
+    card.onclick=()=>{ 
+      floorSelect.value = it.f; 
+      roomSelect.value = it.r; 
+      updateCurrentDisplay(); 
+      renderCurrentPhotos(); 
+    };
+    const badge=document.createElement("div"); badge.className="badge"; badge.innerHTML=`A${pad2(it.f)} • ${formatRoomNumber(it.r)}${has?' 📸':''}`;
     const pill =document.createElement("div"); pill.className=`pill ${statusClass(it.status)}`; pill.textContent=`${statusEmoji(it.status)} ${statusName(it.status)}`;
     card.appendChild(badge); card.appendChild(pill);
     if(has){ const pi=document.createElement("div"); pi.className="photo-indicator"; pi.textContent=`📸 ${photos.length} foto(s)`; card.appendChild(pi); }
@@ -1108,16 +1135,16 @@ function renderCreated(){
 
 /* ===== IA de narrativa ===== */
 function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
-  const stats={valid:0,lock:0,prob:0,other:0}, floors={};
+  const stats={valid:0,lock:0,prob:0,occupied:0}, floors={};
   entries.forEach(e=>{
     stats[e.status]=(stats[e.status]||0)+1;
-    if(!floors[e.f]) floors[e.f]={valid:[],lock:[],prob:[],other:[]};
+    if(!floors[e.f]) floors[e.f]={valid:[],lock:[],prob:[],occupied:[]};
     floors[e.f][e.status].push(e.r);
   });
   const total=entries.length, dataStr=new Date().toLocaleString("pt-BR");
   const headline = total===0
     ? "Nenhuma sala foi registrada nesta vistoria."
-    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"} e ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios relevantes"}.`;
+    : `Vistoria de ${total} sala(s) concluída. Predominaram ${stats.valid} validações; ${stats.prob>0?`${stats.prob} ocorrência(s) com problema`:"sem incidentes críticos"}, ${stats.lock>0?`${stats.lock} bloqueio(s) por acesso`:"sem bloqueios"} e ${stats.occupied>0?`${stats.occupied} sala(s) ocupada(s)`:"nenhuma sala ocupada"}.`;
 
   const meta =
 `<div class="kv"><b>Prédio</b><span>${predio||"—"}</span></div>
@@ -1125,17 +1152,17 @@ function aiComposeReportText({predio,endereco,auditor,entries,totalFotos}){
 <div class="kv"><b>Data</b><span>${dataStr}</span></div>
 <div class="kv"><b>Auditor</b><span>${auditor||"—"}</span></div>`;
 
-  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • ◻️ Outros: ${stats.other}`;
+  const global = `• ✅ Validadas: ${stats.valid}  • 🔒 Trancadas: ${stats.lock}  • ❌ Problemas: ${stats.prob}  • 🟠 Ocupadas: ${stats.occupied}`;
 
   let detalhe = "";
   if(total>0){
     detalhe += `<div class="bullet"><b>Detalhe por andar</b></div>`;
     Object.keys(floors).map(Number).sort((a,b)=>a-b).forEach(f=>{
       const a=floors[f], parts=[];
-      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(pad2).join(", ")})`);
-      if(a.other.length) parts.push(`◻️ ${a.other.length} (${a.other.sort((x,y)=>x-y).map(pad2).join(", ")})`);
+      if(a.valid.length) parts.push(`✅ ${a.valid.length} (${a.valid.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.lock.length)  parts.push(`🔒 ${a.lock.length} (${a.lock.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.prob.length)  parts.push(`❌ ${a.prob.length} (${a.prob.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
+      if(a.occupied.length) parts.push(`🟠 ${a.occupied.length} (${a.occupied.sort((x,y)=>x-y).map(r=>formatRoomNumber(r)).join(", ")})`);
       detalhe += `<div class="bullet">• Andar ${pad2(f)}: ${parts.join(" | ")||"—"}</div>`;
     });
   }
@@ -1169,7 +1196,7 @@ function renderReportWithPhotos(){
   let totalFotos = 0; const roomsWithPhotos = [];
   entries.forEach(item=>{
     const photos = getRoomPhotos(item.f,item.r);
-    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-S${pad2(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
+    if(photos.length){ totalFotos += photos.length; roomsWithPhotos.push({room:`A${pad2(item.f)}-${formatRoomNumber(item.r)}`,status:statusName(item.status),statusEmoji:statusEmoji(item.status),photos}); }
   });
 
   let mainHtml;
@@ -1212,12 +1239,6 @@ async function generateImage(){
     return canvas.toDataURL('image/png');
   }catch(e){ showToast("❌ Erro ao gerar imagem"); return null; }
 }
-async function saveAsPNG(){
-  const data = await generateImage(); if(!data) return;
-  const link=document.createElement('a'); const pred=predioSel.value||"vistoria";
-  const ts=new Date().toISOString().slice(0,19).replace(/:/g,'-');
-  link.download=`vistoria_${pred}_${ts}.png`; link.href=data; link.click(); showToast("✅ Imagem salva!");
-}
 
 /* ===== Compartilhar ===== */
 async function openShareModal(){ const d=await generateImage(); if(!d)return; currentImageData=d; shareModal.classList.add("show"); }
@@ -1250,31 +1271,6 @@ function shareToEmail(){
 }
 function shareSaveImage(){ if(!currentImageData) return; const a=document.createElement('a'); a.download=`vistoria_${predioSel.value||"vistoria"}.png`; a.href=currentImageData; a.click(); shareModal.classList.remove("show"); showToast("✅ Imagem salva!"); }
 
-/* ===== Ações ===== */
-function getReportText(){ return document.getElementById("relatorio")?.textContent || ""; }
-function copyReportToClipboard(){
-  const t=getReportText(); if(!t.trim()) return showToast("Relatório vazio");
-  navigator.clipboard?.writeText(t).then(()=>showToast("Relatório copiado ✅"),
-    ()=>{try{const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); showToast("Relatório copiado ✅")}catch{showToast("Não foi possível copiar")}})
-}
-function downloadReportTxt(){
-  const t=getReportText(); if(!t.trim()) return showToast("Relatório vazio");
-  const blob=new Blob([t],{type:"text/plain;charset=utf-8"}), url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); const pred=(predioSel.value||"Predio").replace(/\s+/g,'_'); const d=new Date();
-  const st=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-  a.href=url; a.download=`relatorio_vistoria_${pred}_${st}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast("Download iniciado ⬇️");
-}
-function exportCsv(){
-  const pred=predioSel.value||"Prédio", end=enderecoInp.value||"Endereço não informado", aud=auditorInp.value||"", dataStr=new Date().toLocaleString("pt-BR");
-  const header=["Auditor","Predio","Endereco","Data","Andar","Sala","Status","QtdFotos"];
-  const rows=entries.sort((a,b)=>a.f-b.f||a.r-b.r).map(e=>[aud,pred,end,dataStr,pad2(e.f),pad2(e.r),statusName(e.status),getRoomPhotos(e.f,e.r).length]);
-  const csv=[header,...rows].map(l=>l.join(";")).join("\n");
-  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}), url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); const d=new Date();
-  const st=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`;
-  a.href=url; a.download=`vistoria_${pred.replace(/\s+/g,'_')}_${st}.csv`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast("CSV exportado 🧾");
-}
-
 /* ===== Persistência ===== */
 function persist(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); }
 function showToast(msg){ let t=document.querySelector(".toast"); if(!t){ t=document.createElement("div"); t.className="toast"; document.body.appendChild(t); }
@@ -1288,7 +1284,6 @@ photoInput.addEventListener("change",(e)=>{
   photoInput.value="";
 });
 
-document.getElementById("btnPNG").addEventListener("click", saveAsPNG);
 document.getElementById("btnShare").addEventListener("click", openShareModal);
 document.getElementById("shareWhatsApp").addEventListener("click", shareToWhatsApp);
 document.getElementById("shareTeams").addEventListener("click", shareToTeams);
@@ -1297,13 +1292,10 @@ document.getElementById("shareSave").addEventListener("click", shareSaveImage);
 document.getElementById("closeModal").addEventListener("click", ()=> shareModal.classList.remove("show"));
 shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.classList.remove("show"); });
 
-document.getElementById("btnCopy").addEventListener("click", copyReportToClipboard);
-document.getElementById("btnDownload").addEventListener("click", downloadReportTxt);
-document.getElementById("btnCsv").addEventListener("click", exportCsv);
 document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
-  if(!confirm("⚠️ Limpar TODOS registros e fotos?")) return;
+  if(!confirm("⚠️ Limpar TODOS os registros e fotos?")) return;
   entries=[];
   const keys=[]; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) keys.push(k); }
   keys.forEach(k=> localStorage.removeItem(k));
@@ -1321,6 +1313,10 @@ predioSel.addEventListener("change", ()=>{
 
 /* ===== Boot ===== */
 (function init(){
+  populateFloorOptions();
+  populateRoomOptions();
+  floorSelect.value = "1";
+  roomSelect.value = "1";
   updateCurrentDisplay();
   renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
 })();
