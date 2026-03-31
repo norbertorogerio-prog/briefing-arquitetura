@@ -72,72 +72,77 @@
             padding: 20px;
             margin: 20px 0;
             position: relative;
-            min-height: 500px;
+        }
+
+        .zone-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .zone-alta-section {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px solid #667eea;
+        }
+
+        .zone-baixa-section {
+            background: linear-gradient(135deg, #f093fb20 0%, #f5576c20 100%);
+            border: 2px solid #f5576c;
+        }
+
+        .zone-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 10px;
         }
 
-        .building-structure {
+        .zone-alta-section .zone-title {
+            color: #667eea;
+        }
+
+        .zone-baixa-section .zone-title {
+            color: #f5576c;
+        }
+
+        .floor-selector {
+            margin-bottom: 15px;
+        }
+
+        .floor-selector label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .floor-selector select {
             width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            position: relative;
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .zone-alta {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px 10px 0 0;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            position: relative;
+        .floor-selector select:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
-        .zone-alta::before {
-            content: "🏢";
-            position: absolute;
-            left: -30px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-        }
-
-        .floors-alta {
-            background: rgba(255,255,255,0.1);
-            margin-top: 10px;
+        .selected-floor-info {
+            background: white;
             padding: 10px;
             border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .zone-baixa {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 0 0 10px 10px;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            margin-top: 5px;
-            position: relative;
-        }
-
-        .zone-baixa::before {
-            content: "🏬";
-            position: absolute;
-            left: -30px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-        }
-
-        .floors-baixa {
-            background: rgba(255,255,255,0.1);
             margin-top: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
         }
 
         .building-info {
@@ -184,10 +189,10 @@
         .stat-item {
             flex: 1;
             text-align: center;
-            min-width: 80px;
             padding: 10px;
             border-radius: 10px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .stat-item:hover {
@@ -340,11 +345,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .status-select.status-avaliada { border-color: #10b981; color: #10b981; background: #f0fdf4; }
-        .status-select.status-trancada { border-color: #f59e0b; color: #f59e0b; background: #fffbeb; }
-        .status-select.status-ocupada { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
-        .status-select.status-problemas { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
-
         .btn-reset {
             background: #ef4444;
             color: white;
@@ -391,14 +391,6 @@
                 font-size: 1.8rem;
             }
 
-            .stats {
-                gap: 8px;
-            }
-
-            .stat-number {
-                font-size: 1.5rem;
-            }
-
             .room-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -426,18 +418,33 @@
             <div class="building-card">
                 <h2>📍 Torre Comercial</h2>
                 <div class="building-image">
-                    <div class="building-structure">
-                        <div class="zone-alta">
-                            ZONA ALTA
-                            <div class="floors-alta">
-                                Pisos 17 a 32
-                            </div>
+                    <div class="zone-section zone-alta-section">
+                        <div class="zone-title">
+                            <span>🏢</span> ZONA ALTA
                         </div>
-                        <div class="zone-baixa">
-                            ZONA BAIXA
-                            <div class="floors-baixa">
-                                Pisos 01 a 16
-                            </div>
+                        <div class="floor-selector">
+                            <label>Selecione o Andar (17º a 32º):</label>
+                            <select id="altaFloorSelect">
+                                <option value="">Selecione um andar</option>
+                            </select>
+                        </div>
+                        <div class="selected-floor-info" id="altaSelectedInfo">
+                            Nenhum andar selecionado
+                        </div>
+                    </div>
+
+                    <div class="zone-section zone-baixa-section">
+                        <div class="zone-title">
+                            <span>🏬</span> ZONA BAIXA
+                        </div>
+                        <div class="floor-selector">
+                            <label>Selecione o Andar (1º a 16º):</label>
+                            <select id="baixaFloorSelect">
+                                <option value="">Selecione um andar</option>
+                            </select>
+                        </div>
+                        <div class="selected-floor-info" id="baixaSelectedInfo">
+                            Nenhum andar selecionado
                         </div>
                     </div>
                 </div>
@@ -485,22 +492,13 @@
 
                 <div class="rooms-list" id="roomsList"></div>
 
-                <button class="btn-reset" id="resetBtn">🔄 Resetar Todos os Status para "Avaliada"</button>
+                <button class="btn-reset" id="resetBtn">🗑️ Limpar Todos os Status</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Status possíveis
-        const STATUS = ['avaliada', 'trancada', 'ocupada', 'problemas'];
-        const STATUS_LABELS = {
-            avaliada: { text: '✓ Avaliada', icon: '✓', color: '#10b981' },
-            trancada: { text: '🔒 Trancada', icon: '🔒', color: '#f59e0b' },
-            ocupada: { text: '👥 Ocupada', icon: '👥', color: '#3b82f6' },
-            problemas: { text: '⚠️ Problemas', icon: '⚠️', color: '#ef4444' }
-        };
-
-        // Gerar salas SL01 até SL50 distribuídas em 32 andares
+        // Gerar salas SL01 até SL50 - TODAS COM STATUS LIMPO (sem status definido)
         const generateRooms = () => {
             const rooms = [];
             const totalRooms = 50;
@@ -513,7 +511,6 @@
             let roomCounter = 1;
             
             for (let floor = 1; floor <= totalFloors; floor++) {
-                // Quantas salas neste andar
                 let roomsOnThisFloor = roomsPerFloor;
                 if (floor <= remainder) {
                     roomsOnThisFloor++;
@@ -524,21 +521,14 @@
                     const roomCode = `SL${roomNumber}`;
                     const zone = floor >= 17 ? 'Alta' : 'Baixa';
                     
-                    // Status iniciais variados para demonstração
-                    let status;
-                    if (roomCounter <= 12) status = 'avaliada';
-                    else if (roomCounter <= 22) status = 'trancada';
-                    else if (roomCounter <= 38) status = 'ocupada';
-                    else status = 'problemas';
-                    
                     rooms.push({
                         id: roomCounter,
                         code: roomCode,
                         roomNumber: roomCounter,
                         floor: floor,
                         zone: zone,
-                        status: status,
-                        lastUpdate: new Date().toLocaleString('pt-BR')
+                        status: null, // Limpo, sem status definido
+                        lastUpdate: null
                     });
                     
                     roomCounter++;
@@ -568,27 +558,25 @@
         // Atualizar status da sala
         const updateRoomStatus = (roomId, newStatus) => {
             const room = rooms.find(r => r.id === roomId);
-            if (room && room.status !== newStatus) {
-                room.status = newStatus;
-                room.lastUpdate = new Date().toLocaleString('pt-BR');
+            if (room) {
+                if (newStatus === '') {
+                    room.status = null;
+                    room.lastUpdate = null;
+                } else {
+                    room.status = newStatus;
+                    room.lastUpdate = new Date().toLocaleString('pt-BR');
+                }
                 renderRoomsList();
                 updateStats();
-                
-                // Feedback visual
-                const selectElement = document.querySelector(`select[data-room-id="${roomId}"]`);
-                if (selectElement) {
-                    selectElement.classList.remove('status-avaliada', 'status-trancada', 'status-ocupada', 'status-problemas');
-                    selectElement.classList.add(`status-${newStatus}`);
-                }
             }
         };
 
-        // Resetar todos os status
+        // Limpar todos os status
         const resetAllStatus = () => {
-            if (confirm('Tem certeza que deseja resetar todos os status para "Avaliada"? Esta ação não pode ser desfeita.')) {
+            if (confirm('Tem certeza que deseja limpar TODOS os status? Todas as salas ficarão sem status definido.')) {
                 rooms.forEach(room => {
-                    room.status = 'avaliada';
-                    room.lastUpdate = new Date().toLocaleString('pt-BR');
+                    room.status = null;
+                    room.lastUpdate = null;
                 });
                 renderRoomsList();
                 updateStats();
@@ -615,7 +603,6 @@
                 roomsByFloor[room.floor].push(room);
             });
             
-            // Ordenar andares
             const sortedFloors = Object.keys(roomsByFloor).sort((a, b) => Number(a) - Number(b));
             
             let html = '';
@@ -628,23 +615,24 @@
                 `;
                 
                 roomsByFloor[floor].forEach(room => {
+                    const statusClass = room.status ? `status-${room.status}` : '';
+                    const currentStatus = room.status || '';
                     html += `
-                        <div class="room-item status-${room.status}">
+                        <div class="room-item ${statusClass}">
                             <div class="room-info">
                                 <div class="room-code">${room.code}</div>
                                 <div class="room-location">
                                     <span class="badge ${room.zone === 'Alta' ? 'badge-alta' : 'badge-baixa'}">
                                         Zona ${room.zone}
                                     </span>
-                                    <span style="font-size: 0.7rem; color: #999;">
-                                        • Atualizado: ${room.lastUpdate}
-                                    </span>
+                                    ${room.lastUpdate ? `<span style="font-size: 0.7rem; color: #999;"> • Atualizado: ${room.lastUpdate}</span>` : '<span style="font-size: 0.7rem; color: #999;"> • Sem status definido</span>'}
                                 </div>
                             </div>
                             <div class="room-status-select">
-                                <select class="status-select status-${room.status}" 
+                                <select class="status-select" 
                                         data-room-id="${room.id}"
                                         onchange="updateRoomStatus(${room.id}, this.value)">
+                                    <option value="" ${!room.status ? 'selected' : ''}>📋 Selecionar status</option>
                                     <option value="avaliada" ${room.status === 'avaliada' ? 'selected' : ''}>✓ Avaliada</option>
                                     <option value="trancada" ${room.status === 'trancada' ? 'selected' : ''}>🔒 Trancada</option>
                                     <option value="ocupada" ${room.status === 'ocupada' ? 'selected' : ''}>👥 Ocupada</option>
@@ -686,10 +674,63 @@
             });
         };
 
+        // Configurar selects de andares
+        const setupFloorSelectors = () => {
+            const altaSelect = document.getElementById('altaFloorSelect');
+            const baixaSelect = document.getElementById('baixaFloorSelect');
+            const altaInfo = document.getElementById('altaSelectedInfo');
+            const baixaInfo = document.getElementById('baixaSelectedInfo');
+            
+            // Preencher andares da zona alta (17 a 32)
+            for (let i = 17; i <= 32; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}º Andar`;
+                altaSelect.appendChild(option);
+            }
+            
+            // Preencher andares da zona baixa (1 a 16)
+            for (let i = 1; i <= 16; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}º Andar`;
+                baixaSelect.appendChild(option);
+            }
+            
+            // Evento para seleção de andar na zona alta
+            altaSelect.addEventListener('change', (e) => {
+                const floor = e.target.value;
+                if (floor) {
+                    const roomsOnFloor = rooms.filter(r => r.floor === parseInt(floor));
+                    altaInfo.innerHTML = `
+                        <strong>Andar ${floor} selecionado</strong><br>
+                        Salas neste andar: ${roomsOnFloor.map(r => r.code).join(', ') || 'Nenhuma sala'}
+                    `;
+                } else {
+                    altaInfo.innerHTML = 'Nenhum andar selecionado';
+                }
+            });
+            
+            // Evento para seleção de andar na zona baixa
+            baixaSelect.addEventListener('change', (e) => {
+                const floor = e.target.value;
+                if (floor) {
+                    const roomsOnFloor = rooms.filter(r => r.floor === parseInt(floor));
+                    baixaInfo.innerHTML = `
+                        <strong>Andar ${floor} selecionado</strong><br>
+                        Salas neste andar: ${roomsOnFloor.map(r => r.code).join(', ') || 'Nenhuma sala'}
+                    `;
+                } else {
+                    baixaInfo.innerHTML = 'Nenhum andar selecionado';
+                }
+            });
+        };
+
         // Inicializar
         const init = () => {
             setupSearch();
             setupFilters();
+            setupFloorSelectors();
             renderRoomsList();
             updateStats();
             
