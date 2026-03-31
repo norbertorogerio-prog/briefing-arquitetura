@@ -308,10 +308,11 @@ label {
 .pill.prob { background: var(--grad-danger); color: white; }
 .pill.occupied { background: var(--grad-occupied); color: var(--black); }
 
+/* Relatório direto - sem mock do celular */
 .report-box {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.3);
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid rgba(102, 0, 204, 0.3);
 }
 
@@ -342,94 +343,43 @@ label {
 .btn-action:hover { background: rgba(102, 0, 204, 0.3); transform: translateY(-2px); }
 .btn-share { background: linear-gradient(135deg, #25D366, #128C7E); border: none; }
 
-/* Mock do celular - MAIS LARGO */
-.phone-wrap {
-  margin: 12px auto;
-  width: 100%;
-  max-width: 560px;
-  border-radius: 48px;
-  padding: 16px 14px 20px;
-  background: linear-gradient(180deg, #2A2A3E 0%, #1A1A2E 100%);
-  box-shadow: var(--shadow-lg), 0 0 0 8px rgba(102, 0, 204, 0.1);
-  border: 1px solid rgba(102, 0, 204, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.phone-notch {
-  width: 180px;
-  height: 28px;
-  background: #0F0F1A;
-  border-radius: 0 0 20px 20px;
-  margin: -8px auto 12px;
-  position: relative;
-}
-
-.phone-screen {
+/* Relatório content - estilo direto */
+.report-content {
   background: #0A0A12;
-  border-radius: 32px;
-  overflow: auto;
-  position: relative;
-  max-height: 700px;
-}
-
-.phone-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 10px 10px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.04));
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.vivo-logo {
-  font-weight: 900;
-  letter-spacing: 2px;
-  font-size: 12px;
-  background: linear-gradient(135deg, #fff, #d9c9ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  padding: 4px 12px;
-  border-radius: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.phone-screen .report-content {
-  background: transparent;
-  padding: 24px 24px 28px;
+  padding: 28px 32px;
   font-size: 14px;
   line-height: 1.6;
-  min-height: 520px;
 }
 
 .report-content .h-line {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(102, 0, 204, 0.4), transparent);
-  margin: 16px 0;
+  margin: 18px 0;
 }
-.report-content .title { font-weight: 800; font-size: 16px; letter-spacing: -0.2px; color: var(--vivo-purple-light); margin-bottom: 12px; }
+.report-content .title { font-weight: 800; font-size: 18px; letter-spacing: -0.2px; color: var(--vivo-purple-light); margin-bottom: 12px; }
 .report-content .kvs { margin: 12px 0 0; }
-.report-content .kv { display: flex; gap: 14px; font-size: 13px; margin: 10px 0; }
-.report-content .kv b { color: var(--vivo-purple-light); min-width: 90px; text-transform: uppercase; font-size: 12px; font-weight: 700; }
-.report-content .bullet { margin: 10px 0 10px 20px; font-size: 13px; }
+.report-content .kv { display: flex; gap: 16px; font-size: 14px; margin: 12px 0; }
+.report-content .kv b { color: var(--vivo-purple-light); min-width: 95px; text-transform: uppercase; font-size: 12px; font-weight: 700; }
+.report-content .bullet { margin: 12px 0 12px 24px; font-size: 14px; }
 
 .report-room-photos {
-  margin: 20px 0;
-  padding: 16px;
+  margin: 24px 0;
+  padding: 20px;
   background: rgba(102, 0, 204, 0.08);
-  border-radius: 18px;
+  border-radius: 20px;
 }
-.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 12px; font-size: 13px; }
-.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.report-room-title { font-weight: 700; color: var(--vivo-purple-light); margin-bottom: 14px; font-size: 14px; }
+.report-photo-thumbnails { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; }
 .report-thumb {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
   border-radius: 14px;
   object-fit: cover;
   border: 2px solid var(--vivo-purple);
   cursor: pointer;
+  transition: var(--transition-fast);
 }
+.report-thumb:hover { transform: scale(1.05); box-shadow: var(--shadow-glow); }
 
 .toast {
   position: fixed;
@@ -554,7 +504,7 @@ label {
       </div>
     </div>
 
-    <label>📌 Status Sala</label>
+    <label>📌 Status da Sala</label>
     <div class="status-strip">
       <button class="status" data-status="valid"><span class="dot valid"></span>Validada</button>
       <button class="status" data-status="lock"><span class="dot lock"></span>Trancada</button>
@@ -594,18 +544,10 @@ label {
           </div>
         </div>
 
-        <div id="phoneMock" class="phone-wrap">
-          <div class="phone-notch"></div>
-          <div id="reportCaptureArea" class="phone-screen">
-            <div id="relatorio" class="report-content">
-              <div class="title">Relatório de Vistoria</div>
-              <div class="h-line"></div>
-              <div class="bullet">Aguardando registros...</div>
-            </div>
-            <div class="phone-footer">
-              <div class="vivo-logo">VIVO</div>
-            </div>
-          </div>
+        <div id="reportContent" class="report-content">
+          <div class="title">Relatório de Vistoria</div>
+          <div class="h-line"></div>
+          <div class="bullet">Aguardando registros...</div>
         </div>
       </div>
     </div>
@@ -675,6 +617,7 @@ const auditorInp = document.getElementById("auditor");
 const photoInput = document.getElementById("photoInput");
 const photoBtn = document.getElementById("photoUploadBtn");
 const shareModal = document.getElementById("shareModal");
+const reportContainer = document.getElementById("reportContent");
 
 function updateCurrentDisplay(){
   currentFloor = parseInt(floorSelect.value) || 1;
@@ -693,14 +636,14 @@ const saveRoomPhotos= (f,r,arr)=> localStorage.setItem(`photos_${roomKey(f,r)}`,
 function addPhotoToRoom(f,r,photo){
   const arr = getRoomPhotos(f,r); arr.push(photo); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
-  renderCreated(); renderReportWithPhotos();
+  renderCreated(); renderReport();
   showToast("📸 Foto adicionada!");
 }
 
 function deletePhotoFromRoom(f,r,idx){
   const arr = getRoomPhotos(f,r); arr.splice(idx,1); saveRoomPhotos(f,r,arr);
   if(currentFloor===f && currentRoom===r) renderCurrentPhotos();
-  renderCreated(); renderReportWithPhotos(); showToast("📸 Foto removida");
+  renderCreated(); renderReport(); showToast("📸 Foto removida");
 }
 
 function renderCurrentPhotos(){
@@ -727,7 +670,7 @@ document.querySelectorAll(".status").forEach(btn=>{
     const status = btn.dataset.status, f=currentFloor, r=currentRoom;
     const idx = entries.findIndex(e=> e.f===f && e.r===r);
     if(idx>=0) entries[idx].status = status; else entries.push({f,r,status});
-    persist(); renderCreated(); renderReportWithPhotos();
+    persist(); renderCreated(); renderReport();
     showToast(`✅ A${pad2(f)}-${formatRoomNumber(r)}: ${statusName(status)}`);
   });
 });
@@ -749,7 +692,7 @@ function renderCreated(){
   });
 }
 
-function renderReportWithPhotos(){
+function renderReport(){
   const predio = predioSel.value || "Não selecionado";
   const endereco = enderecoInp.value || "Não informado";
   const auditor = auditorInp.value || "Não informado";
@@ -815,25 +758,25 @@ function renderReportWithPhotos(){
     });
   }
 
-  document.getElementById("relatorio").innerHTML = html;
+  reportContainer.innerHTML = html;
 }
 
 async function generateImage(){
-  const phone = document.getElementById("phoneMock");
-  if(!phone){ showToast("Erro"); return null; }
+  const reportElement = document.getElementById("reportContent");
+  if(!reportElement){ showToast("Erro"); return null; }
   showToast("📸 Gerando imagem...");
   
   await new Promise(resolve => setTimeout(resolve, 200));
   
   try{
-    const canvas = await html2canvas(phone, {
+    const canvas = await html2canvas(reportElement, {
       scale: 2.2,
-      backgroundColor: null,
+      backgroundColor: "#0A0A12",
       logging: false,
       useCORS: true,
       allowTaint: false,
-      windowWidth: phone.scrollWidth,
-      windowHeight: phone.scrollHeight
+      windowWidth: reportElement.scrollWidth,
+      windowHeight: reportElement.scrollHeight
     });
     return canvas.toDataURL('image/png');
   }catch(e){ 
@@ -919,14 +862,14 @@ document.getElementById("shareEmail").addEventListener("click", shareToEmail);
 document.getElementById("shareSave").addEventListener("click", shareSaveImage);
 document.getElementById("closeModal").addEventListener("click", ()=> shareModal.classList.remove("show"));
 shareModal.addEventListener("click",(e)=>{ if(e.target===shareModal) shareModal.classList.remove("show"); });
-document.getElementById("useAI").addEventListener("change", renderReportWithPhotos);
+document.getElementById("useAI").addEventListener("change", renderReport);
 
 document.getElementById("btnClear").addEventListener("click", ()=>{
   if(!confirm("⚠️ Limpar TODOS os dados?")) return;
   entries = [];
   for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k && k.startsWith("photos_")) localStorage.removeItem(k); }
   auditorInp.value = ""; predioSel.value = ""; enderecoInp.value = "";
-  persist(); renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
+  persist(); renderCreated(); renderReport(); renderCurrentPhotos();
   showToast("✓ Dados removidos");
 });
 
@@ -935,7 +878,7 @@ predioSel.addEventListener("change", ()=>{
   if(v==="Eco Berrini") enderecoInp.value = "Av. Eng. Luís Carlos Berrini, 1376 - SP";
   else if(v==="Chucri Zaidan") enderecoInp.value = "Av. Dr. Chucri Zaidan, 2460 - SP";
   else enderecoInp.value = "";
-  renderReportWithPhotos();
+  renderReport();
 });
 
 (function init(){
@@ -944,7 +887,7 @@ predioSel.addEventListener("change", ()=>{
   floorSelect.value = "1";
   roomSelect.value = "1";
   updateCurrentDisplay();
-  renderCreated(); renderReportWithPhotos(); renderCurrentPhotos();
+  renderCreated(); renderReport(); renderCurrentPhotos();
 })();
 </script>
 </body>
